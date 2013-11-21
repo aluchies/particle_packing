@@ -241,8 +241,6 @@ class TestCode(unittest.TestCase):
         self.assertTrue(np.allclose(y0, y1))
         self.assertTrue(np.allclose(z0, z1))
 
-        import code; code.interact(local=dict(globals(), **locals()))
-
 
 
 
