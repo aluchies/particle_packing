@@ -128,6 +128,8 @@ class TestCode(unittest.TestCase):
         self.assertTrue(success_steps > 0)
 
 
+
+
     def test3_pack_metro_md(self):
         """
 
@@ -155,6 +157,23 @@ class TestCode(unittest.TestCase):
         self.assertTrue(np.allclose(x0, x1))
         self.assertTrue(np.allclose(y0, y1))
         self.assertTrue(np.allclose(z0, z1))
+
+
+
+    def test4_pack_metro_md(self):
+        """
+
+        Test case when all steps are successful
+
+        """
+
+        npoints = 500
+        radius = 0.0
+        step_limit = 10 ** 3
+        x, y, z = spheres.pack_uniform(npoints=npoints)
+        success_steps = spheres.pack_metro_md(x, y, z, radius, step_limit)
+
+        self.assertTrue(success_steps == step_limit)
 
 
 
@@ -249,6 +268,24 @@ class TestCode(unittest.TestCase):
         self.assertTrue(np.allclose(x0, x1))
         self.assertTrue(np.allclose(y0, y1))
         self.assertTrue(np.allclose(z0, z1))
+
+
+
+    def test4_pack_metro_pd(self):
+        """
+
+        Test case when all steps are successful
+
+        """
+
+        npoints = 500
+        radius = 0.0
+        radius = np.ascontiguousarray(radius * np.ones(npoints))
+        step_limit = 10 ** 3
+        x, y, z = spheres.pack_uniform(npoints=npoints)
+        success_steps = spheres.pack_metro_pd(x, y, z, radius, step_limit)
+
+        self.assertTrue(success_steps == step_limit)
 
 
 

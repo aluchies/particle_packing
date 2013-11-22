@@ -32,55 +32,55 @@ unsigned int metro_md_3d(double *x, double *y, double *z,
     while (step < step_limit)
     {
 
-        for (i = 0; i < npoints; i++)
+        i = step % npoints;
+
+        /* Generate new position */
+        while (1)
         {
-            /* Generate new position */
-            while (1)
+
+            dx = diameter * (gsl_rng_uniform (r) - 0.5);
+            xn = x[i] + dx;
+
+            dy = diameter * (gsl_rng_uniform (r) - 0.5);
+            yn = y[i] + dy;
+
+            dz = diameter * (gsl_rng_uniform (r) - 0.5);
+            zn = z[i] + dz;
+
+            if (((xn > radius) & (xn < 1 - radius)) & ((yn > radius) & (yn < 1 - radius)) & ((zn > radius) & (zn < 1 - radius)))
             {
-
-                dx = diameter * (gsl_rng_uniform (r) - 0.5);
-                xn = x[i] + dx;
-
-                dy = diameter * (gsl_rng_uniform (r) - 0.5);
-                yn = y[i] + dy;
-
-                dz = diameter * (gsl_rng_uniform (r) - 0.5);
-                zn = z[i] + dz;
-
-                if (((xn > radius) & (xn < 1 - radius)) & ((yn > radius) & (yn < 1 - radius)) & ((zn > radius) & (zn < 1 - radius)))
-                {
-                   break;
-                }
-
+               break;
             }
-
-            /* Determine if new position overlaps with other positions */
-            flag = 1;
-            for (k = 0; k < npoints; k++)
-            {
-                dist = sqrt( pow(xn - x[k], 2) + pow(yn - y[k], 2) + pow(zn - z[k], 2) );
-                if ((dist < diameter) & (i != k))
-                {
-                    flag = 0;
-                    break;
-                }
-
-
-            }
-
-            if (flag == 1)
-            {
-
-                x[i] = xn;
-                y[i] = yn;
-                z[i] = zn;
-                success_steps = success_steps + 1;
-
-            }
-
-            step = step + 1;
 
         }
+
+        /* Determine if new position overlaps with other positions */
+        flag = 1;
+        for (k = 0; k < npoints; k++)
+        {
+            dist = sqrt( pow(xn - x[k], 2) + pow(yn - y[k], 2) + pow(zn - z[k], 2) );
+            if ((dist < diameter) & (i != k))
+            {
+                flag = 0;
+                break;
+            }
+
+
+        }
+
+        if (flag == 1)
+        {
+
+            x[i] = xn;
+            y[i] = yn;
+            z[i] = zn;
+            success_steps = success_steps + 1;
+
+        }
+
+        step = step + 1;
+
+
     }
 
     gsl_rng_free (r);
@@ -117,57 +117,57 @@ unsigned int metro_pd_3d(double *x, double *y, double *z,
     while (step < step_limit)
     {
 
-        for (i = 0; i < npoints; i++)
+        i = step % npoints;
+
+        /* Generate new position */
+        while (1)
         {
-            /* Generate new position */
-            while (1)
+
+            diameter = 2 * radius[i];
+
+            dx = diameter * (gsl_rng_uniform (r) - 0.5);
+            xn = x[i] + dx;
+
+            dy = diameter * (gsl_rng_uniform (r) - 0.5);
+            yn = y[i] + dy;
+
+            dz = diameter * (gsl_rng_uniform (r) - 0.5);
+            zn = z[i] + dz;
+
+            if (((xn > radius[i]) & (xn < 1 - radius[i])) & ((yn > radius[i]) & (yn < 1 - radius[i])) & ((zn > radius[i]) & (zn < 1 - radius[i])))
             {
-
-                diameter = 2 * radius[i];
-
-                dx = diameter * (gsl_rng_uniform (r) - 0.5);
-                xn = x[i] + dx;
-
-                dy = diameter * (gsl_rng_uniform (r) - 0.5);
-                yn = y[i] + dy;
-
-                dz = diameter * (gsl_rng_uniform (r) - 0.5);
-                zn = z[i] + dz;
-
-                if (((xn > radius[i]) & (xn < 1 - radius[i])) & ((yn > radius[i]) & (yn < 1 - radius[i])) & ((zn > radius[i]) & (zn < 1 - radius[i])))
-                {
-                   break;
-                }
-
+               break;
             }
-
-            /* Determine if new position overlaps with other positions */
-            flag = 1;
-            for (k = 0; k < npoints; k++)
-            {
-                dist = sqrt( pow(xn - x[k], 2) + pow(yn - y[k], 2) + pow(zn - z[k], 2) );
-                if ((dist < (radius[i] + radius[k])) & (i != k))
-                {
-                    flag = 0;
-                    break;
-                }
-
-
-            }
-
-            if (flag == 1)
-            {
-
-                x[i] = xn;
-                y[i] = yn;
-                z[i] = zn;
-                success_steps += 1;
-
-            }
-
-            step = step + 1;
 
         }
+
+        /* Determine if new position overlaps with other positions */
+        flag = 1;
+        for (k = 0; k < npoints; k++)
+        {
+            dist = sqrt( pow(xn - x[k], 2) + pow(yn - y[k], 2) + pow(zn - z[k], 2) );
+            if ((dist < (radius[i] + radius[k])) & (i != k))
+            {
+                flag = 0;
+                break;
+            }
+
+
+        }
+
+        if (flag == 1)
+        {
+
+            x[i] = xn;
+            y[i] = yn;
+            z[i] = zn;
+            success_steps += 1;
+
+        }
+
+        step = step + 1;
+
+
     }
 
     gsl_rng_free (r);
