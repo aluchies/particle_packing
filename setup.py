@@ -62,7 +62,7 @@ if use_cython:
     spheres_ext = Extension("particle_packing.ext.spheres",
                        [base_dir + "/cython/spheres_ext.pyx"],
                        include_dirs=[np.get_include()],
-                       #libraries=['gsl', 'gslcblas', 'm'],
+                       libraries=['gsl', 'gslcblas', 'm'],
                        #extra_compile_args=["-g"],
                        #extra_link_args=["-g"]
                        )
@@ -73,7 +73,7 @@ else:
     spheres_ext = Extension("particle_packing.ext.spheres",
                        [base_dir + "/cython/spheres_ext.c"],
                        include_dirs=[np.get_include()],
-                       #libraries=['gsl', 'gslcblas', 'm'],
+                       libraries=['gsl', 'gslcblas', 'm'],
                        #extra_compile_args=["-g"],
                        #extra_link_args=["-g"]
                        )
