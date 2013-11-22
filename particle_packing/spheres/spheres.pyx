@@ -33,15 +33,18 @@ def pack_metro_md(
     np.ndarray[double, ndim=1, mode="c"] z not None,
     double radius, int step_limit, rand_seed=None):
 
-    """Metropolis algorithm for mono-disperse spheres.
+    """Metropolis algorithm for mono-disperse size spheres.
 
     Keyword arguments:
-    x --
-    y --
-    z --
+    x -- array of x coordinates
+    y -- array of y coordinates
+    z -- array of z coordinates
+    radius -- sphere radius
+    step_limit -- number of steps in metropolis algorithm
+    rand_seed -- seed for the random number generator
 
     Return values:
-    success_steps --
+    success_steps -- number of metropolis steps that were successful
 
     """
 
@@ -79,13 +82,15 @@ def pack_metro_pd(
     np.ndarray[double, ndim=1, mode="c"] radius not None,
     int step_limit, rand_seed=None):
 
-    """Metropolis algorithm for mono-disperse spheres.
+    """Metropolis algorithm for poly-disperse size spheres.
 
     Keyword arguments:
     x -- array of x coordinates
     y -- array of y coordinates
     z -- array of z coordinates
-    radius -- array of radii
+    radius -- array of sphere radii
+    step_limit -- number of steps in metropolis algorithm
+    rand_seed -- seed for the random number generator
 
     Return values:
     success_steps -- number of metropolis steps that were successful
@@ -121,7 +126,19 @@ def pack_metro_pd(
 
 
 def pack_rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
-    """
+    """RSA algorithm for mono-disperse size spheres.
+
+    Keyword arguments:
+    npoints -- number of spheres positions to generate
+    radius -- sphere radius
+    step_limit -- number of steps in metropolis algorithm
+    rand_seed -- seed for the random number generator
+
+    Return values:
+    x -- array of x-coordinates
+    y -- array of y-coordinates
+    z -- array of z-coordinates
+
     """
 
 
@@ -150,7 +167,19 @@ def pack_rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
 
 
 def pack_grid_md(int npoints=5, double radius=0.05):
-    """
+    """Algorithm for placing mono-disperse size spheres on a square grid. May be used to generate
+    initial positions for metropolis algorithm.
+
+    Keyword arguments:
+    npoints -- number of sphere positions to generate
+    radius -- sphere radius
+
+    Return values:
+    x -- array of x-coordinates
+    y -- array of y-coordinates
+    z -- array of z-coordinates
+
+
     """
 
     space = 1.1 * 2. * radius
@@ -191,16 +220,14 @@ def pack_grid_md(int npoints=5, double radius=0.05):
 
 
 def pack_uniform(int npoints=5):
-    """Generate monodisperse sphere locations in n-dimensional cube volume.
+    """Generate mono-disperse size sphere positions.
 
     Keyword arguements:
-    ndim -- number of dimensions
-    L -- container length (accepts numeric value, list, tuple, ndarray)
-    npoints -- numper of points
-    nsim -- number of center point configurations to generate
 
     Return values:
-    x -- center point locations
+    x -- array of x-coordinates
+    y -- array of y-coordinates
+    z -- array of z-coordinates
 
     """
 
