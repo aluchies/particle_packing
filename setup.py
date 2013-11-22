@@ -32,8 +32,6 @@ except ImportError:
 else:
     use_cython = True
 
-use_cython = False
-
 
 args = sys.argv[1:]
 
