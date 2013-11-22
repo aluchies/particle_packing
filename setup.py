@@ -25,15 +25,16 @@ from Cython.Distutils import build_ext
 
 args = sys.argv[1:]
 
+base_dir = "particle_packing"
+
 # Make a `cleanall` rule to get rid of intermediate and library files
 if "cleanall" in args:
     print "Deleting cython files..."
     # Just in case the build directory was created by accident,
     # note that shell=True should be OK here because the command is constant.
     subprocess.Popen("rm -rf build", shell=True, executable="/bin/bash")
-    #subprocess.Popen("rm -rf *.c", shell=True, executable="/bin/bash")
-    subprocess.Popen("rm -rf *.so", shell=True, executable="/bin/bash")
-    subprocess.Popen("rm -rf spheres.c", shell=True, executable="/bin/bash")
+    subprocess.Popen("rm -rf " + base_dir + "/cython/*.c", shell=True, executable="/bin/bash")
+    subprocess.Popen("rm -rf " + base_dir + "/ext/*.so", shell=True, executable="/bin/bash")
 
     # Now do a normal clean
     sys.argv[1] = "clean"
@@ -42,12 +43,13 @@ if "cleanall" in args:
 if args.count("build_ext") > 0 and args.count("--inplace") == 0:
     sys.argv.insert(sys.argv.index("build_ext")+1, "--inplace")
 
+
 # Only build for 64-bit target
 os.environ['ARCHFLAGS'] = "-arch x86_64"
 
 # Set up extension and build
-cy_ext = Extension("spheres",
-                   ["spheres.pyx"],
+spheres_ext = Extension("particle_packing.ext.spheres",
+                   [base_dir + "/cython/spheres_ext.pyx"],
                    include_dirs=[np.get_include()],
                    libraries=['gsl', 'gslcblas', 'm'],
                    #extra_compile_args=["-g"],
@@ -55,4 +57,4 @@ cy_ext = Extension("spheres",
                    )
 
 setup(cmdclass={'build_ext': build_ext},
-      ext_modules=[cy_ext])
+      ext_modules=[spheres_ext])

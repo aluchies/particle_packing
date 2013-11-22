@@ -6,7 +6,7 @@ import sys
 
 
 
-cdef extern from "src/spheres_metro.c":
+cdef extern from "c/spheres_metro.c":
     unsigned int metro_md_3d(double *x, double *y, double *z,
     double radius, size_t npoints, int step_limit,
     unsigned long randSeed)
@@ -16,7 +16,7 @@ cdef extern from "src/spheres_metro.c":
     unsigned long randSeed)
 
 
-cdef extern from "src/spheres_rsa.c":
+cdef extern from "c/spheres_rsa.c":
     size_t gen_pts_rsa_3d(double *x, double *y, double *z,
     size_t npoints, double radius, int step_limit,
     unsigned long randSeed)
