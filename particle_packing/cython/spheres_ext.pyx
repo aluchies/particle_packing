@@ -1,3 +1,6 @@
+# disutils: language = c
+# disutils: libraries = gsl gslcblas m
+
 import numpy as np
 cimport numpy as np
 from itertools import product
