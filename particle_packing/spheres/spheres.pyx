@@ -4,6 +4,8 @@ from itertools import product
 import random
 import sys
 
+
+
 cdef extern from "src/spheres_metro.c":
     unsigned int metro_md_3d(double *x, double *y, double *z,
     double radius, size_t npoints, int step_limit,
@@ -114,7 +116,40 @@ def pack_metro_pd(
 
 
 
-def pack_grid_md(npoints=5, radius=0.05):
+
+
+
+
+def pack_rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
+    """
+    """
+
+
+    cdef np.ndarray[double, ndim=1, mode="c"] x = np.zeros((npoints, ))
+    cdef np.ndarray[double, ndim=1, mode="c"] y = np.zeros((npoints, ))
+    cdef np.ndarray[double, ndim=1, mode="c"] z = np.zeros((npoints, ))
+
+
+
+    # take care of random seed
+    cdef unsigned long rseed
+    if rand_seed is None:
+        rseed = random.randint(0, sys.maxint)
+    else:
+        rseed = long(rand_seed)
+
+    cdef int valid_pts
+    valid_pts = gen_pts_rsa_3d(&x[0], &y[0], &z[0], npoints, radius, step_limit, rseed)
+
+    return x[:valid_pts], y[:valid_pts], z[:valid_pts]
+
+
+
+
+
+
+
+def pack_grid_md(int npoints=5, double radius=0.05):
     """
     """
 
@@ -155,27 +190,22 @@ def pack_grid_md(npoints=5, radius=0.05):
 
 
 
+def pack_uniform(int npoints=5):
+    """Generate monodisperse sphere locations in n-dimensional cube volume.
 
+    Keyword arguements:
+    ndim -- number of dimensions
+    L -- container length (accepts numeric value, list, tuple, ndarray)
+    npoints -- numper of points
+    nsim -- number of center point configurations to generate
 
-def pack_rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
+    Return values:
+    x -- center point locations
+
     """
-    """
 
+    x = np.ascontiguousarray(np.random.rand(npoints))
+    y = np.ascontiguousarray(np.random.rand(npoints))
+    z = np.ascontiguousarray(np.random.rand(npoints))
 
-    cdef np.ndarray[double, ndim=1, mode="c"] x = np.zeros((npoints, ))
-    cdef np.ndarray[double, ndim=1, mode="c"] y = np.zeros((npoints, ))
-    cdef np.ndarray[double, ndim=1, mode="c"] z = np.zeros((npoints, ))
-
-
-
-    # take care of random seed
-    cdef unsigned long rseed
-    if rand_seed is None:
-        rseed = random.randint(0, sys.maxint)
-    else:
-        rseed = long(rand_seed)
-
-    cdef int valid_pts
-    valid_pts = gen_pts_rsa_3d(&x[0], &y[0], &z[0], npoints, radius, step_limit, rseed)
-
-    return x[:valid_pts], y[:valid_pts], z[:valid_pts]
+    return x, y, z
