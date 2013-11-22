@@ -23,6 +23,18 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 
+cmdclass = {}
+ext_modules = []
+try:
+    from Cython.Distutils import build_ext
+except ImportError:
+    use_cython = False
+else:
+    use_cython = True
+
+use_cython = False
+
+
 args = sys.argv[1:]
 
 base_dir = "particle_packing"
@@ -48,13 +60,28 @@ if args.count("build_ext") > 0 and args.count("--inplace") == 0:
 os.environ['ARCHFLAGS'] = "-arch x86_64"
 
 # Set up extension and build
-spheres_ext = Extension("particle_packing.ext.spheres",
-                   [base_dir + "/cython/spheres_ext.pyx"],
-                   include_dirs=[np.get_include()],
-                   libraries=['gsl', 'gslcblas', 'm'],
-                   #extra_compile_args=["-g"],
-                   #extra_link_args=["-g"]
-                   )
+if use_cython:
+    spheres_ext = Extension("particle_packing.ext.spheres",
+                       [base_dir + "/cython/spheres_ext.pyx"],
+                       include_dirs=[np.get_include()],
+                       libraries=['gsl', 'gslcblas', 'm'],
+                       #extra_compile_args=["-g"],
+                       #extra_link_args=["-g"]
+                       )
+    ext_modules += [spheres_ext]
+    cmdclass={'build_ext': build_ext}
 
-setup(cmdclass={'build_ext': build_ext},
-      ext_modules=[spheres_ext])
+else:
+    spheres_ext = Extension("particle_packing.ext.spheres",
+                       [base_dir + "/cython/spheres_ext.c"],
+                       include_dirs=[np.get_include()],
+                       libraries=['gsl', 'gslcblas', 'm'],
+                       #extra_compile_args=["-g"],
+                       #extra_link_args=["-g"]
+                       )
+    ext_modules += [spheres_ext]
+
+
+
+setup(cmdclass=cmdclass,
+      ext_modules=ext_modules)
