@@ -57,27 +57,29 @@ if args.count("build_ext") > 0 and args.count("--inplace") == 0:
 # Only build for 64-bit target
 os.environ['ARCHFLAGS'] = "-arch x86_64"
 
-# Set up extension and build
 if use_cython:
-    spheres_ext = Extension("particle_packing.ext.spheres",
-                       [base_dir + "/cython/spheres_ext.pyx"],
-                       include_dirs=[np.get_include()],
-                       libraries=['gsl', 'gslcblas', 'm'],
-                       #extra_compile_args=["-g"],
-                       #extra_link_args=["-g"]
-                       )
-    ext_modules += [spheres_ext]
+    ext = ".pyx"
     cmdclass={'build_ext': build_ext}
-
 else:
-    spheres_ext = Extension("particle_packing.ext.spheres",
-                       [base_dir + "/cython/spheres_ext.c"],
-                       include_dirs=[np.get_include()],
-                       libraries=['gsl', 'gslcblas', 'm'],
-                       #extra_compile_args=["-g"],
-                       #extra_link_args=["-g"]
-                       )
-    ext_modules += [spheres_ext]
+    ext = ".c"
+
+spheres_ext = Extension("particle_packing.ext.spheres",
+                   [base_dir + "/cython/spheres_ext" + ext],
+                   include_dirs=[np.get_include()],
+                   libraries=['gsl', 'gslcblas', 'm'],
+                   #extra_compile_args=["-g"],
+                   #extra_link_args=["-g"]
+                   )
+
+boxcar_ext = Extension("particle_packing.ext.boxcar",
+                   [base_dir + "/cython/boxcar_ext" + ext],
+                   include_dirs=[np.get_include()],
+                   libraries=['gsl', 'gslcblas', 'm'],
+                   #extra_compile_args=["-g"],
+                   #extra_link_args=["-g"]
+                   )
+
+ext_modules += [spheres_ext, boxcar_ext]
 
 
 
