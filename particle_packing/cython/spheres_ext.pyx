@@ -167,8 +167,7 @@ def pack_rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
 
 
 def pack_grid_md(int npoints=5, double radius=0.05):
-    """Algorithm for placing mono-disperse size spheres on a square grid. May be used to generate
-    initial positions for metropolis algorithm.
+    """Algorithm for placing mono-disperse size spheres on a square grid. May be used to generate initial positions for metropolis algorithm.
 
     Keyword arguments:
     npoints -- number of sphere positions to generate
@@ -220,9 +219,10 @@ def pack_grid_md(int npoints=5, double radius=0.05):
 
 
 def pack_uniform(int npoints=5):
-    """Generate mono-disperse size sphere positions.
+    """Generate i.i.d. uniformly distributed positions.
 
     Keyword arguements:
+    npoints -- number of independent points to generate
 
     Return values:
     x -- array of x-coordinates

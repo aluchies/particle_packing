@@ -200,9 +200,10 @@ def pack_grid_md(int npoints=5, double radius=0.05):
 
 
 def pack_uniform(int npoints=5):
-    """Generate mono-disperse size boxcar positions.
+    """Generate i.i.d. uniformly distributed positions.
 
     Keyword arguements:
+    npoints -- number of independent points to generate
 
     Return values:
     x -- array of x-coordinates

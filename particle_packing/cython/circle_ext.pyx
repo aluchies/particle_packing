@@ -32,7 +32,7 @@ def pack_metro_md(
     np.ndarray[double, ndim=1, mode="c"] y not None,
     double radius, int step_limit, rand_seed=None):
 
-    """Metropolis algorithm for mono-disperse size spheres.
+    """Metropolis algorithm for mono-disperse size hard disks.
 
     Keyword arguments:
     x -- array of x coordinates
@@ -79,7 +79,7 @@ def pack_metro_pd(
     np.ndarray[double, ndim=1, mode="c"] radius not None,
     int step_limit, rand_seed=None):
 
-    """Metropolis algorithm for poly-disperse size spheres.
+    """Metropolis algorithm for poly-disperse size hard disks.
 
     Keyword arguments:
     x -- array of x coordinates
@@ -122,7 +122,7 @@ def pack_metro_pd(
 
 
 def pack_rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
-    """RSA algorithm for mono-disperse size spheres.
+    """RSA algorithm for mono-disperse size hard disks.
 
     Keyword arguments:
     npoints -- number of spheres positions to generate
@@ -161,8 +161,8 @@ def pack_rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
 
 
 def pack_grid_md(int npoints=5, double radius=0.05):
-    """Algorithm for placing mono-disperse size spheres on a square grid. May be used to generate
-    initial positions for metropolis algorithm.
+    """Algorithm for placing mono-disperse size hard disks on a square grid.
+    May be used to generate initial positions for metropolis algorithm.
 
     Keyword arguments:
     npoints -- number of sphere positions to generate
@@ -211,9 +211,10 @@ def pack_grid_md(int npoints=5, double radius=0.05):
 
 
 def pack_uniform(int npoints=5):
-    """Generate mono-disperse size sphere positions.
+    """Generate i.i.d. uniformly distributed positions.
 
     Keyword arguements:
+    npoints -- number of independent points to generate
 
     Return values:
     x -- array of x-coordinates
