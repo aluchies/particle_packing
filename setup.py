@@ -63,8 +63,8 @@ if use_cython:
 else:
     ext = ".c"
 
-spheres_ext = Extension("particle_packing.ext.spheres",
-                   [base_dir + "/cython/spheres_ext" + ext],
+sphere_ext = Extension("particle_packing.ext.sphere",
+                   [base_dir + "/cython/sphere_ext" + ext],
                    include_dirs=[np.get_include()],
                    libraries=['gsl', 'gslcblas', 'm'],
                    #extra_compile_args=["-g"],
@@ -88,7 +88,7 @@ boxcar_ext = Extension("particle_packing.ext.boxcar",
                    #extra_link_args=["-g"]
                    )
 
-ext_modules += [spheres_ext, circle_ext, boxcar_ext]
+ext_modules += [sphere_ext, circle_ext, boxcar_ext]
 
 
 

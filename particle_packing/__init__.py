@@ -1,3 +1,3 @@
-import spheres, circle, boxcar
+import sphere, circle, boxcar
 
-__all__ = [ 'spheres', 'circle', 'boxcar', ]
+__all__ = [ 'sphere', 'circle', 'boxcar', ]
