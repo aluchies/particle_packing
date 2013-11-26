@@ -46,6 +46,17 @@ class Sphere(object):
         """Extract sub-volume from the volume with x-, y-, z-axes given by
         x_ax, y_ax, z_ax. The sub-volume is just large enough to contain a
         sphere centered at xi and having radius a.
+
+        Keyword arguments:
+        x_ax -- numpy array for x-axis
+        y_ax -- numpy array for y-axis
+        z_ax -- numpy array for z-axis
+
+        Return values:
+        x_ax_subvol -- x-axis for subvolume
+        y_ax_subvol -- y-axis for subvolume
+        z_ax_subvol -- z-axis for subvolume
+
         """
 
         x_ax_subvol, y_ax_subvol, z_ax_subvol, \
@@ -54,8 +65,22 @@ class Sphere(object):
 
         return x_ax_subvol, y_ax_subvol, z_ax_subvol
 
+
     def find_subvolume_ix(self, x_ax, y_ax, z_ax):
-        """
+        """Extract sub-volume from the volume with x-, y-, z-axes given by
+        x_ax, y_ax, z_ax. The sub-volume is just large enough to contain a
+        sphere centered at xi and having radius a.
+
+        Keyword arguments:
+        x_ax -- numpy array for x-axis
+        y_ax -- numpy array for y-axis
+        z_ax -- numpy array for z-axis
+
+        Return values:
+        x_ax_subvol_ix -- index values (x_ax) for x-axis for subvolume
+        y_ax_subvol_ix -- index values (y_ax) y-axis or subvolume
+        z_ax_subvol_ix -- index values (z_ax) z-axis for subvolume
+
         """
 
         x_ax_subvol, y_ax_subvol, z_ax_subvol, \
@@ -63,6 +88,13 @@ class Sphere(object):
         _find_sphere_subvolume(x_ax, y_ax, z_ax, self.center, self.radius)
 
         return x_ax_subvol_ix, y_ax_subvol_ix, z_ax_subvol_ix
+
+
+
+
+
+
+
 
 
 def _generate_sphere_volume(x, y, z, radius, center):
