@@ -71,7 +71,7 @@ class TestCode(unittest.TestCase):
         arr[2,1,1] = 1
         self.assertTrue(np.allclose(arr, subvol))
 
-    def test2_gen_sphere(self):
+    def test2_generate_sphere(self):
         """
 
         Test generate_volume() method for Sphere class
@@ -91,7 +91,7 @@ class TestCode(unittest.TestCase):
 
         self.assertTrue(np.allclose(np.zeros((3,3,3)), subvol))
 
-    def test3_gen_sphere(self):
+    def test3_generate_sphere(self):
         """
 
         Test generate_volume() method for Sphere class
