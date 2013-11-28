@@ -55,9 +55,13 @@ class TestCode(unittest.TestCase):
 
 
 
-    def test1_gen_ellipsoid(self):
-        """Sphere at origin
+    def test1_generate_volume(self):
         """
+
+        Sphere at origin
+
+        """
+
         a = 1.
         b = 1.
         c = 1.
@@ -69,7 +73,10 @@ class TestCode(unittest.TestCase):
         x = np.linspace(-1., 1., 3)
         y = np.linspace(-1., 1., 3)
         z = np.linspace(-1., 1., 3)
-        vol = gen_ellipsoid(x, y, z, center, radii, alpha, beta, gamma)
+
+        c = Ellipsoid(center, radii, alpha, beta, gamma)
+        vol = c.generate_volume(x, y, z)
+
         arr = np.array([[[0, 0, 0],
                          [0, 1, 0],
                          [0, 0, 0]],
@@ -81,11 +88,17 @@ class TestCode(unittest.TestCase):
                         [[0, 0, 0],
                          [0, 1, 0],
                          [0, 0, 0]]])
-        npt.assert_array_equal(arr, vol)
 
-    def test2_gen_ellipsoid(self):
-        """Sphere that is narrow along z-axis
+        self.assertTrue(np.allclose(arr, vol))
+
+
+    def test2_generate_volume(self):
         """
+
+        Sphere that is narrow along z-axis
+
+        """
+        
         a = 1.
         b = 1.
         c = 0.5
@@ -97,7 +110,10 @@ class TestCode(unittest.TestCase):
         x = np.linspace(-1., 1., 3)
         y = np.linspace(-1., 1., 3)
         z = np.linspace(-1., 1., 3)
-        vol = gen_ellipsoid(x, y, z, center, radii, alpha, beta, gamma)
+
+        c = Ellipsoid(center, radii, alpha, beta, gamma)
+        vol = c.generate_volume(x, y, z)
+
         arr = np.array([[[0, 0, 0],
                          [0, 0, 0],
                          [0, 0, 0]],
@@ -109,11 +125,17 @@ class TestCode(unittest.TestCase):
                         [[0, 0, 0],
                          [0, 0, 0],
                          [0, 0, 0]]])
-        npt.assert_array_equal(arr, vol)
 
-    def test3_gen_ellipsoid(self):
-        """Sphere offset along z-axis
+        self.assertTrue(np.allclose(arr, vol))
+
+
+    def test3_generate_volume(self):
         """
+
+        Sphere offset along z-axis
+
+        """
+
         a = 1.
         b = 1.
         c = 1.
@@ -125,7 +147,10 @@ class TestCode(unittest.TestCase):
         x = np.linspace(-1., 1., 3)
         y = np.linspace(-1., 1., 3)
         z = np.linspace(-1., 1., 3)
-        vol = gen_ellipsoid(x, y, z, center, radii, alpha, beta, gamma)
+
+        c = Ellipsoid(center, radii, alpha, beta, gamma)
+        vol = c.generate_volume(x, y, z)
+
         arr = np.array([[[0, 0, 0],
                          [0, 0, 0],
                          [0, 0, 0]],
@@ -137,11 +162,16 @@ class TestCode(unittest.TestCase):
                         [[0, 1, 0],
                          [1, 1, 1],
                          [0, 1, 0]]])
-        npt.assert_array_equal(arr, vol)
 
-    def test4_gen_ellipsoid(self):
-        """Sphere offset along y-axis
+        self.assertTrue(np.allclose(arr, vol))
+
+    def test4_generate_volume(self):
         """
+
+        Sphere offset along y-axis
+
+        """
+
         a = 1.
         b = 1.
         c = 1.
@@ -153,7 +183,10 @@ class TestCode(unittest.TestCase):
         x = np.linspace(-1., 1., 3)
         y = np.linspace(-1., 1., 3)
         z = np.linspace(-1., 1., 3)
-        vol = gen_ellipsoid(x, y, z, center, radii, alpha, beta, gamma)
+
+        c = Ellipsoid(center, radii, alpha, beta, gamma)
+        vol = c.generate_volume(x, y, z)
+
         arr = np.array([[[0, 0, 0],
                          [0, 0, 0],
                          [0, 1, 0]],
@@ -165,23 +198,31 @@ class TestCode(unittest.TestCase):
                         [[0, 0, 0],
                          [0, 0, 0],
                          [0, 1, 0]]])
-        npt.assert_array_equal(arr, vol)
 
-    def test5_gen_ellipsoid(self):
-        """Rotated ellipsoid
+        self.assertTrue(np.allclose(arr, vol))
+
+    def test5_generate_volume(self):
         """
+
+        Rotated ellipsoid
+
+        """
+
         a = 0.5
         b = np.sqrt(2)
         c = 1
         center = np.array([0., 0., 0.])
         radii = np.array([a, b, c])
-        alpha = np.pi / 4.
+        alpha = 0.
         beta = 0.
-        gamma = 0.
+        gamma = np.pi / 4.
         x = np.linspace(-1., 1., 3)
         y = np.linspace(-1., 1., 3)
         z = np.linspace(-1., 1., 3)
-        vol = gen_ellipsoid(x, y, z, center, radii, alpha, beta, gamma)
+
+        c = Ellipsoid(center, radii, alpha, beta, gamma)
+        vol = c.generate_volume(x, y, z)
+
         arr = np.array([[[0, 0, 0],
                          [0, 1, 0],
                          [0, 0, 0]],
@@ -193,7 +234,10 @@ class TestCode(unittest.TestCase):
                         [[0, 0, 0],
                          [0, 1, 0],
                          [0, 0, 0]]])
-        npt.assert_array_equal(arr, vol)
+
+
+
+        self.assertTrue(np.allclose(arr, vol))
 
 
 if __name__ == '__main__':
