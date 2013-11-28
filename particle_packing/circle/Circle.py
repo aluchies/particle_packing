@@ -16,6 +16,7 @@ class Circle(object):
             self.center = center
 
         radius = float(radius)
+        self.radius = radius
 
 
 
@@ -86,7 +87,7 @@ class Circle(object):
         return x_ax_subvol_ix, y_ax_subvol_ix
 
 
-def _generate_circle_volume(x, y, center, radius, phi):
+def _generate_circle_volume(x, y, center, radius):
     """Generate the volume having x- and y-axes given by x, and y. In the
     volume, place an circle at center having given radius and rotate phi
     radians clockwise.

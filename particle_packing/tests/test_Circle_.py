@@ -17,12 +17,10 @@ class TestCode(unittest.TestCase):
 
         center = np.asarray([0, 0 ], dtype=float)
         radius = 1
-        phi = 0.
 
-        c = Circle(center, radius, phi)
+        c = Circle(center, radius)
         self.assertTrue(c.radius, radius)
         self.assertTrue(np.allclose(c.center, center))
-        self.assertTrue(c.phi == phi)
 
 
     def test2_constuctor(self):
@@ -34,18 +32,11 @@ class TestCode(unittest.TestCase):
 
         center = [0, 0, 0]
         radius = 1
-        phi = 0.
-        self.assertRaises(ValueError, Circle, center, radius, phi)
+        self.assertRaises(ValueError, Circle, center, radius)
 
         center = np.asarray([0,0])
         radius = 'a'
-        phi = 0.
-        self.assertRaises(ValueError, Circle, center, radius, phi)
-
-        center = np.asarray([0,0])
-        radius = 1
-        phi = 'a'
-        self.assertRaises(ValueError, Circle, center, radius, phi)
+        self.assertRaises(ValueError, Circle, center, radius)
 
 
 
@@ -65,11 +56,10 @@ class TestCode(unittest.TestCase):
 
         center = np.array([0., 0.])
         radius = 1
-        phi = 0.
         x = np.linspace(-1., 1., 3)
         y = np.linspace(-1., 1., 3)
 
-        c = Circle(center, radius, phi)
+        c = Circle(center, radius)
 
         vol = c.generate_volume(x, y)
 
@@ -81,30 +71,6 @@ class TestCode(unittest.TestCase):
 
 
 
-
-    def test3_generate_volume(self):
-        """
-
-        Sphere at origin, radius 1, rotated 90
-
-        """
-
-
-        center = np.array([0., 0.])
-        radius = 1
-        phi = np.pi / 2.
-        x = np.linspace(-1., 1., 3)
-        y = np.linspace(-1., 1., 3)
-
-        c = Circle(center, radius, phi)
-
-        vol = c.generate_volume(x, y)
-
-        arr = np.array([[0, 1, 0],
-                        [1, 1, 1],
-                        [0, 1, 0]])
-
-        self.assertTrue(np.allclose(arr, vol))
 
 
 
@@ -120,11 +86,10 @@ class TestCode(unittest.TestCase):
 
         center = np.array([0., 0.5])
         radius = 1.
-        phi = 0.
         x = np.linspace(-1., 1., 3)
         y = np.linspace(-1., 1., 3)
 
-        c = Circle(center, radius, phi)
+        c = Circle(center, radius)
 
         vol = c.generate_volume(x, y)
 
@@ -149,8 +114,7 @@ class TestCode(unittest.TestCase):
 
         radius = 0.5
         center = 0.5 * np.ones(2)
-        phi = 0.
-        c = Circle(center, radius, phi)
+        c = Circle(center, radius)
 
         x_ax = np.linspace(0, 1, 10)
         y_ax = np.linspace(0, 1, 10)
@@ -172,8 +136,7 @@ class TestCode(unittest.TestCase):
 
         radius = 0.5
         center = 2. * np.ones(2)
-        phi = 0.
-        c = Circle(center, radius, phi)
+        c = Circle(center, radius)
 
         x_ax = np.linspace(0, 1, 10)
         y_ax = np.linspace(0, 1, 10)
@@ -198,8 +161,7 @@ class TestCode(unittest.TestCase):
 
         radius = 0.4
         center = 0.5 * np.ones(2)
-        phi = 0.
-        c = Circle(center, radius, phi)
+        c = Circle(center, radius)
 
         x_ax = np.linspace(0, 1, 10)
         y_ax = np.linspace(0, 1, 10)
@@ -227,8 +189,7 @@ class TestCode(unittest.TestCase):
 
         radius = 0.5
         center = 0.5 * np.ones(2)
-        phi = 0.
-        c = Circle(center, radius, phi)
+        c = Circle(center, radius)
 
         x_ax = np.linspace(0, 1, 10)
         y_ax = np.linspace(0, 1, 10)
@@ -250,8 +211,7 @@ class TestCode(unittest.TestCase):
 
         radius = 0.5
         center = 2. * np.ones(2)
-        phi = 0.
-        c = Circle(center, radius, phi)
+        c = Circle(center, radius)
 
         x_ax = np.linspace(0, 1, 10)
         y_ax = np.linspace(0, 1, 10)
@@ -276,8 +236,7 @@ class TestCode(unittest.TestCase):
 
         radius = 0.4
         center = 0.5 * np.ones(2)
-        phi = 0.
-        c = Circle(center, radius, phi)
+        c = Circle(center, radius)
 
         x_ax = np.linspace(0, 1, 10)
         y_ax = np.linspace(0, 1, 10)
