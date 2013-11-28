@@ -110,7 +110,7 @@ def _generate_boxcar_volume(x, radius, center):
     return vol.astype(float)
 
 
-def _find_boxcar_subvolume(X, Y, Z, xi, a):
+def _find_boxcar_subvolume(X, xi, a):
     """Extract sub-volume from the volume with x-, y-, z-axes given by X, Y, Z.
     The sub-volume is just large enough to contain a boxcar centered at xi and
     having radius a.
@@ -128,7 +128,7 @@ def _find_boxcar_subvolume(X, Y, Z, xi, a):
     """
 
     # Find smallest cube that contains the boxcar
-    X_subvol_ix = np.nonzero(np.abs(X - xi[0]) <= a)[0]
+    X_subvol_ix = np.nonzero(np.abs(X - xi) <= a)[0]
 
     # Get axis arrays for the sub-volume
     X_subvol = X[X_subvol_ix]

@@ -19,7 +19,7 @@ class TestCode(unittest.TestCase):
         radius = 1.
         c = Boxcar(center, radius)
         self.assertTrue(c.radius == radius)
-        self.assertTrue(c.center == center
+        self.assertTrue(c.center == center)
 
 
     def test2_constuctor(self):
@@ -89,13 +89,13 @@ class TestCode(unittest.TestCase):
         """
 
         radius = 0.4
-        center = 0.5 * np.ones(3)
+        center = 0.5
 
 
         x_ax = np.linspace(0, 1, 3)
 
         c = Boxcar(center, radius)
-        subvol = c.generate_volume(x_ax, y_ax, z_ax)
+        subvol = c.generate_volume(x_ax)
 
         arr = np.zeros(3)
         arr[1] = 1
@@ -170,7 +170,7 @@ class TestCode(unittest.TestCase):
         x_ax = np.linspace(0, 1, 10)
 
         x_ax_subvol = \
-        c.find_subvolume(x_ax, y_ax, z_ax)
+        c.find_subvolume(x_ax)
 
 
         self.assertTrue(np.allclose(x_ax[1:-1], x_ax_subvol))
