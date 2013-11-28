@@ -68,7 +68,7 @@ class Ellipse(object):
 
         x_ax_subvol, y_ax_subvol, \
         x_ax_subvol_ix, y_ax_subvol_ix = \
-        _find_ellipse_subvolume(x_ax, y_ax, self.center, max(self.radii))
+        _find_circle_subvolume(x_ax, y_ax, self.center, max(self.radii))
 
         return x_ax_subvol, y_ax_subvol
 
@@ -90,7 +90,7 @@ class Ellipse(object):
 
         x_ax_subvol, y_ax_subvol, \
         x_ax_subvol_ix, y_ax_subvol_ix = \
-        _find_ellipse_subvolume(x_ax, y_ax, self.center, max(self.radii))
+        _find_circle_subvolume(x_ax, y_ax, self.center, max(self.radii))
 
         return x_ax_subvol_ix, y_ax_subvol_ix
 
@@ -143,7 +143,7 @@ def _generate_ellipse_volume(x, y, center, radii, phi):
 
 
 
-def _find_ellipse_subvolume(X, Y, xi, a):
+def _find_circle_subvolume(X, Y, xi, a):
     """Extract sub-volume from the volume with x-, y-axes given by X, Y.
     The sub-volume is just large enough to contain an ellipse centered at xi
     and having maximum radius a.
