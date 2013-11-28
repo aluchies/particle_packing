@@ -5,7 +5,7 @@ class Ellipsoid(object):
 
     """
 
-    def __init__(self, center, radius, alpha, beta, gamma):
+    def __init__(self, center, radii, alpha, beta, gamma):
         """  
         """
 
@@ -15,8 +15,13 @@ class Ellipsoid(object):
         else:
             self.center = center
 
-        radius = float(radius)
-        self.radius = radius
+        radii = np.asarray(radii, dtype=np.float).flatten()
+        if len(radii) == 1:
+            self.radii = radii * np.ones(3)
+        elif len(radii) == 3:
+            self.radii = radii
+        else:
+            raise ValueError('incorrect input for radii input')
 
         alpha = float(alpha)
         self.alpha = alpha
@@ -26,6 +31,8 @@ class Ellipsoid(object):
 
         gamma = float(gamma)
         self.gamma = gamma
+
+
 
 
 
@@ -46,9 +53,12 @@ class Ellipsoid(object):
         y_ax = np.asarray(y_ax, dtype=np.float).flatten()
         z_ax = np.asarray(z_ax, dtype=np.float).flatten()
 
-        vol = _generate_sphere_volume(x_ax, y_ax, z_ax, self.radius, self.center)
+        vol = _generate_ellipsoid_volume(x_ax, y_ax, z_ax,
+            self.center, self.radii, self.alpha, self.beta, self.gamma)
 
         return vol
+
+
 
 
     def find_subvolume(self, x_ax, y_ax, z_ax):
@@ -70,7 +80,7 @@ class Ellipsoid(object):
 
         x_ax_subvol, y_ax_subvol, z_ax_subvol, \
         x_ax_subvol_ix, y_ax_subvol_ix, z_ax_subvol_ix = \
-        _find_sphere_subvolume(x_ax, y_ax, z_ax, self.center, self.radius)
+        _find_sphere_subvolume(x_ax, y_ax, z_ax, self.center, max(self.radii))
 
         return x_ax_subvol, y_ax_subvol, z_ax_subvol
 
@@ -94,7 +104,7 @@ class Ellipsoid(object):
 
         x_ax_subvol, y_ax_subvol, z_ax_subvol, \
         x_ax_subvol_ix, y_ax_subvol_ix, z_ax_subvol_ix = \
-        _find_sphere_subvolume(x_ax, y_ax, z_ax, self.center, self.radius)
+        _find_sphere_subvolume(x_ax, y_ax, z_ax, self.center, max(self.radii))
 
         return x_ax_subvol_ix, y_ax_subvol_ix, z_ax_subvol_ix
 
@@ -106,34 +116,66 @@ class Ellipsoid(object):
 
 
 
-def _generate_sphere_volume(x, y, z, radius, center):
+def _generate_ellipsoid_volume(x, y, z, center, radii, alpha, beta, gamma):
     """Generate the volume having x-, y-, and z-axes given by x, y, z. In the
-    volume, place a sphere centered at xi and having radius a.
+    volume, place an ellipsoid at center having given radii and according to
+    alpha, beta, and gamma.
+
+    The point x = [xi, yi, zi] is inside an ellipoid if 
+    (x - center)^T R^T A R (x - center) <= 1.
+
+    center = [xc, yc, zc] is the center point of the ellipsoid
+    Rx = [[cos(theta), -sin(theta)], is clock-wise rotation of theta radians
+         [sin(theta), cos(theta)]]
+    Ry =
+    Rz =
+    A = [[1/a^2, 0, 0], records major and minor axis radii
+         [0, 1/b^2, 0],
+         [0, 0, 1/c^2]]
 
     Keyword arguments:
     x -- extent of the volume along x-axis
     y -- extent of the volume along y-axis
     z -- extent of the volume along z-axis
-    radius -- sphere radius
+    radii -- sphere radius
     center -- center point of the sphere
+    alpha --
+    beta --
+    gamma -- 
 
     Return values:
-    subvol -- generated sub-volume containing sphere
+    vol -- generated volume containing ellipse
 
     """
 
-    # Form cubic position array for x, y, z
-    X_cube = np.tile(x, (len(z), len(y), 1))
-    Y_cube = np.tile(y, (len(z), len(x), 1)).transpose(0, 2, 1)
-    Z_cube = np.tile(z, (len(y), len(x), 1)).transpose(2, 0, 1)
+    # Setup matrices for quadratic form evaluation
+    A = np.diag(1. / radii ** 2)
+    Rx = np.array([[1., 0., 0.],
+                   [0., np.cos(alpha), -np.sin(alpha)],
+                   [0., np.sin(alpha), np.cos(alpha)]])
+    Ry = np.array([[np.cos(beta), 0., np.sin(beta)],
+                   [0., 1., 0.],
+                   [-np.sin(beta), 0., np.cos(beta)]])
+    Rz = np.array([[np.cos(gamma), -np.sin(gamma), 0.],
+                   [np.sin(gamma), np.cos(gamma), 0.],
+                   [0., 0., 1.]])
+    R = Rz.dot(Ry.dot(Rx))
+    B = R.transpose().dot(A).dot(R)
 
-    # Find all points inside sphere inside the cube
-    vol = np.sqrt((X_cube - center[0]) ** 2 / radius ** 2 +
-        (Y_cube - center[1]) ** 2 / radius ** 2 +
-        (Z_cube - center[2]) ** 2 / radius ** 2)
-    vol = vol <= 1
+    # Form square position array for x and y
+    X = np.zeros((3, len(y) * len(x) * len(z)))
+    X[0] = np.tile(x - center[0], (len(z), len(y), 1)).flatten()
+    X[1] = np.tile(y - center[1], (len(z), len(x), 1)).transpose(0, 2, 1).flatten()
+    X[2] = np.tile(z - center[2], (len(y), len(x), 1)).transpose(2, 0, 1).flatten()
 
-    return vol.astype(float)
+    # Indicate points inside the ellipse
+    vol = (X * (B.dot(X))).sum(0)
+    vol = np.reshape(vol, (len(z), len(y), len(x)))
+    vol = vol <= 1.
+    vol = vol.astype(float)
+
+    return vol
+
 
 
 def _find_sphere_subvolume(X, Y, Z, xi, a):
