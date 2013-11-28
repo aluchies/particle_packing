@@ -51,8 +51,7 @@ class Boxcar(object):
 
         """
 
-        x_ax_subvol \
-        x_ax_subvol_ix = \
+        x_ax_subvol, x_ax_subvol_ix = \
         _find_boxcar_subvolume(x_ax, self.center, self.radius)
 
         return x_ax_subvol
@@ -73,8 +72,7 @@ class Boxcar(object):
 
         """
 
-        x_ax_subvol \
-        x_ax_subvol_ix = \
+        x_ax_subvol, x_ax_subvol_ix = \
         _find_boxcar_subvolume(x_ax, self.center, self.radius)
 
         return x_ax_subvol_ix
