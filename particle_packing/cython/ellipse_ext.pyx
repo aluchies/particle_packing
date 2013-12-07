@@ -36,12 +36,37 @@ def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
 
 
 
-    cdef np.ndarray[double, ndim=1, mode="c"] rA = np.ascontiguousarray(r1.flatten(), dtype=np.float64)
-    cdef np.ndarray[double, ndim=1, mode="c"] radiiA = np.ascontiguousarray(radii1.flatten(), dtype=np.float64)
+
+
+    """Input argument checking."""
+    r1 = np.asarray(r1.flatten())
+    if len(r1) != 2:
+        raise ValueError('input error for r1')
+
+    r2 = np.asarray(r2.flatten())
+    if len(r2) != 2:
+        raise ValueError('input error for r2')
+
+
+    radii1 = np.asarray(radii1.flatten())
+    if len(radii1) != 2:
+        raise ValueError('input error for radii1')
+
+    radii2 = np.asarray(radii2.flatten())
+    if len(radii2) != 2:
+        raise ValueError('input error for radii2')
+
+    phi1 = float(phi1)
+    phi2 = float(phi2)
+
+
+
+    cdef np.ndarray[double, ndim=1, mode="c"] rA = np.ascontiguousarray(r1, dtype=np.float64)
+    cdef np.ndarray[double, ndim=1, mode="c"] radiiA = np.ascontiguousarray(radii1, dtype=np.float64)
     cdef double phiA = float(phi1)
     
-    cdef np.ndarray[double, ndim=1, mode="c"] rB = np.ascontiguousarray(r2.flatten(), dtype=np.float64)
-    cdef np.ndarray[double, ndim=1, mode="c"] radiiB = np.ascontiguousarray(radii2.flatten(), dtype=np.float64)
+    cdef np.ndarray[double, ndim=1, mode="c"] rB = np.ascontiguousarray(r2, dtype=np.float64)
+    cdef np.ndarray[double, ndim=1, mode="c"] radiiB = np.ascontiguousarray(radii2, dtype=np.float64)
     cdef double phiB = float(phi2)
 
     cdef double F
