@@ -1,26 +1,41 @@
 import numpy as np
 cimport numpy as np
 
-cdef extern from "c/ellipse_overlap.c":
+cdef extern from "c/ellipse/ellipse_overlap.c":
     double ellipse_overlap(double *rA, double *radiiA, double phiA, double *rB, double *radiiB, double phiB)
-    void characteristic_ellipse_matrix(double *X, double *R, double phi, double exponent)
 
 
 def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
-    """Metropolis algorithm for mono-disperse size hard disks.
+    """
+
+    Overlap potential function (Python version) provides a distance measure
+    for ellipses A and B.
+
+    Overlap criterion based on the overlap potential value:
+    F(A,B) > 1, A and B are disjoint
+    F(A,B) = 0, A and B are externally tangent
+    F(A,B) < 1, A and B are overlapping
 
     Keyword arguments:
-    r1 --
-    radii1 --
-    phi1 --
-    r2 --
-    radii2 --
-    phi2 --
+    rA -- center of ellipse A
+    radiiA -- radii of ellipse A
+    phiA -- rotation angle of ellipse A
+    rB -- center of ellipse B
+    radiiB -- radii of ellipse B
+    phiB -- rotation angle of ellipse B
 
     Return values:
-    F --
+    F -- overlap potential value
+
+    Sources:
+    Donev, A, et. al., Neighbor list collision-driven molecular dynamics
+    simulation for nonspherical hard particles. II. Applications to ellipses
+    and ellipsoids, J. of Comp. Physics, vol 202, 2004.
 
     """
+
+
+
     cdef np.ndarray[double, ndim=1, mode="c"] rA = np.ascontiguousarray(r1.flatten(), dtype=np.float64)
     cdef np.ndarray[double, ndim=1, mode="c"] radiiA = np.ascontiguousarray(radii1.flatten(), dtype=np.float64)
     cdef double phiA = float(phi1)
@@ -35,20 +50,3 @@ def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
     F = ellipse_overlap(&rA[0], &radiiA[0], phiA, &rB[0], &radiiB[0], phiB)
 
     return F
-
-
-def char_mat(radii, angle):
-
-    cdef np.ndarray[double, ndim=1, mode="c"] rad
-    cdef np.ndarray[double, ndim=2, mode="c"] X
-    cdef double phi
-    cdef exponent
-
-    rad = np.ascontiguousarray(radii.flatten(), dtype=np.float64)
-    X = np.ascontiguousarray(np.zeros((2,2)), dtype=np.float64)
-    phi = float(angle)
-    exponent = 1
-
-    characteristic_ellipse_matrix(&X[0,0], &rad[0], phi, exponent)
-
-    return X

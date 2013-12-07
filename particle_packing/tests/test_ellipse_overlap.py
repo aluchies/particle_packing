@@ -2,8 +2,6 @@ import unittest
 import numpy as np
 from particle_packing.ellipse import overlap_potential, overlap_potential_py
 
-from particle_packing.ext.ellipse import char_mat
-
 class TestCode(unittest.TestCase):
 
 
@@ -22,7 +20,7 @@ class TestCode(unittest.TestCase):
         F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
         F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
 
-        self.assertTrue(F == F_py)
+        self.assertEqual(F, F_py)
 
 
 
