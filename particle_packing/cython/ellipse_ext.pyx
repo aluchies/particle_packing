@@ -8,7 +8,7 @@ cdef extern from "c/ellipse/ellipse_overlap.c":
 def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
     """
 
-    Overlap potential function (Python version) provides a distance measure
+    Overlap potential function provides a distance measure
     for ellipses A and B.
 
     Overlap criterion based on the overlap potential value:
