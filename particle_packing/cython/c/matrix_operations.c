@@ -142,3 +142,104 @@ void set_diagonal(double *A, double v[], int nrows, int ncols)
 
    for (; n > 0 ; A += (ncols + 1), n--)  *A = *v++;
 }
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//  void Multiply_Matrix_by_Scalar(double *A, double x, int nrows, int ncols) //
+//                                                                            //
+//  Description:                                                              //
+//     Multiply each element of the matrix A by the scalar x.                 //
+//                                                                            //
+//  Arguments:                                                                //
+//     double *A    Pointer to the first element of the matrix A.             //
+//     double x     Scalar to multipy each element of the matrix A.           //
+//     int    nrows The number of rows of matrix A.                           //
+//     int    ncols The number of columns of the matrix A.                    //
+//                                                                            //
+//  Return Values:                                                            //
+//     void                                                                   //
+//                                                                            //
+//  Example:                                                                  //
+//     #define N                                                              //
+//     #define M                                                              //
+//     double A[M][N],  x;                                                    //
+//                                                                            //
+//     (your code to initialize the matrix A and scalar x)                    //
+//                                                                            //
+//     Multiply_Matrix_by_Scalar(&A[0][0], x, M, N);                          //
+//     printf("The matrix A is \n"); ...                                      //
+//                                                                            //
+//  http:http://www.mymathlib.com/c_source/matrices/arithmetic/mul_matrix_by_scalar.c//
+//  Last visisted on: 2013-12-05                                              //
+////////////////////////////////////////////////////////////////////////////////
+void multiply_matrix_by_scalar(double *A, double x, int nrows, int ncols) 
+{
+   register int n = nrows * ncols - 1;
+   
+   for (; n >= 0; n--) A[n] *= x;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//  void Add_Matrices(double *C, double *A, double *B, int nrows, int ncols)  //
+//                                                                            //
+//  Description:                                                              //
+//     This routine computes C = A + B where C is an nrows x ncols real matrix//
+//     and A and B are given nrows x ncols real matrices.                     //
+//                                                                            //
+//     All matrices should be declared as " double X[nrows][ncols] " in the   //
+//     calling routine, where X = A, B, C.                                    //
+//                                                                            //
+//  Arguments:                                                                //
+//     double *C    Address of the first element of the matrix C.             //
+//     double *A    Address of the first element of the matrix A.             //
+//     double *B    Address of the first element of the matrix B.             //
+//     int    nrows The number of rows of matrices A, B, and C.               //
+//     int    ncols The number of columns of the matrices A, B, and C.        //
+//                                                                            //
+//  Return Values:                                                            //
+//      void                                                                  //
+//                                                                            //
+//  Example:                                                                  //
+//     #define N                                                              //
+//     #define M                                                              //
+//     double A[M][N],  B[M][N], C[M][N];                                     //
+//                                                                            //
+//     (your code to initialize the matrices A and B)                         //
+//                                                                            //
+//     Add_Matrices((double *) C, &A[0][0], &B[0][0], M, N);                  //
+//     printf("The matrix C = A + B is \n"); ...                              //
+//                                                                            //
+//  http:http:http://www.mymathlib.com/c_source/matrices/arithmetic/add_matrices.c//
+//  Last visisted on: 2013-12-05                                              //
+////////////////////////////////////////////////////////////////////////////////
+void add_matrices(double *C, double *A, double *B, int nrows, int ncols) 
+{
+   register int i;
+   register int n = nrows * ncols;
+
+   for (i = 0; i < n; i++) C[i] = A[i] + B[i];
+}

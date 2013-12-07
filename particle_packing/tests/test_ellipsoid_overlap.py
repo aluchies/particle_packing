@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from particle_packing.ellipsoid import overlap_potential_py
+from particle_packing.ellipsoid import overlap_potential_py, overlap_potential
 
 class TestCode(unittest.TestCase):
 
@@ -26,8 +26,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(np.allclose(F_py, 0.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
 
@@ -54,8 +58,13 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
+
 
 
     def test3_ellipse_overlap_py(self):
@@ -78,8 +87,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
 
@@ -105,9 +118,13 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
-
         self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
+
 
 
     def test5_ellipse_overlap_py(self):
@@ -130,9 +147,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
-
         self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
 
@@ -166,8 +186,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
     def test7_ellipse_overlap_py(self):
@@ -190,8 +214,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
     def test8_ellipse_overlap_py(self):
@@ -214,8 +242,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
     def test9_ellipse_overlap_py(self):
@@ -238,8 +270,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
 
@@ -274,8 +310,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
 
@@ -299,8 +339,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
     def test12_ellipse_overlap_py(self):
@@ -323,8 +367,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
 
@@ -348,8 +396,12 @@ class TestCode(unittest.TestCase):
 
         F_py = overlap_potential_py(rA, radiiA, phiA, rotaxA,
             rB, radiiB, phiB, rotaxB)
-
         self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rotaxA,
+            rB, radiiB, phiB, rotaxB)
+        self.assertTrue(np.allclose(F_py, F))
 
 
 
