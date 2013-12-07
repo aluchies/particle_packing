@@ -7,26 +7,45 @@ class TestCode(unittest.TestCase):
 
 
     def test1_ellipse_overlap(self):
+        """
+
+        Full overlap, identical ellipses.
+
+        """
+
         # Ellipse A
         rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
         # Ellipse B
-        rB = np.array([[2., 0.]])
+        rB = np.array([[0., 0.]])
         radiiB = np.array([1., 1.])
         phiB = 0.
 
-        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
         F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F_py, 0.))
 
-        self.assertEqual(F, F_py)
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
 
 
 
 
 
     def test2_ellipse_overlap(self):
+        """
+
+        Tangent, x-axis.
+
+        """
+
         # Ellipse A
         rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
@@ -34,20 +53,171 @@ class TestCode(unittest.TestCase):
 
         # Ellipse B
         rB = np.array([[2., 0.]])
-        radiiB = np.array([1.1, 1.])
+        radiiB = np.array([1., 1.])
         phiB = 0.
 
-        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
         F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
-
-        self.assertAlmostEqual(F, F_py)
-
+        self.assertTrue(np.allclose(F_py, 1.))
 
 
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
 
 
 
     def test3_ellipse_overlap(self):
+        """
+
+        Tangent, y-axis.
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[0., 2.]])
+        radiiB = np.array([1., 1.])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+    def test4_ellipse_overlap(self):
+        """
+
+        Tangent, all.
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.sqrt(2) * np.array([[1., 1.]])
+        radiiB = np.array([1., 1.])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+
+
+
+
+
+    def test5_ellipse_overlap(self):
+        """
+
+        Overlap, x-axis.
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[2., 0.]])
+        radiiB = np.array([1.1, 1.])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+    def test6_ellipse_overlap(self):
+        """
+
+        Overlap, y-axis.
+
+        """
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[0., 2.]])
+        radiiB = np.array([1., 1.1])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+    def test7_ellipse_overlap(self):
+        """
+
+        Overlap, all.
+
+        """
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.sqrt(2) * np.array([[1., 1.]])
+        radiiB = np.array([1.1, 1.1])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test8_ellipse_overlap(self):
+        """
+
+        No overlap, x-axis.
+
+        """
+
         # Ellipse A
         rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
@@ -58,146 +228,64 @@ class TestCode(unittest.TestCase):
         radiiB = np.array([0.9, 1.])
         phiB = 0.
 
-        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
         F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py > 1.)
 
-        self.assertAlmostEqual(F, F_py)
-
-
-
-
-    def test4_ellipse_overlap(self):
-        # Ellipse A
-        rA = np.array([[0., 0.]])
-        radiiA = np.array([1., 1.])
-        phiA = 0.
-
-        # Ellipse B
-        rB = np.array([[3., 0.]])
-        radiiB = np.array([2., 1.])
-        phiB = 0.
 
         F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
-        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
 
-        self.assertAlmostEqual(F, F_py)
-
-
-
-    def test5_ellipse_overlap(self):
-        # Ellipse A
-        rA = np.array([[0., 0.]])
-        radiiA = np.array([1., 1.])
-        phiA = 0.
-
-        # Ellipse B
-        rB = np.array([[3., 0.]])
-        radiiB = np.array([2.1, 1.])
-        phiB = 0.
-
-        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
-        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
-
-        self.assertAlmostEqual(F, F_py)
-
-
-
-
-    def test6_ellipse_overlap(self):
-        # Ellipse A
-        rA = np.array([[0., 0.]])
-        radiiA = np.array([1., 1.])
-        phiA = 0.
-
-        # Ellipse B
-        rB = np.array([[3., 0.]])
-        radiiB = np.array([1.9, 1.])
-        phiB = 0.
-
-        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
-        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
-
-        self.assertAlmostEqual(F, F_py)
-
-
-
-
-
-
-
-
-
-
-    def test7_ellipse_overlap(self):
-        # Ellipse A
-        rA = np.array([[0., 0.]])
-        radiiA = np.array([1., 1.])
-        phiA = 0.
-
-        # Ellipse B
-        rB = np.array([[np.sqrt(2)], [np.sqrt(2)]])
-        radiiB = np.array([1., 1.])
-        phiB = 0.
-
-        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
-        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
-
-        self.assertAlmostEqual(F, F_py)
-
-
-
-    def test8_ellipse_overlap(self):
-        # Ellipse A
-        rA = np.array([[0., 0.]])
-        radiiA = np.array([1., 1.])
-        phiA = 0.
-
-        # Ellipse B
-        rB = np.array([[np.sqrt(2)], [np.sqrt(2)]])
-        radiiB = np.array([0.9, 1.])
-        phiB = 0.
-
-        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
-        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
-
-        self.assertAlmostEqual(F, F_py)
-
-
-
-
-
-    def test8_ellipse_overlap(self):
-        # Ellipse A
-        rA = np.array([[0., 0.]])
-        radiiA = np.array([1., 1.])
-        phiA = 0.
-
-        # Ellipse B
-        rB = np.array([[np.sqrt(2)], [np.sqrt(2)]])
-        radiiB = np.array([1.1, 1.])
-        phiB = 0.
-
-        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
-        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
-
-        self.assertAlmostEqual(F, F_py)
 
 
     def test9_ellipse_overlap(self):
+        """
+
+        No overlap, y-axis.
+
+        """
         # Ellipse A
         rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
         # Ellipse B
-        rB = np.array([[0.], [0.]])
-        radiiB = np.array([1., 1.])
+        rB = np.array([[0., 2.]])
+        radiiB = np.array([1., 0.9])
         phiB = 0.
 
-        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
         F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py > 1.)
 
-        self.assertAlmostEqual(F, F_py)
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+    def test10_ellipse_overlap(self):
+        """
+
+        No overlap, all.
+
+        """
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.sqrt(2) * np.array([[1., 1.]])
+        radiiB = np.array([0.9, 0.9])
+        phiB = 0.
+
+
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
 
 
 
