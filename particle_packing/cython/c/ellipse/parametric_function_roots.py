@@ -28,4 +28,4 @@ h2 = h.coeff(L, 2)
 h3 = h.coeff(L, 3)
 h4 = h.coeff(L, 4)
 
-codegen([("f", f), ("h0", h0), ("h1", h1), ("h2", h2), ("h3", h3), ("h4", h4)], "C", "ellipse_parametric_function_roots", to_files=True, header=False, empty=True)
+codegen([("f", f), ("h0", h0), ("h1", h1), ("h2", h2), ("h3", h3), ("h4", h4)], "C", "parametric_function_roots", to_files=True, header=False, empty=True)

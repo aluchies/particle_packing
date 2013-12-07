@@ -1,4 +1,4 @@
-#include "ellipse_parametric_function_roots.h"
+#include "parametric_function_roots.h"
 #include <math.h>
 
 double f(double L, double a11, double a12, double a21, double a22, double b1, double b2) {
