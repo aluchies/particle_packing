@@ -80,6 +80,15 @@ circle_ext = Extension("particle_packing.ext.circle",
                    #extra_link_args=["-g"]
                    )
 
+
+ellipse_ext = Extension("particle_packing.ext.ellipse",
+                   [base_dir + "/cython/ellipse_ext" + ext],
+                   include_dirs=[np.get_include()],
+                   libraries=['gsl', 'gslcblas', 'm'],
+                   #extra_compile_args=["-g"],
+                   #extra_link_args=["-g"]
+                   )
+
 boxcar_ext = Extension("particle_packing.ext.boxcar",
                    [base_dir + "/cython/boxcar_ext" + ext],
                    include_dirs=[np.get_include()],
@@ -88,7 +97,7 @@ boxcar_ext = Extension("particle_packing.ext.boxcar",
                    #extra_link_args=["-g"]
                    )
 
-ext_modules += [sphere_ext, circle_ext, boxcar_ext]
+ext_modules += [sphere_ext, circle_ext, ellipse_ext, boxcar_ext]
 
 
 
