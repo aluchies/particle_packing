@@ -8,12 +8,12 @@ class TestCode(unittest.TestCase):
 
     def test1_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
         # Ellipse B
-        rB = np.array([[2.], [0.]])
+        rB = np.array([[2., 0.]])
         radiiB = np.array([1., 1.])
         phiB = 0.
 
@@ -28,12 +28,12 @@ class TestCode(unittest.TestCase):
 
     def test2_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
         # Ellipse B
-        rB = np.array([[2.], [0.]])
+        rB = np.array([[2., 0.]])
         radiiB = np.array([1.1, 1.])
         phiB = 0.
 
@@ -49,12 +49,12 @@ class TestCode(unittest.TestCase):
 
     def test3_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
         # Ellipse B
-        rB = np.array([[2.], [0.]])
+        rB = np.array([[2., 0.]])
         radiiB = np.array([0.9, 1.])
         phiB = 0.
 
@@ -68,12 +68,12 @@ class TestCode(unittest.TestCase):
 
     def test4_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
         # Ellipse B
-        rB = np.array([[3.], [0.]])
+        rB = np.array([[3., 0.]])
         radiiB = np.array([2., 1.])
         phiB = 0.
 
@@ -86,12 +86,12 @@ class TestCode(unittest.TestCase):
 
     def test5_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
         # Ellipse B
-        rB = np.array([[3.], [0.]])
+        rB = np.array([[3., 0.]])
         radiiB = np.array([2.1, 1.])
         phiB = 0.
 
@@ -105,12 +105,12 @@ class TestCode(unittest.TestCase):
 
     def test6_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
         # Ellipse B
-        rB = np.array([[3.], [0.]])
+        rB = np.array([[3., 0.]])
         radiiB = np.array([1.9, 1.])
         phiB = 0.
 
@@ -130,7 +130,7 @@ class TestCode(unittest.TestCase):
 
     def test7_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
@@ -148,7 +148,7 @@ class TestCode(unittest.TestCase):
 
     def test8_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
@@ -168,7 +168,7 @@ class TestCode(unittest.TestCase):
 
     def test8_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
@@ -185,7 +185,7 @@ class TestCode(unittest.TestCase):
 
     def test9_ellipse_overlap(self):
         # Ellipse A
-        rA = np.array([[0.], [0.]])
+        rA = np.array([[0., 0.]])
         radiiA = np.array([1., 1.])
         phiA = 0.
 
