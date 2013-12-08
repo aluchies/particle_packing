@@ -158,7 +158,7 @@ double ellipsoid_overlap(double *rA, double *radiiA, double phiA, double *rotaxA
 
 
 
-        for(i=0; i<=m-1; i++)
+        for(i=0; i<=m-2; i++)
         {
 
            if (( z[2 * i + 1] == 0 ) & (z[2 * i] > 0) & (z[2 * i] < 1))
