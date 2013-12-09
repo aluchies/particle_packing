@@ -11,37 +11,30 @@
 void characteristic_ellipsoid_matrix(double *X, double *R, double phi, double *rotax, double exponent)
 {
 
+    double w, x, y, z;
+    w = cos(phi / 2.0);
+    x = sin(phi / 2.0) * rotax[0];
+    y = sin(phi / 2.0) * rotax[1];
+    z = sin(phi / 2.0) * rotax[2];
 
-    // rotation matrix
-    double I[3][3] = {{ 0.0 }};
-    double v[3] = { 1.0, 1.0, 1.0 };
-    set_diagonal(&I[0][0], &v[0], 3, 3);
-
-    double s = cos(phi);
-
-    double p[3][1] = {{ 0.0 }};
-    p[0][0] = sin(phi) * rotax[0];
-    p[1][0] = sin(phi) * rotax[1];
-    p[2][0] = sin(phi) * rotax[2];
-
-    double pT[1][3] = {{ 0 }};
-    matrix_transpose(&pT[0][0], &p[0][0], 3, 1);
-
-    double P[3][3] = {{ 0 }};
-    matrix_multiply(&P[0][0], &p[0][0], &pT[0][0], 3, 1, 3);
-
-
-    double s_temp1 = 1 - s;
-    multiply_matrix_by_scalar(&P[3][3], s_temp1, 3, 3);
-
-
-    double s_temp2 = pow(s, 2) - 0.5;
-    multiply_matrix_by_scalar(&I[3][3], s_temp2, 3, 3);
-
-
+    // Rotation matrix
     double Q[3][3] = {{ 0 }};
+
+    Q[0][0] = 1.0 - 2.0 * (pow(y, 2) + pow(z, 2));
+    Q[0][1] = 2.0 * (x * y + w * z);
+    Q[0][2] = 2.0 * (x * z - w * y);
+
+    Q[1][0] = 2.0 * (x * y - w * z);
+    Q[1][1] = 1.0 - 2.0 * (pow(x, 2) + pow(z, 2));
+    Q[1][2] = 2.0 * (y * z + w * x);
+
+    Q[2][0] = 2.0 * (x * z + w * y);
+    Q[2][1] = 2.0 * (y * z - w * x);
+    Q[2][2] = 1.0 - 2.0 * (pow(x, 2) + pow(y, 2));
+
+
+    //Rotation matrix transpose
     double Qt[3][3] = {{ 0 }};
-    add_matrices(&Q[0][0], &P[0][0], &I[0][0], 3, 3);
     matrix_transpose(&Qt[0][0], &Q[0][0], 3, 3);
 
 
