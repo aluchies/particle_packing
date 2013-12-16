@@ -6,7 +6,7 @@ import sys
 
 
 
-cdef extern from "c/boxcar_metro.c":
+cdef extern from "c/boxcar/boxcar_metro.c":
     unsigned int metro_md_1d(double *x,
     double radius, size_t npoints, int step_limit,
     unsigned long randSeed)
@@ -16,10 +16,73 @@ cdef extern from "c/boxcar_metro.c":
     unsigned long randSeed)
 
 
-cdef extern from "c/boxcar_rsa.c":
+cdef extern from "c/boxcar/boxcar_rsa.c":
     size_t gen_pts_rsa_1d(double *x,
     size_t npoints, double radius, int step_limit,
     unsigned long randSeed)
+
+cdef extern from "c/boxcar/boxcar_overlap.c":
+    double boxcar_overlap(double rA, double radiiA, double rB, double radiiB)
+
+
+
+
+def overlap_potential(r1, radii1, r2, radii2):
+    """
+
+    Overlap potential function provides a distance measure
+    for boxcars A and B.
+
+    Overlap criterion based on the overlap potential value:
+    F(A,B) > 1, A and B are disjoint
+    F(A,B) = 0, A and B are externally tangent
+    F(A,B) < 1, A and B are overlapping
+
+    Keyword arguments:
+    rA -- center of boxcar A
+    radiiA -- radii of boxcar A
+    rB -- center of boxcar B
+    radiiB -- radii of boxcar B
+
+    Return values:
+    F -- overlap potential value
+
+    Sources:
+    Donev, A, et. al., Neighbor list collision-driven molecular dynamics
+    simulation for nonspherical hard particles. II. Applications to ellipses
+    and ellipsoids, J. of Comp. Physics, vol 202, 2004.
+
+    """
+
+    # Input argument checking.
+
+    cdef double rA, radiiA, rB, radiiB, F
+
+    r1 = np.asarray(r1).flatten()
+    if len(r1) != 1:
+        raise ValueError('input error for r1')
+    rA = r1[0]
+
+    r2 = np.asarray(r2).flatten()
+    if len(r2) != 1:
+        raise ValueError('input error for r2')
+    rB = r2[0]
+
+
+    radii1 = np.asarray(radii1).flatten()
+    if len(radii1) != 1:
+        raise ValueError('input error for radii1')
+    radiiA = radii1[0]
+
+    radii2 = np.asarray(radii2).flatten()
+    if len(radii2) != 1:
+        raise ValueError('input error for radii2')
+    radiiB = radii2[0]
+
+    F = boxcar_overlap(rA, radiiA, rB, radiiB)
+
+    return F
+
 
 
 

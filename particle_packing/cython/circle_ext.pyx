@@ -6,7 +6,7 @@ import sys
 
 
 
-cdef extern from "c/circle_metro.c":
+cdef extern from "c/circle/circle_metro.c":
     unsigned int metro_md_2d(double *x, double *y,
     double radius, size_t npoints, int step_limit,
     unsigned long randSeed)
@@ -16,10 +16,82 @@ cdef extern from "c/circle_metro.c":
     unsigned long randSeed)
 
 
-cdef extern from "c/circle_rsa.c":
+cdef extern from "c/circle/circle_rsa.c":
     size_t gen_pts_rsa_2d(double *x, double *y,
     size_t npoints, double radius, int step_limit,
     unsigned long randSeed)
+
+cdef extern from "c/circle/circle_overlap.c":
+    double circle_overlap(double *rA, double radiiA, double *rB, double radiiB)
+
+
+
+
+
+def overlap_potential(r1, radii1, r2, radii2):
+    """
+
+    Overlap potential function provides a distance measure
+    for circles A and B.
+
+    Overlap criterion based on the overlap potential value:
+    F(A,B) > 1, A and B are disjoint
+    F(A,B) = 0, A and B are externally tangent
+    F(A,B) < 1, A and B are overlapping
+
+    Keyword arguments:
+    rA -- center of circle A
+    radiiA -- radii of circle A
+    rB -- center of circle B
+    radiiB -- radii of circle B
+
+    Return values:
+    F -- overlap potential value
+
+    Sources:
+    Donev, A, et. al., Neighbor list collision-driven molecular dynamics
+    simulation for nonspherical hard particles. II. Applications to ellipses
+    and ellipsoids, J. of Comp. Physics, vol 202, 2004.
+
+    """
+
+    # Input argument checking.
+
+    cdef double radiiA, radiiB, F
+    cdef np.ndarray[double, ndim=1, mode="c"] rA
+    cdef np.ndarray[double, ndim=1, mode="c"] rB
+
+
+    r1 = np.asarray(r1).flatten()
+    if len(r1) != 2:
+        raise ValueError('input error for r1')
+    rA = np.ascontiguousarray(r1, dtype=np.float64)
+
+
+    r2 = np.asarray(r2).flatten()
+    if len(r2) != 2:
+        raise ValueError('input error for r2')
+    rB = np.ascontiguousarray(r2, dtype=np.float64)
+
+
+    radii1 = np.asarray(radii1).flatten()
+    if len(radii1) != 1:
+        raise ValueError('input error for radii1')
+    radiiA = radii1[0]
+
+
+    radii2 = np.asarray(radii2).flatten()
+    if len(radii2) != 1:
+        raise ValueError('input error for radii2')
+    radiiB = radii2[0]
+
+
+
+    F = circle_overlap(&rA[0], radiiA, &rB[0], radiiB)
+
+
+    return F
+
 
 
 
