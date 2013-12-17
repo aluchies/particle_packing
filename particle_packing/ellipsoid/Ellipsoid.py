@@ -1,4 +1,5 @@
 import numpy as np
+from overlap_potential_py import overlap_potential_py
 
 class Ellipsoid(object):
     """
@@ -120,6 +121,38 @@ class Ellipsoid(object):
         _find_sphere_subvolume(x_ax, y_ax, z_ax, self.center, max(self.radii))
 
         return x_ax_subvol_ix, y_ax_subvol_ix, z_ax_subvol_ix
+
+
+
+
+
+
+
+
+    def overlap_potential(self, c):
+        """Determine the overlap potential of object self and object c.
+
+        Overlap criterion based on the overlap potential value:
+        F(A,B) > 1, A and B are disjoint
+        F(A,B) = 0, A and B are externally tangent
+        F(A,B) < 1, A and B are overlapping
+
+        Input arguments:
+        c -- object to check for overlap with self
+
+        Return values:
+        F -- overlap potential value
+
+        """
+
+        if not isinstance(c, Ellipsoid):
+            raise ValueError('input is not an ellipsoid')
+
+
+        F = overlap_potential_py(self.center, self.radii, self.phi, self.rt_ax,
+            c.center, c.radii, c.phi, c.rt_ax)
+
+        return F
 
 
 

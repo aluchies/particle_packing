@@ -343,6 +343,37 @@ class TestCode(unittest.TestCase):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+    def test1_overlap_potential(self):
+        """
+
+        Test overlap_potential method for Ellipse class
+
+        """
+
+        center = np.zeros(2)
+        radii = 0.5 * np.ones(2)
+        phi = 0.
+        c1 = Ellipse(center, radii, phi)
+        c2 = Ellipse(center, radii, phi)
+
+        F = c1.overlap_potential(c2)
+
+        self.assertTrue(F == 0.)
+
+
+
+
 if __name__ == '__main__':
     print 'Running unit tests for Ellipse.py'
     unittest.main()

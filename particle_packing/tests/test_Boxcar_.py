@@ -250,6 +250,33 @@ class TestCode(unittest.TestCase):
 
 
 
+
+
+
+
+
+
+    def test1_overlap_potential(self):
+        """
+
+        Test overlap_potential method for Boxcar class
+
+        """
+
+        center = 0.
+        radii = 0.5
+        phi = 0.
+        c1 = Boxcar(center, radii)
+        c2 = Boxcar(center, radii)
+
+        F = c1.overlap_potential(c2)
+
+        self.assertTrue(F == 0.)
+
+
+
+
+
 if __name__ == '__main__':
     print 'Running unit tests for Boxcar.py'
     unittest.main()
