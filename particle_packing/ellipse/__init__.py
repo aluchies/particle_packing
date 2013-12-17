@@ -1,4 +1,4 @@
-from ..ext.ellipse import overlap_potential
+from ..ext.ellipse import pack_rsa_md_aligned, overlap_potential
 
 from Ellipse import Ellipse
 

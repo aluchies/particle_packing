@@ -1,4 +1,6 @@
 import numpy as np
+from overlap_potential_py import overlap_potential_py
+
 
 class Ellipse(object):
     """
@@ -93,6 +95,20 @@ class Ellipse(object):
         _find_circle_subvolume(x_ax, y_ax, self.center, max(self.radii))
 
         return x_ax_subvol_ix, y_ax_subvol_ix
+
+
+    def overlap_potential(self, c):
+
+        if not isinstance(c, Ellipse):
+            raise ValueError('input is not an ellipse')
+
+
+        F = overlap_potential_py(self.center, self.radii, self.phi,
+            c.center, c.radii, c.phi)
+
+        return F
+
+
 
 
 def _generate_ellipse_volume(x, y, center, radii, phi):

@@ -1,8 +1,13 @@
 import numpy as np
 cimport numpy as np
+import random
+import sys
 
 cdef extern from "c/ellipse.c":
     double ellipse_overlap(double *rA, double *radiiA, double phiA, double *rB, double *radiiB, double phiB)
+    size_t gen_pts_rsa_aligned(double *x, double *y,
+    size_t npoints, double *radius, double phi, int step_limit,
+    unsigned long randSeed)
 
 
 def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
@@ -38,7 +43,7 @@ def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
 
 
 
-    """Input argument checking."""
+    # Input argument checking.
     r1 = np.asarray(r1.flatten())
     if len(r1) != 2:
         raise ValueError('input error for r1')
@@ -75,3 +80,56 @@ def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
     F = ellipse_overlap(&rA[0], &radiiA[0], phiA, &rB[0], &radiiB[0], phiB)
 
     return F
+
+
+
+
+
+
+
+
+
+
+def pack_rsa_md_aligned(npoints, radius, phi, step_limit, rand_seed=None):
+    """RSA algorithm for mono-disperse size hard ellipses.
+
+    Keyword arguments:
+    npoints -- number of spheres positions to generate
+    radius -- ellipse radii
+    phi --
+    step_limit -- number of steps in metropolis algorithm
+    rand_seed -- seed for the random number generator
+
+    Return values:
+    x -- array of x-coordinates
+    y -- array of y-coordinates
+
+    """
+
+    # Input checking
+    radius = np.asarray(radius).flatten()
+    if len(radius) != 2:
+        raise ValueError('input error for radius')
+    cdef np.ndarray[double, ndim=1, mode="c"] radii = np.ascontiguousarray(radius)
+
+    cdef double alpha = float(phi)
+
+
+
+
+    cdef np.ndarray[double, ndim=1, mode="c"] x = np.zeros((npoints, ))
+    cdef np.ndarray[double, ndim=1, mode="c"] y = np.zeros((npoints, ))
+
+
+
+    # take care of random seed
+    cdef unsigned long rseed
+    if rand_seed is None:
+        rseed = random.randint(0, sys.maxint)
+    else:
+        rseed = long(rand_seed)
+
+    cdef int valid_pts
+    valid_pts = gen_pts_rsa_aligned(&x[0], &y[0], npoints, &radii[0], alpha, step_limit, rseed)
+
+    return x[:valid_pts], y[:valid_pts]

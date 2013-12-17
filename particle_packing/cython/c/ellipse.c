@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdio.h>
+#include <gsl/gsl_rng.h>
 #include "matrix_operations.c"
 #include "ellipse/parametric_function_roots.c"
 #include "polynomial.c"
@@ -116,7 +117,7 @@ double ellipse_overlap(double *rA, double *radiiA, double phiA, double *rB, doub
         }
 
 
-        int i;
+
         for(i=0; i<=m-2; i++)
         {
 
@@ -137,5 +138,105 @@ double ellipse_overlap(double *rA, double *radiiA, double phiA, double *rB, doub
     return F;
 
 
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+size_t gen_pts_rsa_aligned(double *x, double *y,
+    size_t npoints, double *radius, double phi, int step_limit,
+    unsigned long randSeed)
+{
+
+    // Setup GSL random number generator
+    const gsl_rng_type * T;
+    gsl_rng * r;
+    T = gsl_rng_default;
+    r = gsl_rng_alloc (T);
+
+    // Set the seed
+    // srand ( time(NULL) );
+    // unsigned long randSeed = rand();
+    gsl_rng_set(r, randSeed);
+
+    // Set the initial position
+    double C;
+    C = fmaxf(radius[0], radius[1]);
+    double xn = gsl_rng_uniform (r) * (1 - 2 * C) + C;
+    double yn = gsl_rng_uniform (r) * (1 - 2 * C) + C;
+    x[0] = xn;
+    y[0] = yn;
+
+    size_t valid_pts;
+    double F;
+    int k, flag, step;
+
+    step = 0;
+    valid_pts = 1;
+
+    double rA[2];
+    double rB[2];
+    double radiiA[2];
+    double radiiB[2];
+
+    while ((valid_pts < npoints) & (step < step_limit))
+    {
+
+        double xn = gsl_rng_uniform (r) * (1 - 2 * C) + C;
+        double yn = gsl_rng_uniform (r) * (1 - 2 * C) + C;
+
+        flag = 1;
+        for (k = 0; k < valid_pts; k++)
+        {
+
+            rA[0] = x[k];
+            rA[1] = y[k];
+            rB[0] = xn;
+            rB[1] = yn;
+            radiiA[0] = radius[0];
+            radiiA[1] = radius[1];
+            radiiB[0] = radius[0];
+            radiiB[1] = radius[1];
+
+            F = ellipse_overlap(&rA[0], &radiiA[0], phi, &rB[0], &radiiB[0], phi);
+
+            if (F < 1.0)
+            {
+
+                flag = 0;
+                break;
+
+            }
+        }
+        if (flag == 1)
+        {
+
+           x[valid_pts] = xn;
+           y[valid_pts] = yn;
+           valid_pts += 1;
+
+        }
+
+        step += 1;
+        
+    }
+    
+
+    gsl_rng_free (r);
+
+    return valid_pts;
 
 }
