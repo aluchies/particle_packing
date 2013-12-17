@@ -6,7 +6,14 @@ import sys
 
 
 
-cdef extern from "c/boxcar/boxcar_metro.c":
+
+cdef extern from "c/boxcar.c":
+    double boxcar_overlap(double rA, double radiiA, double rB, double radiiB)
+
+    size_t gen_pts_rsa_1d(double *x,
+    size_t npoints, double radius, int step_limit,
+    unsigned long randSeed)
+
     unsigned int metro_md_1d(double *x,
     double radius, size_t npoints, int step_limit,
     unsigned long randSeed)
@@ -16,13 +23,7 @@ cdef extern from "c/boxcar/boxcar_metro.c":
     unsigned long randSeed)
 
 
-cdef extern from "c/boxcar/boxcar_rsa.c":
-    size_t gen_pts_rsa_1d(double *x,
-    size_t npoints, double radius, int step_limit,
-    unsigned long randSeed)
 
-cdef extern from "c/boxcar/boxcar_overlap.c":
-    double boxcar_overlap(double rA, double radiiA, double rB, double radiiB)
 
 
 
@@ -123,7 +124,7 @@ def pack_metro_md(
 
 
 
-    success_steps =  metro_md_1d(&x[0], radius, npoints, step_limit, rseed)
+    success_steps = metro_md_1d(&x[0], radius, npoints, step_limit, rseed)
 
 
     return success_steps
@@ -166,7 +167,7 @@ def pack_metro_pd(
     else:
         rseed = long(rand_seed)
 
-    success_steps =  metro_pd_1d(&x[0], &radius[0], npoints, step_limit, rseed)
+    success_steps = metro_pd_1d(&x[0], &radius[0], npoints, step_limit, rseed)
 
 
     return success_steps

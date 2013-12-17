@@ -6,7 +6,13 @@ import sys
 
 
 
-cdef extern from "c/sphere/sphere_metro.c":
+cdef extern from "c/sphere.c":
+    double sphere_overlap(double *rA, double radiiA, double *rB, double radiiB)
+
+    size_t gen_pts_rsa_3d(double *x, double *y, double *z,
+    size_t npoints, double radius, int step_limit,
+    unsigned long randSeed)
+
     unsigned int metro_md_3d(double *x, double *y, double *z,
     double radius, size_t npoints, int step_limit,
     unsigned long randSeed)
@@ -16,13 +22,7 @@ cdef extern from "c/sphere/sphere_metro.c":
     unsigned long randSeed)
 
 
-cdef extern from "c/sphere/sphere_rsa.c":
-    size_t gen_pts_rsa_3d(double *x, double *y, double *z,
-    size_t npoints, double radius, int step_limit,
-    unsigned long randSeed)
 
-cdef extern from "c/sphere/sphere_overlap.c":
-    double sphere_overlap(double *rA, double radiiA, double *rB, double radiiB)
 
 
 

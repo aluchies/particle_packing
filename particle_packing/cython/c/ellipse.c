@@ -1,8 +1,8 @@
 #include <math.h>
 #include <stdio.h>
-#include "../matrix_operations.c"
-#include "parametric_function_roots.c"
-#include "../polynomial.c"
+#include "matrix_operations.c"
+#include "ellipse/parametric_function_roots.c"
+#include "polynomial.c"
 
 
 

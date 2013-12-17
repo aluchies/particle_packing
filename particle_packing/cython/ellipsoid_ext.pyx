@@ -1,7 +1,7 @@
 import numpy as np
 cimport numpy as np
 
-cdef extern from "c/ellipsoid/ellipsoid_overlap.c":
+cdef extern from "c/ellipsoid.c":
     double ellipsoid_overlap(double *rA, double *radiiA, double phiA, double *rotaxA, double *rB, double *radiiB, double phiB, double *rotaxB)
 
 

@@ -6,7 +6,13 @@ import sys
 
 
 
-cdef extern from "c/circle/circle_metro.c":
+cdef extern from "c/circle.c":
+    double circle_overlap(double *rA, double radiiA, double *rB, double radiiB)
+
+    size_t gen_pts_rsa_2d(double *x, double *y,
+    size_t npoints, double radius, int step_limit,
+    unsigned long randSeed)
+
     unsigned int metro_md_2d(double *x, double *y,
     double radius, size_t npoints, int step_limit,
     unsigned long randSeed)
@@ -16,13 +22,7 @@ cdef extern from "c/circle/circle_metro.c":
     unsigned long randSeed)
 
 
-cdef extern from "c/circle/circle_rsa.c":
-    size_t gen_pts_rsa_2d(double *x, double *y,
-    size_t npoints, double radius, int step_limit,
-    unsigned long randSeed)
 
-cdef extern from "c/circle/circle_overlap.c":
-    double circle_overlap(double *rA, double radiiA, double *rB, double radiiB)
 
 
 

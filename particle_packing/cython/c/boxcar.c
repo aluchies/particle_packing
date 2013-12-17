@@ -6,6 +6,104 @@
 // #include <time.h>
 
 
+
+double boxcar_overlap(double rA, double radiiA, double rB, double radiiB)
+{
+
+    double F;
+    F = pow(rB - rA, 2) / pow(radiiA + radiiB, 2);
+
+    return F;
+
+}
+
+
+
+
+
+
+
+size_t gen_pts_rsa_1d(double *x,
+    size_t npoints, double radius, int step_limit,
+    unsigned long randSeed)
+{
+
+    // Setup GSL random number generator
+    const gsl_rng_type * T;
+    gsl_rng * r;
+    T = gsl_rng_default;
+    r = gsl_rng_alloc (T);
+
+    // Set the seed
+    // srand ( time(NULL) );
+    // unsigned long randSeed = rand();
+    gsl_rng_set(r, randSeed);
+
+    // Set the initial position
+    double xn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+    x[0] = xn;
+
+
+    size_t valid_pts;
+    double F;
+    int k, flag, step;
+
+    step = 0;
+    valid_pts = 1;
+
+    while ((valid_pts < npoints) & (step < step_limit))
+    {
+
+        xn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+
+        flag = 1;
+        for (k = 0; k < valid_pts; k++)
+        {
+
+            F = boxcar_overlap(xn, radius, x[k], radius);
+            if (F < 1.0)
+            {
+
+                flag = 0;
+                break;
+
+            }
+        }
+        if (flag == 1)
+        {
+
+           x[valid_pts] = xn;
+           valid_pts += 1;
+
+        }
+
+        step += 1;
+        
+    }
+    
+
+    gsl_rng_free (r);
+
+    return valid_pts;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 unsigned int metro_md_1d(double *x,
     double radius, size_t npoints, unsigned int step_limit,
     unsigned long randSeed)
@@ -24,7 +122,7 @@ unsigned int metro_md_1d(double *x,
 
     double diameter = 2 * radius;
 
-    double dist, dx, xn;
+    double dx, xn, F;
     unsigned int step, i, k, flag, success_steps;
 
     step = 0;
@@ -53,8 +151,9 @@ unsigned int metro_md_1d(double *x,
         flag = 1;
         for (k = 0; k < npoints; k++)
         {
-            dist = sqrt( pow(xn - x[k], 2) );
-            if ((dist < diameter) & (i != k))
+
+            F = boxcar_overlap(xn, radius, x[k], radius);
+            if ((F < 1.0) & (i != k))
             {
                 flag = 0;
                 break;
@@ -86,6 +185,13 @@ unsigned int metro_md_1d(double *x,
 
 
 
+
+
+
+
+
+
+
 unsigned int metro_pd_1d(double *x,
     double *radius, size_t npoints, int step_limit,
     unsigned long randSeed)
@@ -103,7 +209,7 @@ unsigned int metro_pd_1d(double *x,
     gsl_rng_set(r, randSeed);
 
 
-    double dist, dx, xn, diameter;
+    double dx, xn, diameter, F;
     unsigned int step, i, k, flag, success_steps;
 
     step = 0;
@@ -134,8 +240,9 @@ unsigned int metro_pd_1d(double *x,
         flag = 1;
         for (k = 0; k < npoints; k++)
         {
-            dist = sqrt( pow(xn - x[k], 2) );
-            if ((dist < (radius[i] + radius[k])) & (i != k))
+
+            F = boxcar_overlap(xn, radius[i], x[k], radius[k]);
+            if ((F < 1.0) & (i != k))
             {
                 flag = 0;
                 break;
