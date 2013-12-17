@@ -153,8 +153,8 @@ def _generate_ellipse_volume(x, y, center, radii, phi):
 
     # Setup matrices for quadratic form evaluation
     A = np.diag(1. / radii ** 2)
-    R = np.array([[np.cos(phi), -np.sin(phi)],
-        [np.sin(phi), np.cos(phi)]])
+    R = np.array([[np.cos(phi), np.sin(phi)],
+        [-np.sin(phi), np.cos(phi)]])
     B = R.transpose().dot(A).dot(R)
 
     # Form square position array for x and y

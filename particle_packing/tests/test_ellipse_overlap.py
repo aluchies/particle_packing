@@ -289,6 +289,37 @@ class TestCode(unittest.TestCase):
 
 
 
+    def test11_ellipse_overlap(self):
+        """
+
+        Overlap, rotated ellipses
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0.46728551, 0.47801381]])
+        radiiA = np.array([0.1, 0.2])
+        phiA = -np.pi / 4.
+
+        # Ellipse B
+        rB = np.array([[0.53806873, 0.71002836]])
+        radiiB = np.array([0.1, 0.2])
+        phiB = -np.pi / 4.
+
+
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
 
 
 
