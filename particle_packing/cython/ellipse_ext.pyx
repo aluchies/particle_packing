@@ -5,9 +5,12 @@ import sys
 
 cdef extern from "c/ellipse.c":
     double ellipse_overlap(double *rA, double *radiiA, double phiA, double *rB, double *radiiB, double phiB)
-    size_t gen_pts_rsa_aligned(double *x, double *y,
+
+    size_t rsa_align_square(double *x, double *y,
     size_t npoints, double *radius, double phi, int step_limit,
     unsigned long randSeed)
+
+    double container_square_overlap_potential(double *rA, double *radiiA, double phiA)
 
 
 def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
@@ -44,20 +47,20 @@ def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
 
 
     # Input argument checking.
-    r1 = np.asarray(r1.flatten())
+    r1 = np.asarray(r1).flatten()
     if len(r1) != 2:
         raise ValueError('input error for r1')
 
-    r2 = np.asarray(r2.flatten())
+    r2 = np.asarray(r2).flatten()
     if len(r2) != 2:
         raise ValueError('input error for r2')
 
 
-    radii1 = np.asarray(radii1.flatten())
+    radii1 = np.asarray(radii1).flatten()
     if len(radii1) != 2:
         raise ValueError('input error for radii1')
 
-    radii2 = np.asarray(radii2.flatten())
+    radii2 = np.asarray(radii2).flatten()
     if len(radii2) != 2:
         raise ValueError('input error for radii2')
 
@@ -90,7 +93,63 @@ def overlap_potential(r1, radii1, phi1, r2, radii2, phi2):
 
 
 
-def pack_rsa_md_aligned(npoints, radius, phi, step_limit, rand_seed=None):
+def square_container_potential(r1, radii1, phi1):
+    """Determine if object is contained in the container.
+
+    Containment criterion based on the overlap potential value:
+    F(A,B) > 1, object completely inside container
+    F(A,B) = 1, object completely inside and tangent to container
+    F(A,B) < 1, object at least partially outside container
+
+
+    Return values:
+    F -- overlap potential value
+
+    """
+
+
+
+     # Input argument checking.
+    r1 = np.asarray(r1).flatten()
+    if len(r1) != 2:
+        raise ValueError('input error for r1')
+
+
+    radii1 = np.asarray(radii1).flatten()
+    if len(radii1) != 2:
+        raise ValueError('input error for radii1')
+
+    phi1 = float(phi1)
+
+
+
+    cdef np.ndarray[double, ndim=1, mode="c"] rA = np.ascontiguousarray(r1, dtype=np.float64)
+    cdef np.ndarray[double, ndim=1, mode="c"] radiiA = np.ascontiguousarray(radii1, dtype=np.float64)
+    cdef double phiA = float(phi1)
+
+    cdef double F
+
+    F = container_square_overlap_potential(&rA[0], &radiiA[0], phiA)
+
+    return F
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def pack_rsa_md_align_square(npoints, radius, phi, step_limit, rand_seed=None):
     """RSA algorithm for mono-disperse size hard ellipses.
 
     Keyword arguments:
@@ -130,6 +189,6 @@ def pack_rsa_md_aligned(npoints, radius, phi, step_limit, rand_seed=None):
         rseed = long(rand_seed)
 
     cdef int valid_pts
-    valid_pts = gen_pts_rsa_aligned(&x[0], &y[0], npoints, &radii[0], alpha, step_limit, rseed)
+    valid_pts = rsa_align_square(&x[0], &y[0], npoints, &radii[0], alpha, step_limit, rseed)
 
     return x[:valid_pts], y[:valid_pts]

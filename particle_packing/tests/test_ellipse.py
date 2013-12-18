@@ -1,7 +1,8 @@
 from particle_packing import ellipse
+from particle_packing.ellipse import Ellipse, pack_rsa_md_align_square
+from scipy.spatial.distance import pdist
 import unittest
 import numpy as np
-from scipy.spatial.distance import pdist
 
 class TestCode(unittest.TestCase):
 
@@ -9,7 +10,7 @@ class TestCode(unittest.TestCase):
 
     """ pack_rsa_md() """
 
-    def test1_pack_rsa_md(self):
+    def test1_pack_rsa_md_align_square(self):
         """
 
         circle, npoints small
@@ -21,15 +22,17 @@ class TestCode(unittest.TestCase):
         phi = 0.
         step_limit = 10 ** 2
 
-        x, y = ellipse.pack_rsa_md_aligned(npoints, radius, phi, step_limit)
+        x, y = pack_rsa_md_align_square(npoints, radius, phi, step_limit)
 
 
 
         for i in xrange(len(x)):
-            self.assertTrue(x[i] > radius[0])
-            self.assertTrue(x[i] < 1. - radius[0])
-            self.assertTrue(y[i] > radius[0])
-            self.assertTrue(y[i] < 1. - radius[0])
+            center = np.array([x[i], y[i]])
+            c = Ellipse(center, radius, phi)
+            F = c.square_container_potential()
+            self.assertTrue(F >= 1.)
+
+
 
 
         xy = np.vstack([x, y]).transpose()
@@ -39,7 +42,7 @@ class TestCode(unittest.TestCase):
         self.assertTrue(npoints == len(x))
 
 
-    def test2_pack_rsa_md(self):
+    def test2_pack_rsa_md_align_square(self):
         """
 
         circle, npoints large
@@ -51,14 +54,14 @@ class TestCode(unittest.TestCase):
         phi = 0.
         step_limit = 10 ** 4
 
-        x, y = ellipse.pack_rsa_md_aligned(npoints, radius, phi, step_limit)
+        x, y = pack_rsa_md_align_square(npoints, radius, phi, step_limit)
 
 
         for i in xrange(len(x)):
-            self.assertTrue(x[i] > radius[0])
-            self.assertTrue(x[i] < 1. - radius[0])
-            self.assertTrue(y[i] > radius[0])
-            self.assertTrue(y[i] < 1. - radius[0])
+            center = np.array([x[i], y[i]])
+            c = Ellipse(center, radius, phi)
+            F = c.square_container_potential()
+            self.assertTrue(F >= 1.)
 
 
         xy = np.vstack([x, y]).transpose()
@@ -70,7 +73,7 @@ class TestCode(unittest.TestCase):
 
 
 
-    def test3_pack_rsa_md(self):
+    def test3_pack_rsa_md_align_square(self):
         """
 
         circle, random seed test
@@ -84,16 +87,16 @@ class TestCode(unittest.TestCase):
         step_limit = 10 ** 3
         randSeed = 100
 
-        x0, y0 = ellipse.pack_rsa_md_aligned(npoints, radius, phi, step_limit,
+        x0, y0 = pack_rsa_md_align_square(npoints, radius, phi, step_limit,
             randSeed)
-        x1, y1 = ellipse.pack_rsa_md_aligned(npoints, radius, phi, step_limit,
+        x1, y1 = pack_rsa_md_align_square(npoints, radius, phi, step_limit,
             randSeed)
 
         self.assertTrue(np.allclose(x0, x1))
         self.assertTrue(np.allclose(y0, y1))
 
 
-    def test4_pack_rsa_md(self):
+    def test4_pack_rsa_md_align_square(self):
         """
 
         ellipse, npoints small
@@ -105,15 +108,15 @@ class TestCode(unittest.TestCase):
         phi = 0.
         step_limit = 10 ** 2
 
-        x, y = ellipse.pack_rsa_md_aligned(npoints, radius, phi, step_limit)
+        x, y = pack_rsa_md_align_square(npoints, radius, phi, step_limit)
 
 
 
         for i in xrange(len(x)):
-            self.assertTrue(x[i] > radius[1])
-            self.assertTrue(x[i] < 1. - radius[1])
-            self.assertTrue(y[i] > radius[0])
-            self.assertTrue(y[i] < 1. - radius[0])
+            center = np.array([x[i], y[i]])
+            c = Ellipse(center, radius, phi)
+            F = c.square_container_potential()
+            self.assertTrue(F >= 1.)
 
 
         xy = np.vstack([x, y]).transpose()
@@ -121,10 +124,10 @@ class TestCode(unittest.TestCase):
             for k in xrange(i):
 
                 center = np.asarray([x[i], y[i]])
-                ci = ellipse.Ellipse(center=center, radii=radius, phi=phi)
+                ci = Ellipse(center=center, radii=radius, phi=phi)
 
                 center = np.asarray([x[k], y[k]])
-                ck = ellipse.Ellipse(center=center, radii=radius, phi=phi)
+                ck = Ellipse(center=center, radii=radius, phi=phi)
 
                 F = ci.overlap_potential(ck)
                 self.assertTrue(F >= 1.)
@@ -134,7 +137,7 @@ class TestCode(unittest.TestCase):
 
 
 
-    def test5_pack_rsa_md(self):
+    def test5_pack_rsa_md_align_square(self):
         """
 
         ellipse, npoints larger
@@ -146,15 +149,15 @@ class TestCode(unittest.TestCase):
         phi = 0.
         step_limit = 10 ** 2
 
-        x, y = ellipse.pack_rsa_md_aligned(npoints, radius, phi, step_limit)
+        x, y = pack_rsa_md_align_square(npoints, radius, phi, step_limit)
 
 
 
         for i in xrange(len(x)):
-            self.assertTrue(x[i] > radius[1])
-            self.assertTrue(x[i] < 1. - radius[1])
-            self.assertTrue(y[i] > radius[0])
-            self.assertTrue(y[i] < 1. - radius[0])
+            center = np.array([x[i], y[i]])
+            c = Ellipse(center, radius, phi)
+            F = c.square_container_potential()
+            self.assertTrue(F >= 1.)
 
 
         xy = np.vstack([x, y]).transpose()
@@ -162,10 +165,10 @@ class TestCode(unittest.TestCase):
             for k in xrange(i):
 
                 center = np.asarray([x[i], y[i]])
-                ci = ellipse.Ellipse(center=center, radii=radius, phi=phi)
+                ci = Ellipse(center=center, radii=radius, phi=phi)
 
                 center = np.asarray([x[k], y[k]])
-                ck = ellipse.Ellipse(center=center, radii=radius, phi=phi)
+                ck = Ellipse(center=center, radii=radius, phi=phi)
 
                 F = ci.overlap_potential(ck)
                 self.assertTrue(F >= 1.)

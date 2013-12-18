@@ -1,6 +1,8 @@
 import unittest
 import numpy as np
-from particle_packing.ellipse import Ellipse
+from particle_packing.ellipse import Ellipse, \
+    overlap_potential, overlap_potential_py, \
+    square_container_potential_py, square_container_potential
 
 class TestCode(unittest.TestCase):
 
@@ -153,9 +155,9 @@ class TestCode(unittest.TestCase):
 
         vol = c.generate_volume(x, y)
 
-        arr = np.array([[1, 0, 0],
+        arr = np.array([[0, 0, 1],
                         [0, 1, 0],
-                        [0, 0, 1]])
+                        [1, 0, 0]])
 
         self.assertTrue(np.allclose(arr, vol))
 
@@ -354,7 +356,323 @@ class TestCode(unittest.TestCase):
 
 
 
-    def test1_overlap_potential(self):
+
+
+
+    def test1_ellipse_overlap(self):
+        """
+
+        Full overlap, identical ellipses.
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[0., 0.]])
+        radiiB = np.array([1., 1.])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F_py, 0.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+
+
+
+
+    def test2_ellipse_overlap(self):
+        """
+
+        Tangent, x-axis.
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[2., 0.]])
+        radiiB = np.array([1., 1.])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+    def test3_ellipse_overlap(self):
+        """
+
+        Tangent, y-axis.
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[0., 2.]])
+        radiiB = np.array([1., 1.])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+    def test4_ellipse_overlap(self):
+        """
+
+        Tangent, all.
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.sqrt(2) * np.array([[1., 1.]])
+        radiiB = np.array([1., 1.])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+
+
+
+
+
+    def test5_ellipse_overlap(self):
+        """
+
+        Overlap, x-axis.
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[2., 0.]])
+        radiiB = np.array([1.1, 1.])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+    def test6_ellipse_overlap(self):
+        """
+
+        Overlap, y-axis.
+
+        """
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[0., 2.]])
+        radiiB = np.array([1., 1.1])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+    def test7_ellipse_overlap(self):
+        """
+
+        Overlap, all.
+
+        """
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.sqrt(2) * np.array([[1., 1.]])
+        radiiB = np.array([1.1, 1.1])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test8_ellipse_overlap(self):
+        """
+
+        No overlap, x-axis.
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[2., 0.]])
+        radiiB = np.array([0.9, 1.])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+    def test9_ellipse_overlap(self):
+        """
+
+        No overlap, y-axis.
+
+        """
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.array([[0., 2.]])
+        radiiB = np.array([1., 0.9])
+        phiB = 0.
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+    def test10_ellipse_overlap(self):
+        """
+
+        No overlap, all.
+
+        """
+        # Ellipse A
+        rA = np.array([[0., 0.]])
+        radiiA = np.array([1., 1.])
+        phiA = 0.
+
+        # Ellipse B
+        rB = np.sqrt(2) * np.array([[1., 1.]])
+        radiiB = np.array([0.9, 0.9])
+        phiB = 0.
+
+
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+    def test11_ellipse_overlap(self):
+        """
+
+        Overlap, rotated ellipses
+
+        """
+
+        # Ellipse A
+        rA = np.array([[0.46728551, 0.47801381]])
+        radiiA = np.array([0.1, 0.2])
+        phiA = -np.pi / 4.
+
+        # Ellipse B
+        rB = np.array([[0.53806873, 0.71002836]])
+        radiiB = np.array([0.1, 0.2])
+        phiB = -np.pi / 4.
+
+
+
+        F_py = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, phiA, rB, radiiB, phiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+    def test12_overlap_potential(self):
         """
 
         Test overlap_potential method for Ellipse class
@@ -370,6 +688,245 @@ class TestCode(unittest.TestCase):
         F = c1.overlap_potential(c2)
 
         self.assertTrue(F == 0.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test1_container_potential(self):
+        """
+
+        completely contained
+
+        """
+
+        # Ellipse A
+        rA = np.matrix( np.array( [0.5, 0.5] ))
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        F_py = square_container_potential_py(rA, radiiA, phiA)
+        self.assertTrue(F_py > 1.)
+
+        F = square_container_potential(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, F))
+
+ 
+
+
+
+
+
+
+
+
+
+    def test2_container_potential(self):
+        """
+
+        tangent, left side
+
+        """
+
+        # Ellipse A
+        rA = np.array( [0.4, 0.5] )
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        F_py = square_container_potential_py(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = square_container_potential(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+
+    def test3_container_potential(self):
+        """
+
+        tangent, right side
+
+        """
+
+        # Ellipse A
+        rA = np.matrix( np.array( [0.6, 0.5] ))
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        F_py = square_container_potential_py(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = square_container_potential(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+    def test4_container_potential(self):
+        """
+
+        tangent, top side
+
+        """
+
+        # Ellipse A
+        rA = np.matrix( np.array( [0.5, 0.6] ))
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        F_py = square_container_potential_py(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = square_container_potential(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+
+    def test5_container_potential(self):
+        """
+
+        tangent, bottom side
+
+        """
+
+        # Ellipse A
+        rA = np.matrix( np.array( [0.5, 0.4] ))
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        F_py = square_container_potential_py(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = square_container_potential(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+
+
+
+
+
+
+
+    def test6_container_potential(self):
+        """
+
+        outside, left side
+
+        """
+
+        # Ellipse A
+        rA = np.matrix( np.array( [0.3, 0.5] ))
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        F_py = square_container_potential_py(rA, radiiA, phiA)
+        self.assertTrue(F_py < 1.)
+
+
+        F = square_container_potential(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+
+
+    def test7_container_potential(self):
+        """
+
+        outside, right side
+
+        """
+
+        # Ellipse A
+        rA = np.matrix( np.array( [0.7, 0.5] ))
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        F_py = square_container_potential_py(rA, radiiA, phiA)
+        self.assertTrue(F_py < 1.)
+
+
+        F = square_container_potential(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+
+
+    def test8_container_potential(self):
+        """
+
+        outside, top side
+
+        """
+
+        # Ellipse A
+        rA = np.matrix( np.array( [0.5, 0.7] ))
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        F_py = square_container_potential_py(rA, radiiA, phiA)
+        self.assertTrue(F_py < 1.)
+
+
+        F = square_container_potential(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+
+
+
+    def test9_container_potential(self):
+        """
+
+        outside, bottom side
+
+        """
+
+        # Ellipse A
+        rA = np.matrix( np.array( [0.5, 0.3] ))
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        F_py = square_container_potential_py(rA, radiiA, phiA)
+        self.assertTrue(F_py < 1.)
+
+
+        F = square_container_potential(rA, radiiA, phiA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+
+
 
 
 

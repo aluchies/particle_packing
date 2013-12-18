@@ -25,9 +25,10 @@ void characteristic_ellipse_matrix(double *X, double *R, double phi, double expo
 
     // radii matrix
     double O[2][2] = {{ 0 }};
-    R[0] = pow(R[0], exponent * -2.0);
-    R[1] = pow(R[1], exponent * -2.0);
-    set_diagonal(&O[0][0], R, 2, 2);
+    double diag_vals[2];
+    diag_vals[0] = pow(R[0], exponent * -2.0);
+    diag_vals[1] = pow(R[1], exponent * -2.0);
+    set_diagonal(&O[0][0], diag_vals, 2, 2);
 
 
     // characteristic ellipse matrix
@@ -144,6 +145,61 @@ double ellipse_overlap(double *rA, double *radiiA, double phiA, double *rB, doub
 
 
 
+double container_square_overlap_potential(double *rA, double *radiiA, double phiA)
+{
+
+    double rB[2];
+    double radiiB[2];
+    double phiB;
+
+    double top = 0;
+    double bottom = 0;
+    double left = 0;
+    double right = 0;
+
+    // top
+    rB[0] = 0.5;
+    rB[1] = 2.0;
+    radiiB[0] = INFINITY;
+    radiiB[1] = 1.0;
+    phiB = 0.0;
+    top = ellipse_overlap(&rA[0], &radiiA[0], phiA, &rB[0], &radiiB[0], phiB);
+
+
+    // bottom
+    rB[0] = 0.5;
+    rB[1] = -1.0;
+    radiiB[0] = INFINITY;
+    radiiB[1] = 1.0;
+    phiB = 0.0;
+    bottom = ellipse_overlap(&rA[0], &radiiA[0], phiA, &rB[0], &radiiB[0], phiB);
+
+
+
+    // left
+    rB[0] = -1.0;
+    rB[1] = 0.5;
+    radiiB[0] = 1.0;
+    radiiB[1] = INFINITY;
+    phiB = 0.0;
+    left = ellipse_overlap(&rA[0], &radiiA[0], phiA, &rB[0], &radiiB[0], phiB);
+
+
+
+    // right
+    rB[0] = 2.0;
+    rB[1] = 0.5;
+    radiiB[0] = 1.0;
+    radiiB[1] = INFINITY;
+    phiB = 0.0;
+    right = ellipse_overlap(&rA[0], &radiiA[0], phiA, &rB[0], &radiiB[0], phiB);
+
+
+
+
+    return fminf(top, fminf(bottom, fminf(left, right)));
+
+}
 
 
 
@@ -156,7 +212,11 @@ double ellipse_overlap(double *rA, double *radiiA, double phiA, double *rB, doub
 
 
 
-size_t gen_pts_rsa_aligned(double *x, double *y,
+
+
+
+
+size_t rsa_align_square(double *x, double *y,
     size_t npoints, double *radius, double phi, int step_limit,
     unsigned long randSeed)
 {
@@ -172,31 +232,66 @@ size_t gen_pts_rsa_aligned(double *x, double *y,
     // unsigned long randSeed = rand();
     gsl_rng_set(r, randSeed);
 
-    // Set the initial position
-    double C;
-    C = fmaxf(radius[0], radius[1]);
-    double xn = gsl_rng_uniform (r) * (1 - 2 * C) + C;
-    double yn = gsl_rng_uniform (r) * (1 - 2 * C) + C;
-    x[0] = xn;
-    y[0] = yn;
-
-    size_t valid_pts;
-    double F;
-    int k, flag, step;
-
-    step = 0;
-    valid_pts = 1;
-
+    // arrays for overlap_potential functions
     double rA[2];
     double rB[2];
     double radiiA[2];
     double radiiB[2];
+    double F;
+    double xn = 0.;
+    double yn = 0.;
 
+
+    radiiA[0] = radius[0];
+    radiiA[1] = radius[1];
+
+    // Set the initial position
+    double C;
+    C = fmaxf(radius[0], radius[1]);
+
+    F = 0;
+    while (F < 1.)
+    {
+
+        xn = gsl_rng_uniform (r);
+        yn = gsl_rng_uniform (r);
+
+        rA[0] = xn;
+        rA[1] = yn;
+
+        F = container_square_overlap_potential(&rA[0], &radiiA[0], phi);
+
+    }
+
+
+
+    x[0] = xn;
+    y[0] = yn;
+
+    size_t valid_pts;
+    int k, flag, step;
+
+    step = 0;
+    valid_pts = 1;
     while ((valid_pts < npoints) & (step < step_limit))
     {
 
-        double xn = gsl_rng_uniform (r) * (1 - 2 * C) + C;
-        double yn = gsl_rng_uniform (r) * (1 - 2 * C) + C;
+        // Generate new ellipse inside the container
+        F = 0;
+        while (F < 1.)
+        {
+
+            xn = gsl_rng_uniform (r);
+            yn = gsl_rng_uniform (r);
+
+            rA[0] = xn;
+            rA[1] = yn;
+
+            F = container_square_overlap_potential(&rA[0], &radiiA[0], phi);
+
+        }
+
+
 
         flag = 1;
         for (k = 0; k < valid_pts; k++)
