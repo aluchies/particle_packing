@@ -107,23 +107,27 @@ class Boxcar(object):
 
 
 
-    def container_potential(self):
-        """Determine container potential for the object.
+    def contain_potential(self, c):
+        """Determine contain potential for the object.
 
-        Containment criterion based on the overlap potential value:
-        G(A,B) > 1, object completely inside container
-        G(A,B) = 1, object completely inside and tangent to container
-        G(A,B) < 1, object at least partially outside container
+        Containment criterion based on the contain potential value:
+        G(A,B) > 1, A completely inside B
+        G(A,B) = 1, A completely inside and tangent to B
+        G(A,B) < 1, A at least partially outside B
 
 
         Return values:
-        G -- overlap potential value
+        G -- contain potential value
 
         """
 
-        rB = 0.5
-        radiiB = 1.
-        G = container_potential_py(self.center, self.radius, rB, radiiB)
+
+        if not isinstance(c, Boxcar):
+            raise ValueError('input is not a boxcar')
+
+
+        G = contain_potential_py(self.center, self.radius,
+            c.center, c.radius)
 
         return G
 
@@ -256,13 +260,13 @@ def overlap_potential_py(rA, radiiA, rB, radiiB):
 
 
 
-def container_potential_py(rA, radiiA, rB, radiiB):
+def contain_potential_py(rA, radiiA, rB, radiiB):
     """
 
-    Container potential function (Python version) provides a distance measure
+    Contain potential function (Python version) provides a distance measure
     for boxcars A and B.
 
-    Criterion based on the container potential value:
+    Criterion based on the contain potential value:
     F(A,B) > 1, A entirely inside B
     F(A,B) = 1, A entirely inside and tangent to B
     F(A,B) < 1, A is partly or entirely outside of B
