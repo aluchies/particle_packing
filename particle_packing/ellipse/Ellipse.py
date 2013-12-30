@@ -492,7 +492,7 @@ def square_container_potential_py(r, radii, phi):
 
     Overlap criterion based on the overlap potential value:
     F(A,B) > 1, A and B are disjoint
-    F(A,B) = 0, A and B are externally tangent
+    F(A,B) = 1, A and B are externally tangent
     F(A,B) < 1, A and B are overlapping
 
     Keyword arguments:

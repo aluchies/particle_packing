@@ -1,5 +1,4 @@
 import numpy as np
-from overlap_potential_py import overlap_potential_py
 
 class Boxcar(object):
     """
@@ -108,6 +107,23 @@ class Boxcar(object):
 
 
 
+    def container_potential(self):
+        """Determine container potential for the object.
+
+        Containment criterion based on the overlap potential value:
+        G(A,B) > 1, object completely inside container
+        G(A,B) = 1, object completely inside and tangent to container
+        G(A,B) < 1, object at least partially outside container
+
+
+        Return values:
+        G -- overlap potential value
+
+        """
+
+
+
+
 
 
 
@@ -162,3 +178,135 @@ def _find_boxcar_subvolume(X, xi, a):
     X_subvol = X[X_subvol_ix]
 
     return X_subvol, X_subvol_ix
+
+
+
+
+
+
+
+
+
+
+def overlap_potential_py(rA, radiiA, rB, radiiB):
+    """
+
+    Overlap potential function (Python version) provides a distance measure
+    for boxcars A and B.
+
+    Overlap criterion based on the overlap potential value:
+    F(A,B) > 1, A and B are disjoint
+    F(A,B) = 0, A and B are externally tangent
+    F(A,B) < 1, A and B are overlapping
+
+    Keyword arguments:
+    rA -- center of boxcar A
+    radiiA -- radii of boxcar A
+    rB -- center of boxcar B
+    radiiB -- radii of boxcar B
+
+    Return values:
+    F -- overlap potential value
+
+    Sources:
+    Donev, A, et. al., Neighbor list collision-driven molecular dynamics
+    simulation for nonspherical hard particles. II. Applications to ellipses
+    and ellipsoids, J. of Comp. Physics, vol 202, 2004.
+
+    """
+
+
+    """Input argument checking."""
+
+    rA = np.asarray(rA).flatten()
+    if len(rA) != 1:
+        raise ValueError('input error for rA')
+    rA = rA[0]
+
+    rB = np.asarray(rB).flatten()
+    if len(rB) != 1:
+        raise ValueError('input error for rB')
+    rB = rB[0]
+
+
+    radiiA = np.asarray(radiiA).flatten()
+    if len(radiiA) != 1:
+        raise ValueError('input error for radiiA')
+    radiiA = radiiA[0]
+
+    radiiB = np.asarray(radiiB).flatten()
+    if len(radiiB) != 1:
+        raise ValueError('input error for radiiB')
+    radiiB = radiiB[0]
+
+
+
+    return (rA - rB) ** 2 / (radiiA + radiiB) ** 2
+
+
+
+
+
+def container_potential_py(rA, radiiA, rB, radiiB):
+    """
+
+    Container potential function (Python version) provides a distance measure
+    for boxcars A and B.
+
+    Overlap criterion based on the overlap potential value:
+    F(A,B) > 1, A and B are disjoint
+    F(A,B) = 0, A and B are externally tangent
+    F(A,B) < 1, A and B are overlapping
+
+    Keyword arguments:
+    rA -- center of boxcar A
+    radiiA -- radii of boxcar A
+    rB -- center of boxcar B
+    radiiB -- radii of boxcar B
+
+    Return values:
+    F -- overlap potential value
+
+    Sources:
+    Donev, A, et. al., Neighbor list collision-driven molecular dynamics
+    simulation for nonspherical hard particles. II. Applications to ellipses
+    and ellipsoids, J. of Comp. Physics, vol 202, 2004.
+
+    """
+
+
+    """Input argument checking."""
+
+    rA = np.asarray(rA).flatten()
+    if len(rA) != 1:
+        raise ValueError('input error for rA')
+    rA = rA[0]
+
+    rB = np.asarray(rB).flatten()
+    if len(rB) != 1:
+        raise ValueError('input error for rB')
+    rB = rB[0]
+
+
+    radiiA = np.asarray(radiiA).flatten()
+    if len(radiiA) != 1:
+        raise ValueError('input error for radiiA')
+    radiiA = radiiA[0]
+
+    radiiB = np.asarray(radiiB).flatten()
+    if len(radiiB) != 1:
+        raise ValueError('input error for radiiB')
+    radiiB = radiiB[0]
+
+    pass
+
+
+
+
+
+
+
+
+
+
+
