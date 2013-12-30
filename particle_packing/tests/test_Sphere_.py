@@ -1,6 +1,8 @@
 import unittest
 import numpy as np
-from particle_packing.sphere import Sphere
+from particle_packing.sphere import Sphere, \
+    overlap_potential, overlap_potential_py, \
+    contain_potential_py
 
 class TestCode(unittest.TestCase):
 
@@ -288,8 +290,376 @@ class TestCode(unittest.TestCase):
 
 
 
-
     def test1_overlap_potential(self):
+        """
+
+        Full overlap.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.])
+
+        # Sphere B
+        rB = np.array([[0., 0., 0.]])
+        radiiB = np.array([1.])
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F_py, 0.))
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+
+
+    def test2_overlap_potential(self):
+        """
+
+        Tangent, x-axis.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.])
+
+        # Sphere B
+        rB = np.array([[2., 0., 0.]])
+        radiiB = np.array([1.])
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+    def test3_overlap_potential(self):
+        """
+
+        Tangent, y-axis.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.])
+
+
+        # Sphere B
+        rB = np.array([[0., 2., 0.]])
+        radiiB = np.array([1.])
+
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+
+    def test4_overlap_potential(self):
+        """
+
+        Tangent, z-axis.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 2.]])
+        radiiA = np.array([1.])
+
+
+        # Sphere B
+        rB = np.array([[0., 0., 0.]])
+        radiiB = np.array([1.])
+
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+    def test5_overlap_potential(self):
+        """
+
+        Tangent, all.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.])
+
+
+        # Sphere B
+        rB = np.sqrt(4. / 3. ) * np.array([[1., 1., 1.]])
+        radiiB = np.array([1.])
+
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test6_overlap_potential(self):
+        """
+
+        Overlap, x-axis.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.1])
+
+        # Sphere B
+        rB = np.array([[2., 0., 0.]])
+        radiiB = np.array([1.])
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+    def test7_overlap_potential(self):
+        """
+
+        Overlap, y-axis.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.1])
+
+
+        # Sphere B
+        rB = np.array([[0., 2., 0.]])
+        radiiB = np.array([1.])
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+    def test8_overlap_potential(self):
+        """
+
+        Overlap, z-axis.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.1])
+
+
+        # Sphere B
+        rB = np.array([[0., 0., 2.]])
+        radiiB = np.array([1.])
+
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+    def test9_overlap_potential(self):
+        """
+
+        Overlap, all.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.])
+
+
+        # Sphere B
+        rB = np.sqrt(4. / 3.) * np.array([[1., 1., 1.]]) - 0.1
+        radiiB = np.array([1.])
+
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(F_py < 1.)
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test10_overlap_potential(self):
+        """
+
+        No overlap, x-axis.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([0.9])
+
+
+        # Sphere B
+        rB = np.array([[2., 0., 0.]])
+        radiiB = np.array([1.])
+
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+    def test11_overlap_potential(self):
+        """
+
+        No overlap, y-axis.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([0.9])
+
+
+        # Sphere B
+        rB = np.array([[0., 2., 0.]])
+        radiiB = np.array([1.])
+
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+    def test12_overlap_potential(self):
+        """
+
+        No overlap, z-axis.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([0.9])
+
+
+        # Sphere B
+        rB = np.array([[0., 0., 2.]])
+        radiiB = np.array([1.])
+
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(F_py > 1.)
+
+
+        F = overlap_potential(rA, radiiA, rB, radiiB)
+        self.assertTrue(np.allclose(F, F_py))
+
+
+
+
+
+    def test13_overlap_potential(self):
+        """
+
+        No overlap, all.
+
+        """
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([0.9])
+
+
+        # Sphere B
+        rB = np.sqrt(4. / 3.) * np.array([[1., 1., 1.]])
+        radiiB = np.array([1.])
+
+
+        F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(F_py > 1.)
+
+
+
+
+
+
+
+
+
+
+    def test14_overlap_potential(self):
         """
 
         Test overlap_potential method for Sphere class
@@ -304,6 +674,196 @@ class TestCode(unittest.TestCase):
         F = c1.overlap_potential(c2)
 
         self.assertTrue(F == 0.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test1_contain_potential(self):
+        """
+
+        Full containment
+
+        """
+
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([0.9])
+        phiA = 0.
+
+        # Sphere B
+        rB = np.array([[0., 0., 0.]])
+        radiiB = np.array([1.])
+        phiB = 0.
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py > 1.)
+
+
+
+    def test2_contain_potential(self):
+        """
+
+        Full containment, tangent
+
+        """
+
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.])
+        phiA = 0.
+
+        # Sphere B
+        rB = np.array([[0., 0., 0.]])
+        radiiB = np.array([1.])
+        phiB = 0.
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py == 1.)
+
+
+
+    def test3_contain_potential(self):
+        """
+
+        Partially oustide due to size
+
+        """
+
+        # Sphere A
+        rA = np.array([[0., 0., 0.]])
+        radiiA = np.array([1.1])
+        phiA = 0.
+
+        # Sphere B
+        rB = np.array([[0., 0., 0.]])
+        radiiB = np.array([1.])
+        phiB = 0.
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py < 1.)
+
+
+    def test4_contain_potential(self):
+        """
+
+        Partially oustide due to location
+
+        """
+
+        # Sphere A
+        rA = np.array([[0.1, 0., 0.]])
+        radiiA = np.array([1.])
+        phiA = 0.
+
+        # Sphere B
+        rB = np.array([[0., 0., 0.]])
+        radiiB = np.array([1.])
+        phiB = 0.
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py < 1.)
+
+
+
+
+    def test5_contain_potential(self):
+        """
+
+        Completely oustide due to location, x-axis
+
+        """
+
+        # Sphere A
+        rA = np.array([[2., 0., 0.]])
+        radiiA = np.array([1.])
+        phiA = 0.
+
+        # Sphere B
+        rB = np.array([[0., 0., 0.]])
+        radiiB = np.array([1.])
+        phiB = 0.
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py < 1.)
+
+
+
+
+
+    def test5_contain_potential(self):
+        """
+
+        Completely oustide due to location, y-axis
+
+        """
+
+        # Sphere A
+        rA = np.array([[0., 2., 0.]])
+        radiiA = np.array([1.])
+        phiA = 0.
+
+        # Sphere B
+        rB = np.array([[0., 0., 0.]])
+        radiiB = np.array([1.])
+        phiB = 0.
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py < 1.)
+
+
+
+
+    def test6_contain_potential(self):
+        """
+
+        Completely oustide due to location, z-axis
+
+        """
+
+        # Sphere A
+        rA = np.array([[0., 0., 2.]])
+        radiiA = np.array([1.])
+        phiA = 0.
+
+        # Sphere B
+        rB = np.array([[0., 0., 0.]])
+        radiiB = np.array([1.])
+        phiB = 0.
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py < 1.)
+
+
+    def test7_contain_potential(self):
+        """
+
+        Test contain_potential_py called as class method
+
+        """
+
+        center = np.array([[0., 0., 0.]])
+        radius = np.array([0.9])
+        c1 = Sphere(center, radius)
+
+        center = np.array([[0., 0., 0.]])
+        radius = np.array([1.])
+        c2 = Sphere(center, radius)
+
+
+        G_py = c1.contain_potential(c2)
+        self.assertTrue(G_py > 1.)
+
+
 
 
 

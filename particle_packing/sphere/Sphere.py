@@ -1,5 +1,4 @@
 import numpy as np
-from overlap_potential_py import overlap_potential_py
 
 class Sphere(object):
     """
@@ -101,7 +100,7 @@ class Sphere(object):
 
         Overlap criterion based on the overlap potential value:
         F(A,B) > 1, A and B are disjoint
-        F(A,B) = 0, A and B are externally tangent
+        F(A,B) = 1, A and B are externally tangent
         F(A,B) < 1, A and B are overlapping
 
         Input arguments:
@@ -120,6 +119,36 @@ class Sphere(object):
             c.center, c.radius)
 
         return F
+
+
+
+
+    def contain_potential(self, c):
+        """Determine contain potential for the object.
+
+        Containment criterion based on the contain potential value:
+        G(A,B) > 1, A completely inside B
+        G(A,B) = 1, A completely inside and tangent to B
+        G(A,B) < 1, A at least partially outside B
+
+
+        Return values:
+        G -- contain potential value
+
+        """
+
+
+        if not isinstance(c, Sphere):
+            raise ValueError('input is not a sphere')
+
+
+        G = contain_potential_py(self.center, self.radius,
+            c.center, c.radius)
+
+        return G
+
+
+
 
 
 
@@ -193,3 +222,130 @@ def _find_sphere_subvolume(X, Y, Z, xi, a):
     Z_subvol = Z[Z_subvol_ix]
 
     return X_subvol, Y_subvol, Z_subvol, X_subvol_ix, Y_subvol_ix, Z_subvol_ix
+
+
+
+
+
+
+
+
+
+
+def overlap_potential_py(rA, radiiA, rB, radiiB):
+    """
+
+    Overlap potential function (Python version) provides a distance measure
+    for spheres A and B.
+
+    Overlap criterion based on the overlap potential value:
+    F(A,B) > 1, A and B are disjoint
+    F(A,B) = 1, A and B are externally tangent
+    F(A,B) < 1, A and B are overlapping
+
+    Keyword arguments:
+    rA -- center of sphere A
+    radiiA -- radii of sphere A
+    rB -- center of sphere B
+    radiiB -- radii of sphere B
+
+    Return values:
+    F -- overlap potential value
+
+    Sources:
+    Donev, A, et. al., Neighbor list collision-driven molecular dynamics
+    simulation for nonspherical hard particles. II. Applications to ellipses
+    and ellipsoids, J. of Comp. Physics, vol 202, 2004.
+
+    """
+
+
+    """Input argument checking."""
+
+    rA = np.asarray(rA).flatten()
+    if len(rA) != 3:
+        raise ValueError('input error for rA')
+
+    rB = np.asarray(rB).flatten()
+    if len(rB) != 3:
+        raise ValueError('input error for rB')
+
+
+    radiiA = np.asarray(radiiA).flatten()
+    if len(radiiA) != 1:
+        raise ValueError('input error for radiiA')
+    radiiA = radiiA[0]
+
+    radiiB = np.asarray(radiiB).flatten()
+    if len(radiiB) != 1:
+        raise ValueError('input error for radiiB')
+    radiiB = radiiB[0]
+
+
+    rAB = rB - rA
+
+    return (rAB[0] ** 2 + rAB[1] ** 2 + rAB[2] ** 2) / (radiiA + radiiB) ** 2
+
+
+
+
+
+
+
+
+
+
+def contain_potential_py(rA, radiiA, rB, radiiB):
+    """
+
+    Contain potential function (Python version) provides a distance measure
+    for spheres A and B.
+
+    Criterion based on the contain potential value:
+    G(A,B) > 1, A entirely inside B
+    G(A,B) = 1, A entirely inside and tangent to B
+    G(A,B) < 1, A is partly or entirely outside of B
+
+    Keyword arguments:
+    rA -- center of sphere A
+    radiiA -- radii of sphere A
+    rB -- center of sphere B
+    radiiB -- radii of sphere B
+
+    Return values:
+    G -- overlap potential value
+
+    Sources:
+    Donev, A, et. al., Neighbor list collision-driven molecular dynamics
+    simulation for nonspherical hard particles. II. Applications to ellipses
+    and ellipsoids, J. of Comp. Physics, vol 202, 2004.
+
+    """
+
+
+    """Input argument checking."""
+
+    rA = np.asarray(rA).flatten()
+    if len(rA) != 3:
+        raise ValueError('input error for rA')
+
+    rB = np.asarray(rB).flatten()
+    if len(rB) != 3:
+        raise ValueError('input error for rB')
+
+
+    radiiA = np.asarray(radiiA).flatten()
+    if len(radiiA) != 1:
+        raise ValueError('input error for radiiA')
+    radiiA = radiiA[0]
+
+    radiiB = np.asarray(radiiB).flatten()
+    if len(radiiB) != 1:
+        raise ValueError('input error for radiiB')
+    radiiB = radiiB[0]
+
+
+    rAB = rB - rA
+
+    return (radiiB ** 2 - (rAB[0] ** 2 + rAB[1] ** 2 +
+        rAB[2] ** 2)) / radiiA ** 2

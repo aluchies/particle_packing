@@ -299,9 +299,9 @@ def contain_potential_py(rA, radiiA, rB, radiiB):
     for circles A and B.
 
     Overlap criterion based on the overlap potential value:
-    G(A,B) > 1, A and B are disjoint
-    G(A,B) = 1, A and B are externally tangent
-    G(A,B) < 1, A and B are overlapping
+    G(A,B) > 1, A entirely inside B
+    G(A,B) = 1, A entirely inside and tangent to B
+    G(A,B) < 1, A is partly or entirely outside of B
 
     Keyword arguments:
     rA -- center of circle A

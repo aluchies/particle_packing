@@ -647,7 +647,7 @@ class TestCode(unittest.TestCase):
         """
 
         # Circle A
-        rA = np.array([[0., 0.1]])
+        rA = np.array([[0.1, 0.]])
         radiiA = np.array([1.])
         phiA = 0.
 
