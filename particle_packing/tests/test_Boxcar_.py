@@ -1,7 +1,8 @@
 import unittest
 import numpy as np
 from particle_packing.boxcar import Boxcar, \
-    overlap_potential, overlap_potential_py
+    overlap_potential, overlap_potential_py, \
+    container_potential_py
 
 class TestCode(unittest.TestCase):
 
@@ -251,6 +252,10 @@ class TestCode(unittest.TestCase):
 
 
 
+
+
+
+
     def test1_boxcar_overlap(self):
         """
 
@@ -368,6 +373,158 @@ class TestCode(unittest.TestCase):
         F = c1.overlap_potential(c2)
 
         self.assertTrue(F == 0.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test1_container_potential(self):
+        """
+
+        Full containment.
+
+        """
+
+        # A
+        rA = np.array([0.])
+        radiiA = np.array([0.9])
+
+        # B
+        rB = np.array([0.])
+        radiiB = np.array([1.])
+
+        G_py = container_potential_py(rA, radiiA, rB, radiiB)
+
+        self.assertTrue(G_py > 1.)
+
+
+
+
+
+
+    def test2_container_potential(self):
+        """
+
+        Full containment, tangent.
+
+        """
+
+        # A
+        rA = np.array([0.])
+        radiiA = np.array([1.])
+
+        # B
+        rB = np.array([0.])
+        radiiB = np.array([1.])
+
+        G_py = container_potential_py(rA, radiiA, rB, radiiB)
+
+        self.assertTrue(np.allclose(G_py, 1.))
+
+
+
+
+    def test3_container_potential(self):
+        """
+
+        Partially outside due to location
+
+        """
+
+        # A
+        rA = np.array([0.1])
+        radiiA = np.array([1.])
+
+        # B
+        rB = np.array([0.])
+        radiiB = np.array([1.])
+
+        G_py = container_potential_py(rA, radiiA, rB, radiiB)
+
+        self.assertTrue(G_py < 1.)
+
+
+
+
+    def test4_container_potential(self):
+        """
+
+        Partially outside due to size
+
+        """
+
+        # A
+        rA = np.array([0.])
+        radiiA = np.array([1.1])
+
+        # B
+        rB = np.array([0.])
+        radiiB = np.array([1.])
+
+        G_py = container_potential_py(rA, radiiA, rB, radiiB)
+
+        self.assertTrue(G_py < 1.)
+
+
+
+
+
+    def test5_container_potential(self):
+        """
+
+        Completely outside due to location
+
+        """
+
+        # A
+        rA = np.array([1.])
+        radiiA = np.array([1.])
+
+        # B
+        rB = np.array([-1.])
+        radiiB = np.array([1.])
+
+        G_py = container_potential_py(rA, radiiA, rB, radiiB)
+
+        self.assertTrue(G_py < 1.)
+
+
+
+
+
+
+
+    def test6_container_potential(self):
+        """
+
+        Test container_potential_py called as class method
+
+        """
+
+
+        center = 0.5
+        radius = 0.9
+        c = Boxcar(center, radius)
+
+        G = c.container_potential()
+
+        self.assertTrue(G > 1.)
+
+
+
+
+
+
 
 
 

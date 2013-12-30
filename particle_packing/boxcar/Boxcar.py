@@ -121,6 +121,12 @@ class Boxcar(object):
 
         """
 
+        rB = 0.5
+        radiiB = 1.
+        G = container_potential_py(self.center, self.radius, rB, radiiB)
+
+        return G
+
 
 
 
@@ -194,9 +200,9 @@ def overlap_potential_py(rA, radiiA, rB, radiiB):
     Overlap potential function (Python version) provides a distance measure
     for boxcars A and B.
 
-    Overlap criterion based on the overlap potential value:
+    Criterion based on the overlap potential value:
     F(A,B) > 1, A and B are disjoint
-    F(A,B) = 0, A and B are externally tangent
+    F(A,B) = 1, A and B are externally tangent
     F(A,B) < 1, A and B are overlapping
 
     Keyword arguments:
@@ -247,16 +253,19 @@ def overlap_potential_py(rA, radiiA, rB, radiiB):
 
 
 
+
+
+
 def container_potential_py(rA, radiiA, rB, radiiB):
     """
 
     Container potential function (Python version) provides a distance measure
     for boxcars A and B.
 
-    Overlap criterion based on the overlap potential value:
-    F(A,B) > 1, A and B are disjoint
-    F(A,B) = 0, A and B are externally tangent
-    F(A,B) < 1, A and B are overlapping
+    Criterion based on the container potential value:
+    F(A,B) > 1, A entirely inside B
+    F(A,B) = 1, A entirely inside and tangent to B
+    F(A,B) < 1, A is partly or entirely outside of B
 
     Keyword arguments:
     rA -- center of boxcar A
@@ -265,7 +274,7 @@ def container_potential_py(rA, radiiA, rB, radiiB):
     radiiB -- radii of boxcar B
 
     Return values:
-    F -- overlap potential value
+    G -- overlap potential value
 
     Sources:
     Donev, A, et. al., Neighbor list collision-driven molecular dynamics
@@ -298,7 +307,11 @@ def container_potential_py(rA, radiiA, rB, radiiB):
         raise ValueError('input error for radiiB')
     radiiB = radiiB[0]
 
-    pass
+
+
+
+
+    return (radiiB ** 2 - (rA - rB) ** 2) / radiiA ** 2
 
 
 
