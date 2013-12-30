@@ -267,9 +267,9 @@ def contain_potential_py(rA, radiiA, rB, radiiB):
     for boxcars A and B.
 
     Criterion based on the contain potential value:
-    F(A,B) > 1, A entirely inside B
-    F(A,B) = 1, A entirely inside and tangent to B
-    F(A,B) < 1, A is partly or entirely outside of B
+    G(A,B) > 1, A entirely inside B
+    G(A,B) = 1, A entirely inside and tangent to B
+    G(A,B) < 1, A is partly or entirely outside of B
 
     Keyword arguments:
     rA -- center of boxcar A
