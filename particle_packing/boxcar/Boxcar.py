@@ -134,6 +134,29 @@ class Boxcar(object):
 
 
 
+    def container_potential(self):
+        """Determine container potential for the object.
+
+        Containment criterion based on the contain potential value:
+        G(A,B) > 1, A completely inside the container
+        G(A,B) = 1, A completely inside and tangent to container
+        G(A,B) < 1, A at least partially outside container
+
+
+        Return values:
+        G -- contain potential value
+
+        """
+
+        c = Boxcar(0.5, 0.5)
+
+        G = self.contain_potential(c)
+
+        return G
+
+
+
+
 
 
 

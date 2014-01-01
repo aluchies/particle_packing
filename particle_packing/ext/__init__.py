@@ -1,1 +1,1 @@
-import sphere, circle, ellipse, boxcar
+import boxcar, circle, sphere, ellipse, ellipsoid

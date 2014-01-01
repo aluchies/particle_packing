@@ -91,7 +91,7 @@ def overlap_potential(r1, radii1, r2, radii2):
 
 
 
-def pack_metro_md(
+def metro_md(
     np.ndarray[double, ndim=1, mode="c"] x not None,
     double radius, int step_limit, rand_seed=None):
 
@@ -135,7 +135,7 @@ def pack_metro_md(
 
 
 
-def pack_metro_pd(
+def metro_pd(
     np.ndarray[double, ndim=1, mode="c"] x not None,
     np.ndarray[double, ndim=1, mode="c"] radius not None,
     int step_limit, rand_seed=None):
@@ -181,7 +181,7 @@ def pack_metro_pd(
 
 
 
-def pack_rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
+def rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
     """RSA algorithm for mono-disperse size spheres.
 
     Keyword arguments:
@@ -218,7 +218,7 @@ def pack_rsa_md(int npoints, double radius, int step_limit, rand_seed=None):
 
 
 
-def pack_grid_md(int npoints=5, double radius=0.05):
+def grid_md(int npoints=5, double radius=0.05):
     """Algorithm for placing mono-disperse size boxcars on grid. May be used to generate
     initial positions for metropolis algorithm.
 
@@ -232,7 +232,7 @@ def pack_grid_md(int npoints=5, double radius=0.05):
 
     """
 
-    space = 1.1 * 2. * radius
+    space = 2. * radius
     ppdim = np.floor(1. / space)
     xlist = np.arange(ppdim) * space + space / 2.
 
@@ -263,7 +263,7 @@ def pack_grid_md(int npoints=5, double radius=0.05):
 
 
 
-def pack_uniform(int npoints=5):
+def poisson_point(int npoints=5):
     """Generate i.i.d. uniformly distributed positions.
 
     Keyword arguements:
