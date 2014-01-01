@@ -123,6 +123,36 @@ class Ellipse(object):
 
 
 
+
+
+    def contain_potential(self, c):
+        """Determine contain potential for the object.
+
+        Containment criterion based on the contain potential value:
+        G(A,B) > 1, A completely inside B
+        G(A,B) = 1, A completely inside and tangent to B
+        G(A,B) < 1, A at least partially outside B
+
+
+        Return values:
+        G -- contain potential value
+
+        """
+
+
+        if not isinstance(c, Ellipse):
+            raise ValueError('input is not an ellipse')
+
+        print 'contain_potential method is not yet implemented.'
+
+        return float('nan')
+
+
+
+
+
+
+
     def square_container_potential(self):
         """Determine if object is contained in the container.
 
@@ -255,15 +285,15 @@ def overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB):
     F(A,B) < 1, A and B are overlapping
 
     Keyword arguments:
-    rA -- center of ellipse A
-    radiiA -- radii of ellipse A
-    phiA -- rotation angle of ellipse A
-    rB -- center of ellipse B
-    radiiB -- radii of ellipse B
-    phiB -- rotation angle of ellipse B
+    rA -- center of A
+    radiiA -- radii of A
+    phiA -- rotation angle of A
+    rB -- center of B
+    radiiB -- radii of B
+    phiB -- rotation angle of B
 
     Return values:
-    F -- overlap potential value
+    F -- overlap potential
 
     Sources:
     Donev, A, et. al., Neighbor list collision-driven molecular dynamics
@@ -303,48 +333,13 @@ def overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB):
 
 
 
+    # What's needed is XA^-1 = Q^T * O^2 * Q
+    XA = _characteristic_matrix(radiiA, phiA, -1.)
 
 
 
-
-    """
-
-    X = Q^T * O^-2 * Q, where Q is rotation matrix given by angle phi and
-    O is diagonal matrix with radii values along main diagonal
-    
-    What's needed is XA^-1 = Q^T * O^2 * Q
-
-    """
-
-
-    O = np.matrix(np.diag(radiiA ** 2))
-
-    Q = np.matrix([[np.cos(phiA), np.sin(phiA)],
-              [-np.sin(phiA), np.cos(phiA)]])
-
-    XA = Q.T * O * Q
-
-
-
-    """
-
-    X = Q^T * O^-2 * Q, where Q is rotation matrix given by angle phi and
-    O is diagonal matrix with radii values along main diagonal
-
-    What's needed is XB^1/2 = Q^T * O^-1 * Q
-
-    """
-
-
-    O = np.matrix(np.diag(radiiB ** -1))
-
-    Q = np.matrix([[np.cos(phiB), np.sin(phiB)],
-              [-np.sin(phiB), np.cos(phiB)]])
-
-    XB = Q.T * O * Q
-
-
-
+    # What's needed is XB^1/2 = Q^T * O^-1 * Q
+    XB = _characteristic_matrix(radiiB, phiB, 0.5)
 
 
 
@@ -469,6 +464,34 @@ def h_coeffs(A, b):
 
 
     return coeff
+
+
+def _characteristic_matrix(radii, phi, exponent=1.):
+    """Find ellipse characteristic matrix.
+
+    Keyword arguments:
+    radii -- radius values for ellipse
+    phi -- rotation angle
+    exponent -- raise characteristic matrix to this exponential power
+
+    Return values:
+    X -- characteristic matrix
+
+
+    X = Q^T * O^-n*2 * Q, where Q is rotation matrix given by angle phi and
+    O is diagonal matrix with radii values along main diagonal
+
+
+    """
+
+    O = np.matrix(np.diag(radii ** (-2. * exponent)))
+
+    Q = np.matrix([[np.cos(phi), np.sin(phi)],
+              [-np.sin(phi), np.cos(phi)]])
+
+    X = Q.T * O * Q
+
+    return X
 
 
 
