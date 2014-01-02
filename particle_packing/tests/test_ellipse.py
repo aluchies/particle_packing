@@ -1,5 +1,5 @@
 from particle_packing import ellipse
-from particle_packing.ellipse import Ellipse, pack_rsa_md_align_square
+from particle_packing.ellipse import Ellipse
 from scipy.spatial.distance import pdist
 import unittest
 import numpy as np
@@ -8,9 +8,9 @@ class TestCode(unittest.TestCase):
 
 
 
-    """ pack_rsa_md() """
+    """ ellipse.pack.rsa_md() """
 
-    def test1_pack_rsa_md_align_square(self):
+    def test1_pack_rsa_mda(self):
         """
 
         circle, npoints small
@@ -22,7 +22,7 @@ class TestCode(unittest.TestCase):
         phi = 0.
         step_limit = 10 ** 2
 
-        x, y = pack_rsa_md_align_square(npoints, radius, phi, step_limit)
+        x, y = ellipse.pack.rsa_mda(npoints, radius, phi, step_limit)
 
 
 
@@ -42,7 +42,7 @@ class TestCode(unittest.TestCase):
         self.assertTrue(npoints == len(x))
 
 
-    def test2_pack_rsa_md_align_square(self):
+    def test2_pack_rsa_mda(self):
         """
 
         circle, npoints large
@@ -54,7 +54,7 @@ class TestCode(unittest.TestCase):
         phi = 0.
         step_limit = 10 ** 4
 
-        x, y = pack_rsa_md_align_square(npoints, radius, phi, step_limit)
+        x, y = ellipse.pack.rsa_mda(npoints, radius, phi, step_limit)
 
 
         for i in xrange(len(x)):
@@ -73,7 +73,7 @@ class TestCode(unittest.TestCase):
 
 
 
-    def test3_pack_rsa_md_align_square(self):
+    def test3_pack_rsa_mda(self):
         """
 
         circle, random seed test
@@ -87,16 +87,16 @@ class TestCode(unittest.TestCase):
         step_limit = 10 ** 3
         randSeed = 100
 
-        x0, y0 = pack_rsa_md_align_square(npoints, radius, phi, step_limit,
+        x0, y0 = ellipse.pack.rsa_mda(npoints, radius, phi, step_limit,
             randSeed)
-        x1, y1 = pack_rsa_md_align_square(npoints, radius, phi, step_limit,
+        x1, y1 = ellipse.pack.rsa_mda(npoints, radius, phi, step_limit,
             randSeed)
 
         self.assertTrue(np.allclose(x0, x1))
         self.assertTrue(np.allclose(y0, y1))
 
 
-    def test4_pack_rsa_md_align_square(self):
+    def test4_pack_rsa_mda(self):
         """
 
         ellipse, npoints small
@@ -108,7 +108,7 @@ class TestCode(unittest.TestCase):
         phi = 0.
         step_limit = 10 ** 2
 
-        x, y = pack_rsa_md_align_square(npoints, radius, phi, step_limit)
+        x, y = ellipse.pack.rsa_mda(npoints, radius, phi, step_limit)
 
 
 
@@ -137,7 +137,7 @@ class TestCode(unittest.TestCase):
 
 
 
-    def test5_pack_rsa_md_align_square(self):
+    def test5_pack_rsa_mda(self):
         """
 
         ellipse, npoints larger
@@ -149,7 +149,7 @@ class TestCode(unittest.TestCase):
         phi = 0.
         step_limit = 10 ** 2
 
-        x, y = pack_rsa_md_align_square(npoints, radius, phi, step_limit)
+        x, y = ellipse.pack.rsa_mda(npoints, radius, phi, step_limit)
 
 
 

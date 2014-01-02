@@ -149,8 +149,8 @@ def square_container_potential(r1, radii1, phi1):
 
 
 
-def pack_rsa_md_align_square(npoints, radius, phi, step_limit, rand_seed=None):
-    """RSA algorithm for mono-disperse size hard ellipses.
+def rsa_mda(npoints, radius, phi, step_limit, rand_seed=None):
+    """RSA algorithm for mono-disperse and aligned hard ellipses in a sqaure.
 
     Keyword arguments:
     npoints -- number of spheres positions to generate
