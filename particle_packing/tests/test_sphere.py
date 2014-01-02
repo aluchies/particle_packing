@@ -5,7 +5,7 @@ from scipy.spatial.distance import pdist
 
 class TestCode(unittest.TestCase):
 
-    """ pack_grid_md() """
+    """ pack.grid_md() """
 
     def test1_pack_grid_md(self):
         """
@@ -14,7 +14,7 @@ class TestCode(unittest.TestCase):
 
         """
 
-        x, y, z = sphere.pack_grid_md(npoints=0, radius=0.05)
+        x, y, z = sphere.pack.grid_md(npoints=0, radius=0.05)
         self.assertTrue(x.size == 0)
         self.assertTrue(y.size == 0)
         self.assertTrue(z.size == 0)
@@ -28,7 +28,7 @@ class TestCode(unittest.TestCase):
 
         npoints = 5
         radius = 0.05
-        x, y, z = sphere.pack_grid_md(npoints=npoints, radius=radius)
+        x, y, z = sphere.pack.grid_md(npoints=npoints, radius=radius)
         self.assertTrue(x.size == npoints)
         self.assertTrue(y.size == npoints)
         self.assertTrue(z.size == npoints)
@@ -42,7 +42,7 @@ class TestCode(unittest.TestCase):
 
         npoints = 500
         radius = 0.05
-        x, y, z = sphere.pack_grid_md(npoints=npoints, radius=radius)
+        x, y, z = sphere.pack.grid_md(npoints=npoints, radius=radius)
         self.assertTrue(x.size == npoints)
         self.assertTrue(y.size == npoints)
         self.assertTrue(z.size == npoints)
@@ -61,7 +61,7 @@ class TestCode(unittest.TestCase):
 
         npoints = 1000
         radius = 0.05
-        self.assertRaises(ValueError, sphere.pack_grid_md, npoints, 0.05)
+        self.assertRaises(ValueError, sphere.pack.grid_md, npoints, 0.05)
 
 
 
@@ -71,7 +71,7 @@ class TestCode(unittest.TestCase):
 
 
 
-    """ pack_metro_md() """
+    """ pack.metro_md() """
 
 
     def test1_pack_metro_md(self):
@@ -84,8 +84,8 @@ class TestCode(unittest.TestCase):
         npoints = 5
         radius = 0.05
         step_limit = 10 ** 2
-        x, y, z = sphere.pack_grid_md(npoints=npoints, radius=radius)
-        success_steps = sphere.pack_metro_md(x, y, z, radius, step_limit)
+        x, y, z = sphere.pack.grid_md(npoints=npoints, radius=radius)
+        success_steps = sphere.pack.metro_md(x, y, z, radius, step_limit)
         for i in xrange(len(x)):
             self.assertTrue(x[i] > radius)
             self.assertTrue(x[i] < 1. - radius)
@@ -111,8 +111,8 @@ class TestCode(unittest.TestCase):
         npoints = 500
         radius = 0.05
         step_limit = 10 ** 3
-        x, y, z = sphere.pack_grid_md(npoints=npoints, radius=radius)
-        success_steps = sphere.pack_metro_md(x, y, z, radius, step_limit)
+        x, y, z = sphere.pack.grid_md(npoints=npoints, radius=radius)
+        success_steps = sphere.pack.metro_md(x, y, z, radius, step_limit)
         for i in xrange(len(x)):
             self.assertTrue(x[i] > radius)
             self.assertTrue(x[i] < 1. - radius)
@@ -149,9 +149,9 @@ class TestCode(unittest.TestCase):
         step_limit = 10 ** 3
         randSeed = 100
 
-        success_steps0 = sphere.pack_metro_md(x0, y0, z0, radius, step_limit,
+        success_steps0 = sphere.pack.metro_md(x0, y0, z0, radius, step_limit,
             randSeed)
-        success_steps1 = sphere.pack_metro_md(x1, y1, z1, radius, step_limit,
+        success_steps1 = sphere.pack.metro_md(x1, y1, z1, radius, step_limit,
             randSeed )
 
         self.assertTrue(np.allclose(x0, x1))
@@ -170,8 +170,8 @@ class TestCode(unittest.TestCase):
         npoints = 500
         radius = 0.0
         step_limit = 10 ** 3
-        x, y, z = sphere.pack_uniform(npoints=npoints)
-        success_steps = sphere.pack_metro_md(x, y, z, radius, step_limit)
+        x, y, z = sphere.pack.poisson_point(npoints=npoints)
+        success_steps = sphere.pack.metro_md(x, y, z, radius, step_limit)
 
         self.assertTrue(success_steps == step_limit)
 
@@ -180,7 +180,7 @@ class TestCode(unittest.TestCase):
 
 
 
-    """ pack_metro_pd() """
+    """ pack.metro_pd() """
 
 
     def test1_pack_metro_pd(self):
@@ -193,9 +193,9 @@ class TestCode(unittest.TestCase):
         npoints = 5
         radius = 0.05
         step_limit = 10 ** 2
-        x, y, z = sphere.pack_grid_md(npoints=npoints, radius=radius)
+        x, y, z = sphere.pack.grid_md(npoints=npoints, radius=radius)
         radius = np.ascontiguousarray(0.05 * np.ones(npoints))
-        success_steps = sphere.pack_metro_pd(x, y, z, radius, step_limit)
+        success_steps = sphere.pack.metro_pd(x, y, z, radius, step_limit)
         for i in xrange(len(x)):
             self.assertTrue(x[i] > radius[i])
             self.assertTrue(x[i] < 1. - radius[i])
@@ -221,9 +221,9 @@ class TestCode(unittest.TestCase):
         npoints = 500
         radius = 0.05
         step_limit = 10 ** 3
-        x, y, z = sphere.pack_grid_md(npoints=npoints, radius=radius)
+        x, y, z = sphere.pack.grid_md(npoints=npoints, radius=radius)
         radius = np.ascontiguousarray(0.05 * np.ones(npoints))
-        success_steps = sphere.pack_metro_pd(x, y, z, radius, step_limit)
+        success_steps = sphere.pack.metro_pd(x, y, z, radius, step_limit)
         for i in xrange(len(x)):
             self.assertTrue(x[i] > radius[i])
             self.assertTrue(x[i] < 1. - radius[i])
@@ -260,9 +260,9 @@ class TestCode(unittest.TestCase):
         npoints = 3
         radius = np.ascontiguousarray(0.05 * np.ones(npoints))
 
-        success_steps0 = sphere.pack_metro_pd(x0, y0, z0, radius, step_limit,
+        success_steps0 = sphere.pack.metro_pd(x0, y0, z0, radius, step_limit,
             randSeed)
-        success_steps1 = sphere.pack_metro_pd(x1, y1, z1, radius, step_limit,
+        success_steps1 = sphere.pack.metro_pd(x1, y1, z1, radius, step_limit,
             randSeed )
 
         self.assertTrue(np.allclose(x0, x1))
@@ -282,8 +282,8 @@ class TestCode(unittest.TestCase):
         radius = 0.0
         radius = np.ascontiguousarray(radius * np.ones(npoints))
         step_limit = 10 ** 3
-        x, y, z = sphere.pack_uniform(npoints=npoints)
-        success_steps = sphere.pack_metro_pd(x, y, z, radius, step_limit)
+        x, y, z = sphere.pack.poisson_point(npoints=npoints)
+        success_steps = sphere.pack.metro_pd(x, y, z, radius, step_limit)
 
         self.assertTrue(success_steps == step_limit)
 
@@ -293,7 +293,7 @@ class TestCode(unittest.TestCase):
 
 
 
-    """ pack_rsa_md() """
+    """ pack.rsa_md() """
 
     def test1_pack_rsa_md(self):
         """
@@ -306,7 +306,7 @@ class TestCode(unittest.TestCase):
         radius = 0.05
         step_limit = 10 ** 2
 
-        x, y, z = sphere.pack_rsa_md(npoints, radius, step_limit)
+        x, y, z = sphere.pack.rsa_md(npoints, radius, step_limit)
 
 
         for i in xrange(len(x)):
@@ -335,7 +335,7 @@ class TestCode(unittest.TestCase):
         radius = 0.05
         step_limit = 10 ** 4
 
-        x, y, z = sphere.pack_rsa_md(npoints, radius, step_limit)
+        x, y, z = sphere.pack.rsa_md(npoints, radius, step_limit)
 
 
         for i in xrange(len(x)):
@@ -366,9 +366,9 @@ class TestCode(unittest.TestCase):
         step_limit = 10 ** 3
         randSeed = 100
 
-        x0, y0, z0 = sphere.pack_rsa_md(npoints, radius, step_limit,
+        x0, y0, z0 = sphere.pack.rsa_md(npoints, radius, step_limit,
             randSeed)
-        x1, y1, z1 = sphere.pack_rsa_md(npoints, radius, step_limit,
+        x1, y1, z1 = sphere.pack.rsa_md(npoints, radius, step_limit,
             randSeed)
 
         self.assertTrue(np.allclose(x0, x1))

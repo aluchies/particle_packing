@@ -740,7 +740,7 @@ class TestCode(unittest.TestCase):
 
 
 
-    def test1_container_potential_square_py(self):
+    def test1_container_potential(self):
         """
 
         Completely inside square container
@@ -757,7 +757,7 @@ class TestCode(unittest.TestCase):
 
 
 
-    def test2_container_potential_square_py(self):
+    def test2_container_potential(self):
         """
 
         Completely outside square container
@@ -773,7 +773,7 @@ class TestCode(unittest.TestCase):
         self.assertTrue(H < 1.)
 
 
-    def test3_container_potential_square_py(self):
+    def test3_container_potential(self):
         """
 
         Completely inside and tange to square container
@@ -787,6 +787,29 @@ class TestCode(unittest.TestCase):
         H = container_potential_square_py(rA, radiiA)
 
         self.assertTrue(np.allclose(H, 1.))
+
+
+
+
+
+
+    def test4_container_potential(self):
+        """
+
+        Test calling container_potential class method
+
+        """
+
+        # Circle A
+        rA = np.array([[0.5, 0.5]])
+        radiiA = np.array([0.1])
+
+        c = Circle(rA, radiiA)
+
+        H = c.container_potential('square')
+
+
+        self.assertTrue(H > 1.)
 
 
 

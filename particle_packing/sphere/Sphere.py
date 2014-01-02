@@ -153,6 +153,44 @@ class Sphere(object):
 
 
 
+    def container_potential(self, shape):
+        """Determine container potential for the object.
+
+        Containment criterion based on the contain potential value:
+        G(A,B) > 1, A completely inside the container
+        G(A,B) = 1, A completely inside and tangent to container
+        G(A,B) < 1, A at least partially outside container
+
+        Keyword arguments:
+        shape -- container shape, 'square' or 'circle'
+
+
+        Return values:
+        G -- contain potential value
+
+        """
+
+        # input checking
+        if (not shape is 'cube') and (not shape is 'sphere'):
+            raise ValueError('shape input is unknown')
+
+        if shape is 'sphere':
+            center = [0.5, 0.5, 0.5]
+            radius = 0.5
+            G = contain_potential_py(self.center, self.radius,
+            center, radius)
+
+        elif shape is 'cube':
+            G = container_potential_cube_py(self.center, self.radius)
+
+        return G
+
+
+
+
+
+
+
 
 
 
@@ -349,3 +387,67 @@ def contain_potential_py(rA, radiiA, rB, radiiB):
 
     return (radiiB ** 2 - (rAB[0] ** 2 + rAB[1] ** 2 +
         rAB[2] ** 2)) / radiiA ** 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def container_potential_cube_py(rA, radiiA):
+    """
+
+    Container potential function (Python version) provides a distance measure
+    for how far A is inside the unit cube
+
+    Overlap criterion based on the overlap potential value:
+    G(A,B) > 1, A entirely inside container
+    G(A,B) = 1, A entirely inside and tangent to container
+    G(A,B) < 1, A is partly or entirely outside of container
+
+    Keyword arguments:
+    rA -- center of circle A
+    radiiA -- radius of circle A
+
+    Return values:
+    G -- overlap potential value
+
+    Sources:
+    Donev, A, et. al., Neighbor list collision-driven molecular dynamics
+    simulation for nonspherical hard particles. II. Applications to ellipses
+    and ellipsoids, J. of Comp. Physics, vol 202, 2004.
+
+    """
+
+
+    """Input argument checking."""
+
+    rA = np.asarray(rA).flatten()
+    if len(rA) != 3:
+        raise ValueError('input error for rA')
+
+
+    radiiA = np.asarray(radiiA).flatten()
+    if len(radiiA) != 1:
+        raise ValueError('input error for radiiA')
+    radiiA = radiiA[0]
+
+    rB = 0.5 * np.ones(3)
+    radiiB = 0.5
+
+
+    rAB = rB - rA
+
+
+    a = (radiiB ** 2 - rAB[0] ** 2) / radiiA ** 2
+    b = (radiiB ** 2 - rAB[1] ** 2) / radiiA ** 2
+    c = (radiiB ** 2 - rAB[2] ** 2) / radiiA ** 2
+
+    return max(a, b, c)

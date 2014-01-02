@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from particle_packing.sphere import Sphere, \
     overlap_potential, overlap_potential_py, \
-    contain_potential_py
+    contain_potential_py, container_potential_cube_py
 
 class TestCode(unittest.TestCase):
 
@@ -862,6 +862,88 @@ class TestCode(unittest.TestCase):
 
         G_py = c1.contain_potential(c2)
         self.assertTrue(G_py > 1.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test1_container_potential(self):
+        """
+
+        Completely inside square container
+
+        """
+
+        # Sphere A
+        rA = np.array([[0.5, 0.5, 0.5]])
+        radiiA = np.array([0.1])
+
+        H = container_potential_cube_py(rA, radiiA)
+
+        self.assertTrue(H > 1.)
+
+
+
+    def test2_container_potential(self):
+        """
+
+        Completely outside container
+
+        """
+
+        # Sphere A
+        rA = np.array([[2., 2., 2.]])
+        radiiA = np.array([0.1])
+
+        H = container_potential_cube_py(rA, radiiA)
+
+        self.assertTrue(H < 1.)
+
+
+    def test3_container_potential(self):
+        """
+
+        Completely inside and tangent to container
+
+        """
+
+        # Sphere A
+        rA = np.array([[0.5, 0.5, 0.5]])
+        radiiA = np.array([0.5])
+
+        H = container_potential_cube_py(rA, radiiA)
+
+        self.assertTrue(np.allclose(H, 1.))
+
+
+
+
+
+    def test4_container_potential(self):
+        """
+
+        Test calling container_potential class method
+
+        """
+
+        # Sphere A
+        rA = np.array([[0.5, 0.5, 0.5]])
+        radiiA = np.array([0.1])
+
+        c = Sphere(rA, radiiA)
+
+        H = c.container_potential('cube')
+
+
+        self.assertTrue(H > 1.)
 
 
 
