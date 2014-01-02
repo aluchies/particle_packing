@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from particle_packing.circle import Circle, \
     overlap_potential, overlap_potential_py, \
-    contain_potential_py
+    contain_potential_py, container_potential_square_py
 
 class TestCode(unittest.TestCase):
 
@@ -270,12 +270,12 @@ class TestCode(unittest.TestCase):
         # Circle A
         rA = np.array([[0., 0.]])
         radiiA = np.array([1.])
-        phiA = 0.
+
 
         # Circle B
         rB = np.array([[0., 0.]])
         radiiB = np.array([1.])
-        phiB = 0.
+
 
         F_py = overlap_potential_py(rA, radiiA, rB, radiiB)
         self.assertTrue(np.allclose(F_py, 0.))
@@ -584,12 +584,12 @@ class TestCode(unittest.TestCase):
         # Circle A
         rA = np.array([[0., 0.]])
         radiiA = np.array([0.9])
-        phiA = 0.
+
 
         # Circle B
         rB = np.array([[0., 0.]])
         radiiB = np.array([1.])
-        phiB = 0.
+
 
         G_py = contain_potential_py(rA, radiiA, rB, radiiB)
         self.assertTrue(G_py > 1.)
@@ -606,12 +606,12 @@ class TestCode(unittest.TestCase):
         # Circle A
         rA = np.array([[0., 0.]])
         radiiA = np.array([1.])
-        phiA = 0.
+
 
         # Circle B
         rB = np.array([[0., 0.]])
         radiiB = np.array([1.])
-        phiB = 0.
+
 
         G_py = contain_potential_py(rA, radiiA, rB, radiiB)
         self.assertTrue(G_py == 1.)
@@ -628,12 +628,12 @@ class TestCode(unittest.TestCase):
         # Circle A
         rA = np.array([[0., 0.]])
         radiiA = np.array([1.1])
-        phiA = 0.
+
 
         # Circle B
         rB = np.array([[0., 0.]])
         radiiB = np.array([1.])
-        phiB = 0.
+
 
         G_py = contain_potential_py(rA, radiiA, rB, radiiB)
         self.assertTrue(G_py < 1.)
@@ -649,12 +649,12 @@ class TestCode(unittest.TestCase):
         # Circle A
         rA = np.array([[0.1, 0.]])
         radiiA = np.array([1.])
-        phiA = 0.
+
 
         # Circle B
         rB = np.array([[0., 0.]])
         radiiB = np.array([1.])
-        phiB = 0.
+
 
         G_py = contain_potential_py(rA, radiiA, rB, radiiB)
         self.assertTrue(G_py < 1.)
@@ -672,12 +672,12 @@ class TestCode(unittest.TestCase):
         # Circle A
         rA = np.array([[2., 0.]])
         radiiA = np.array([1.])
-        phiA = 0.
+
 
         # Circle B
         rB = np.array([[0., 0.]])
         radiiB = np.array([1.])
-        phiB = 0.
+
 
         G_py = contain_potential_py(rA, radiiA, rB, radiiB)
         self.assertTrue(G_py < 1.)
@@ -696,12 +696,12 @@ class TestCode(unittest.TestCase):
         # Circle A
         rA = np.array([[0., 2.]])
         radiiA = np.array([1.])
-        phiA = 0.
+
 
         # Circle B
         rB = np.array([[0., 0.]])
         radiiB = np.array([1.])
-        phiB = 0.
+
 
         G_py = contain_potential_py(rA, radiiA, rB, radiiB)
         self.assertTrue(G_py < 1.)
@@ -726,6 +726,69 @@ class TestCode(unittest.TestCase):
 
         G_py = c1.contain_potential(c2)
         self.assertTrue(G_py > 1.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test1_container_potential_square_py(self):
+        """
+
+        Completely inside square container
+
+        """
+
+        # Circle A
+        rA = np.array([[0.5, 0.5]])
+        radiiA = np.array([0.1])
+
+        H = container_potential_square_py(rA, radiiA)
+
+        self.assertTrue(H > 1.)
+
+
+
+    def test2_container_potential_square_py(self):
+        """
+
+        Completely outside square container
+
+        """
+
+        # Circle A
+        rA = np.array([[2., 2.]])
+        radiiA = np.array([0.1])
+
+        H = container_potential_square_py(rA, radiiA)
+
+        self.assertTrue(H < 1.)
+
+
+    def test3_container_potential_square_py(self):
+        """
+
+        Completely inside and tange to square container
+
+        """
+
+        # Circle A
+        rA = np.array([[0.5, 0.5]])
+        radiiA = np.array([0.5])
+
+        H = container_potential_square_py(rA, radiiA)
+
+        self.assertTrue(np.allclose(H, 1.))
+
+
 
 
 

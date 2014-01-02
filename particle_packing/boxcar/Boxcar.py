@@ -148,9 +148,10 @@ class Boxcar(object):
 
         """
 
-        c = Boxcar(0.5, 0.5)
-
-        G = self.contain_potential(c)
+        center = 0.5
+        radius = 0.5
+        G = contain_potential_py(self.center, self.radius,
+            center, radius)
 
         return G
 
