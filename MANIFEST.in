@@ -1,0 +1,3 @@
+recursive-include particle_packing/cython *.pyx
+recursive-include particle_packing/cython *.c
+recursive-include particle_packing/cython *.h

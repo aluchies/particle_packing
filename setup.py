@@ -1,26 +1,14 @@
-# from distutils.core import setup
-# from Cython.Distutils import build_ext
-# from distutils.extension import Extension
-# import numpy
-
-# setup(
-#   ext_modules = [Extension('metro',
-#     sources = ['metro.pyx'],
-#     libraries=['gsl', 'gslcblas', 'm'],
-#     include_dirs=[numpy.get_include()])],
-#   cmdclass = {'build_ext' : build_ext}
-# )
-
-
 import numpy as np
 
 import os
 import sys
 import subprocess
 
-from distutils.core import setup
-from distutils.extension import Extension
+#from distutils.core import setup
+#from distutils.extension import Extension
 from Cython.Distutils import build_ext
+
+from setuptools import setup, find_packages, Extension
 
 
 cmdclass = {}
@@ -107,7 +95,16 @@ boxcar_ext = Extension("particle_packing.ext.boxcar",
 
 ext_modules += [sphere_ext, ellipsoid_ext, circle_ext, ellipse_ext, boxcar_ext]
 
+NAME = "particle_packing"
+AUTHOR = "Adam Luchies"
+AUTHOR_EMAIL="adamluchies@gmail.com"
+VERSION = '0.0.1'
 
-
-setup(cmdclass=cmdclass,
+setup(
+      name=NAME,
+      author=AUTHOR,
+      author_email=AUTHOR_EMAIL,
+      packages=find_packages(exclude=['tests', 'cython', 'c']),
+      version=VERSION,
+      cmdclass=cmdclass,
       ext_modules=ext_modules)
