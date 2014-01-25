@@ -1,6 +1,12 @@
+# Particle Packings
+
 This module contains routines to generate particle packings.
 
 ## Installation
+
+Install:
+
+	python setup.py install
 
 Build:
 

@@ -95,16 +95,24 @@ boxcar_ext = Extension("particle_packing.ext.boxcar",
 
 ext_modules += [sphere_ext, ellipsoid_ext, circle_ext, ellipse_ext, boxcar_ext]
 
+DESCRIPTION = "Particle packings"
 NAME = "particle_packing"
 AUTHOR = "Adam Luchies"
 AUTHOR_EMAIL="adamluchies@gmail.com"
-VERSION = '0.0.1'
+URL = "https://github.com/aluchies/particle_packing"
+VERSION = "0.0.1"
+LICENSE = "BSD 3-Clause"
 
 setup(
       name=NAME,
+      version=VERSION,
+      description=DESCRIPTION,
+      long_description=DESCRIPTION,
       author=AUTHOR,
       author_email=AUTHOR_EMAIL,
+      url=URL,
+      download_url=URL,
+      license=LICENSE,
       packages=find_packages(exclude=['tests', 'cython', 'c']),
-      version=VERSION,
       cmdclass=cmdclass,
       ext_modules=ext_modules)
