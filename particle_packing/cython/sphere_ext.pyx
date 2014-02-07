@@ -252,7 +252,7 @@ def grid_md(int npoints=5, double radius=0.05):
 
     """
 
-    space = 1.1 * 2. * radius
+    space = 1.01 * 2. * radius
     ppdim = np.floor(1. / space)
     grid = np.arange(ppdim) * space + space / 2.
     xlist = product(grid, grid, grid)
