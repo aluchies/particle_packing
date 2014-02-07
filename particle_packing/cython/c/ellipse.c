@@ -292,7 +292,7 @@ size_t rsa_align_square(double *x, double *y,
         }
 
 
-
+        // Determine if new ellipse overlaps with existing ellipses
         flag = 1;
         for (k = 0; k < valid_pts; k++)
         {
@@ -321,6 +321,149 @@ size_t rsa_align_square(double *x, double *y,
 
            x[valid_pts] = xn;
            y[valid_pts] = yn;
+           valid_pts += 1;
+
+        }
+
+        step += 1;
+        
+    }
+    
+
+    gsl_rng_free (r);
+
+    return valid_pts;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+size_t rsa_square(double *x, double *y,
+    size_t npoints, double *radius, double *phi, int step_limit,
+    unsigned long randSeed)
+{
+
+    // Setup GSL random number generator
+    const gsl_rng_type * T;
+    gsl_rng * r;
+    T = gsl_rng_default;
+    r = gsl_rng_alloc (T);
+
+    // Set the seed
+    // srand ( time(NULL) );
+    // unsigned long randSeed = rand();
+    gsl_rng_set(r, randSeed);
+
+    // arrays for overlap_potential functions
+    double rA[2];
+    double rB[2];
+    double radiiA[2];
+    double radiiB[2];
+    double phiA;
+    double phiB;
+    double F;
+    double xn = 0;
+    double yn = 0;
+    double phin = 0;
+
+
+    radiiA[0] = radius[0];
+    radiiA[1] = radius[1];
+
+    // Set the initial position
+    double C;
+    C = fmaxf(radius[0], radius[1]);
+
+    F = 0;
+    while (F < 1.)
+    {
+
+        xn = gsl_rng_uniform (r);
+        yn = gsl_rng_uniform (r);
+
+        rA[0] = xn;
+        rA[1] = yn;
+        phiA = 2 * M_PI * gsl_rng_uniform (r);
+
+        F = container_square_overlap_potential(&rA[0], &radiiA[0], phiA);
+
+    }
+
+
+
+    x[0] = xn;
+    y[0] = yn;
+    phi[0] = phiA;
+
+    size_t valid_pts;
+    int k, flag, step;
+
+    step = 0;
+    valid_pts = 1;
+    while ((valid_pts < npoints) & (step < step_limit))
+    {
+
+        // Generate new ellipse inside the container
+        F = 0;
+        while (F < 1.)
+        {
+
+            xn = gsl_rng_uniform (r);
+            yn = gsl_rng_uniform (r);
+            phin = 2 * M_PI * gsl_rng_uniform (r);
+
+            rA[0] = xn;
+            rA[1] = yn;
+            phiA = phin;
+
+            F = container_square_overlap_potential(&rA[0], &radiiA[0], phiA);
+
+        }
+
+
+        // Determine if new ellipse overlaps with existing ellipses
+        flag = 1;
+        for (k = 0; k < valid_pts; k++)
+        {
+
+            rA[0] = x[k];
+            rA[1] = y[k];
+            phiA = phi[k];
+
+
+            rB[0] = xn;
+            rB[1] = yn;
+            phiB = phin;
+
+            radiiA[0] = radius[0];
+            radiiA[1] = radius[1];
+            radiiB[0] = radius[0];
+            radiiB[1] = radius[1];
+
+            F = ellipse_overlap(&rA[0], &radiiA[0], phiA, &rB[0], &radiiB[0], phiB);
+
+            if (F < 1.0)
+            {
+
+                flag = 0;
+                break;
+
+            }
+        }
+        if (flag == 1)
+        {
+
+           x[valid_pts] = xn;
+           y[valid_pts] = yn;
+           phi[valid_pts] = phin;
            valid_pts += 1;
 
         }

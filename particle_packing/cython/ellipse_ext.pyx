@@ -10,6 +10,10 @@ cdef extern from "c/ellipse.c":
     size_t npoints, double *radius, double phi, int step_limit,
     unsigned long randSeed)
 
+    size_t rsa_square(double *x, double *y,
+    size_t npoints, double *radius, double *phi, int step_limit,
+    unsigned long randSeed)
+
     double container_square_overlap_potential(double *rA, double *radiiA, double phiA)
 
 
@@ -149,13 +153,13 @@ def square_container_potential(r1, radii1, phi1):
 
 
 
-def rsa_mda(npoints, radius, phi, step_limit, rand_seed=None):
+def rsa_mda(npoints, radii, phi, step_limit, rand_seed=None):
     """RSA algorithm for mono-disperse and aligned hard ellipses in a sqaure.
 
     Keyword arguments:
     npoints -- number of spheres positions to generate
-    radius -- ellipse radii
-    phi --
+    radii -- ellipse radii
+    phi -- rotation angle for the ellipse
     step_limit -- number of steps in metropolis algorithm
     rand_seed -- seed for the random number generator
 
@@ -166,10 +170,10 @@ def rsa_mda(npoints, radius, phi, step_limit, rand_seed=None):
     """
 
     # Input checking
-    radius = np.asarray(radius).flatten()
-    if len(radius) != 2:
-        raise ValueError('input error for radius')
-    cdef np.ndarray[double, ndim=1, mode="c"] radii = np.ascontiguousarray(radius)
+    radii = np.asarray(radii).flatten()
+    if len(radii) != 2:
+        raise ValueError('input error for radii')
+    cdef np.ndarray[double, ndim=1, mode="c"] radii_arr = np.ascontiguousarray(radii)
 
     cdef double alpha = float(phi)
 
@@ -189,6 +193,111 @@ def rsa_mda(npoints, radius, phi, step_limit, rand_seed=None):
         rseed = long(rand_seed)
 
     cdef int valid_pts
-    valid_pts = rsa_align_square(&x[0], &y[0], npoints, &radii[0], alpha, step_limit, rseed)
+    valid_pts = rsa_align_square(&x[0], &y[0], npoints, &radii_arr[0], alpha, step_limit, rseed)
 
     return x[:valid_pts], y[:valid_pts]
+
+
+
+
+
+
+
+
+
+
+def rsa_md(npoints, radii, step_limit, rand_seed=None):
+    """RSA algorithm for mono-disperse (unaligned) hard ellipses in a sqaure.
+
+    Keyword arguments:
+    npoints -- number of spheres positions to generate
+    radii -- ellipse radii
+    step_limit -- number of steps in metropolis algorithm
+    rand_seed -- seed for the random number generator
+
+    Return values:
+    x -- array of x-coordinates
+    y -- array of y-coordinates
+    phi -- ellipse rotation angle
+
+    """
+
+    # Input checking
+    radii = np.asarray(radii).flatten()
+    if len(radii) != 2:
+        raise ValueError('input error for radii')
+    cdef np.ndarray[double, ndim=1, mode="c"] radii_arr = np.ascontiguousarray(radii)
+
+
+    cdef np.ndarray[double, ndim=1, mode="c"] x = np.zeros((npoints, ))
+    cdef np.ndarray[double, ndim=1, mode="c"] y = np.zeros((npoints, ))
+    cdef np.ndarray[double, ndim=1, mode="c"] phi = np.zeros((npoints, ))
+
+
+
+    # take care of random seed
+    cdef unsigned long rseed
+    if rand_seed is None:
+        rseed = random.randint(0, sys.maxint)
+    else:
+        rseed = long(rand_seed)
+
+    cdef int valid_pts
+    valid_pts = rsa_square(&x[0], &y[0], npoints, &radii_arr[0], &phi[0], step_limit, rseed)
+
+    return x[:valid_pts], y[:valid_pts], phi[:valid_pts]
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def grid_md(int npoints=5, radius):
+#     """Algorithm for placing mono-disperse size hard ellipses on a square grid.
+#     May be used to generate initial positions for metropolis algorithm.
+
+#     Keyword arguments:
+#     npoints -- number of sphere positions to generate
+#     radius -- ellipse radii
+
+#     Return values:
+#     x -- array of x-coordinates
+#     y -- array of y-coordinates
+
+
+#     """
+
+#     space = 1.01 * 2. * radius
+#     ppdim = np.floor(1. / space)
+#     grid = np.arange(ppdim) * space + space / 2.
+#     xlist = product(grid, grid)
+#     xlist = list(xlist)
+
+#     np.random.shuffle(xlist)
+
+#     cdef np.ndarray[double, ndim=1, mode="c"] x = np.zeros((npoints,))
+#     cdef np.ndarray[double, ndim=1, mode="c"] y = np.zeros((npoints,))
+
+#     if npoints == 0:
+
+#         return x, y
+
+
+#     elif len(xlist) >= npoints:
+
+#         X = np.asarray(xlist[0:npoints])
+#         x = X[:,0].copy()
+#         y = X[:,1].copy()
+
+#         return x, y
+
+
+#     else:
+#         raise ValueError('Implement case when grid provides too few points')
