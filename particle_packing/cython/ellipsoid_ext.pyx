@@ -3,6 +3,7 @@ cimport numpy as np
 
 cdef extern from "c/ellipsoid.c":
     double ellipsoid_overlap(double *rA, double *radiiA, double phiA, double *rotaxA, double *rB, double *radiiB, double phiB, double *rotaxB)
+    double container_cube_overlap_potential(double *rA, double *radiiA, double phiA, double *rotaxA)
 
 
 
@@ -90,6 +91,60 @@ def overlap_potential(r1, radii1, phi1, rotax1, r2, radii2, phi2, rotax2):
 
 
     F = ellipsoid_overlap(&rA[0], &radiiA[0], phiA, &rotaxA[0], &rB[0], &radiiB[0], phiB, &rotaxB[0])
+
+    return F
+
+
+
+
+
+
+
+
+
+def cube_container_potential(r1, radii1, phi1, rotax1):
+    """Determine if object is contained in the container.
+
+    Containment criterion based on the overlap potential value:
+    F(A,B) > 1, object completely inside container
+    F(A,B) = 1, object completely inside and tangent to container
+    F(A,B) < 1, object at least partially outside container
+
+
+    Return values:
+    F -- overlap potential value
+
+    """
+
+
+
+    """Input argument checking."""
+    r1 = np.asarray(r1).flatten()
+    if len(r1) != 3:
+        raise ValueError('input error for r1')
+
+    radii1 = np.asarray(radii1).flatten()
+    if len(radii1) != 3:
+        raise ValueError('input error for radii1')
+
+    phi1 = float(phi1)
+
+    rotax1 = np.asarray(rotax1).flatten()
+    if len(rotax1) != 3:
+        raise ValueError('input error for rotax1')
+    if np.allclose(rotax1, 1):
+        raise ValueError('input error for rotax1')
+
+
+
+    cdef np.ndarray[double, ndim=1, mode="c"] rA = np.ascontiguousarray(r1, dtype=np.float64)
+    cdef np.ndarray[double, ndim=1, mode="c"] radiiA = np.ascontiguousarray(radii1, dtype=np.float64)
+    cdef double phiA = float(phi1)
+    cdef np.ndarray[double, ndim=1, mode="c"] rotaxA = np.ascontiguousarray(rotax1, dtype=np.float64)
+
+    cdef double F
+
+    F = container_cube_overlap_potential(&rA[0], &radiiA[0], phiA, &rotaxA[0])
 
     return F
 

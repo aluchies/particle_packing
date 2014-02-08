@@ -507,7 +507,7 @@ def _characteristic_matrix(radii, phi, exponent=1.):
 
 
 
-def square_container_potential_py(r, radii, phi):
+def square_container_potential_py(rA, radiiA, phiA):
     """
 
     Container potential function (Python version) determines if an ellipse
@@ -531,28 +531,28 @@ def square_container_potential_py(r, radii, phi):
 
 
     # Top
-    rT = np.array([0.5, 2.]).T
-    radiiT = np.array([float("inf"), 1.])
-    phiT = 0.
-    top = overlap_potential_py(r, radii, phi, rT, radiiT, phiT)
+    rB = np.array([0.5, 2.]).T
+    radiiB = np.array([float("inf"), 1.])
+    phiB = 0.
+    top = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
 
     # Bottom
-    rT = np.array([0.5, -1.]).T
-    radiiT = np.array([float("inf"), 1.])
-    phiT = 0.
-    bottom = overlap_potential_py(r, radii, phi, rT, radiiT, phiT)
+    rB = np.array([0.5, -1.]).T
+    radiiB = np.array([float("inf"), 1.])
+    phiB = 0.
+    bottom = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
 
     # Left
-    rL = np.array([-1., 0.5]).T
-    radiiL = np.array([1, float("inf")])
-    phiL = 0.
-    left = overlap_potential_py(r, radii, phi, rL, radiiL, phiL)
+    rB = np.array([-1., 0.5]).T
+    radiiB = np.array([1, float("inf")])
+    phiB = 0.
+    left = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
 
     # Right
-    rR = np.array([2., 0.5]).T
-    radiiR = np.array([1, float("inf")])
-    phiR = 0.
-    right = overlap_potential_py(r, radii, phi, rR, radiiR, phiR)
+    rB = np.array([2., 0.5]).T
+    radiiB = np.array([1, float("inf")])
+    phiB = 0.
+    right = overlap_potential_py(rA, radiiA, phiA, rB, radiiB, phiB)
 
 
 

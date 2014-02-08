@@ -40,10 +40,11 @@ void characteristic_ellipsoid_matrix(double *X, double *R, double phi, double *r
 
     // radii matrix
     double O[3][3] = {{ 0 }};
-    R[0] = pow(R[0], exponent * -2.0);
-    R[1] = pow(R[1], exponent * -2.0);
-    R[2] = pow(R[2], exponent * -2.0);
-    set_diagonal(&O[0][0], R, 3, 3);
+    double diag_vals[3];
+    diag_vals[0] = pow(R[0], exponent * -2.0);
+    diag_vals[1] = pow(R[1], exponent * -2.0);
+    diag_vals[2] = pow(R[2], exponent * -2.0);
+    set_diagonal(&O[0][0], diag_vals, 3, 3);
 
 
     // characteristic ellipse matrix
@@ -173,3 +174,235 @@ double ellipsoid_overlap(double *rA, double *radiiA, double phiA, double *rotaxA
 
 
 }
+
+
+
+
+
+
+
+
+
+
+double container_cube_overlap_potential(double *rA, double *radiiA, double phiA, double *rotaxA)
+{
+
+    double rB[3];
+    double radiiB[3];
+    double phiB;
+    double rotaxB[3];
+
+    double top, bottom, left, right, front, back;
+
+    // top
+    rB[0] = 0.5;
+    rB[1] = 0.5;
+    rB[2] = 2;
+
+    radiiB[0] = INFINITY;
+    radiiB[1] = INFINITY;
+    radiiB[2] = 1;
+
+    rotaxB[0] = 1;
+    rotaxB[1] = 0;
+    rotaxB[2] = 0;
+
+    phiB = 0.0;
+
+    top = ellipsoid_overlap(&rA[0], &radiiA[0], phiA, &rotaxA[0], &rB[0], &radiiB[0], phiB, &rotaxB[0]);
+
+
+    // bottom
+    rB[0] = 0.5;
+    rB[1] = 0.5;
+    rB[2] = -1;
+
+    radiiB[0] = INFINITY;
+    radiiB[1] = INFINITY;
+    radiiB[2] = 1.0;
+
+    rotaxB[0] = 1;
+    rotaxB[1] = 0;
+    rotaxB[2] = 0;
+
+    phiB = 0;
+
+    bottom = ellipsoid_overlap(&rA[0], &radiiA[0], phiA, &rotaxA[0], &rB[0], &radiiB[0], phiB, &rotaxB[0]);
+
+
+
+    // left
+    rB[0] = 0.5;
+    rB[1] = -1.0;
+    rB[2] = 0.5;
+
+    radiiB[0] = INFINITY;
+    radiiB[1] = 1;
+    radiiB[2] = INFINITY;
+
+    rotaxB[0] = 1;
+    rotaxB[1] = 0;
+    rotaxB[2] = 0;
+
+    phiB = 0;
+
+    left = ellipsoid_overlap(&rA[0], &radiiA[0], phiA, &rotaxA[0], &rB[0], &radiiB[0], phiB, &rotaxB[0]);
+
+
+
+    // right
+    rB[0] = 0.5;
+    rB[1] = 2;
+    rB[2] = 0.5;
+
+    radiiB[0] = INFINITY;
+    radiiB[1] = 1;
+    radiiB[2] = INFINITY;
+
+    rotaxB[0] = 1;
+    rotaxB[1] = 0;
+    rotaxB[2] = 0;
+
+    phiB = 0;
+
+    right = ellipsoid_overlap(&rA[0], &radiiA[0], phiA, &rotaxA[0], &rB[0], &radiiB[0], phiB, &rotaxB[0]);
+
+
+    // front
+    rB[0] = -1.0;
+    rB[1] = 0.5;
+    rB[2] = 0.5;
+
+    radiiB[0] = 1.0;
+    radiiB[1] = INFINITY;
+    radiiB[2] = INFINITY;
+
+    rotaxB[0] = 1.0;
+    rotaxB[1] = 0.0;
+    rotaxB[2] = 0.0;
+
+    phiB = 0.0;
+
+    front = ellipsoid_overlap(&rA[0], &radiiA[0], phiA, &rotaxA[0], &rB[0], &radiiB[0], phiB, &rotaxB[0]);
+
+
+
+
+    // back
+    rB[0] = 2.0;
+    rB[1] = 0.5;
+    rB[2] = 0.5;
+
+    radiiB[0] = 1;
+    radiiB[1] = INFINITY;
+    radiiB[2] = INFINITY;
+
+    rotaxB[0] = 1.0;
+    rotaxB[1] = 0.0;
+    rotaxB[2] = 0.0;
+
+    phiB = 0;
+
+    back = ellipsoid_overlap(&rA[0], &radiiA[0], phiA, &rotaxA[0], &rB[0], &radiiB[0], phiB, &rotaxB[0]);
+
+    return fminf(top, fminf(bottom, fminf(left, fminf(right, fminf(front, back)))));
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// size_t rsa_align_square(double *x, double *y, double *z,
+//     size_t npoints, double *radius, double phi, int step_limit,
+//     unsigned long randSeed)
+// {
+
+//     // Setup GSL random number generator
+//     const gsl_rng_type * T;
+//     gsl_rng * r;
+//     T = gsl_rng_default;
+//     r = gsl_rng_alloc (T);
+
+//     // Set the seed
+//     // srand ( time(NULL) );
+//     // unsigned long randSeed = rand();
+//     gsl_rng_set(r, randSeed);
+
+//     // Set the initial position
+//     double xn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+//     double yn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+//     double zn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+//     x[0] = xn;
+//     y[0] = yn;
+//     z[0] = zn;
+
+//     double diameter = 2 * radius;
+
+//     size_t valid_pts;
+//     double F;
+//     int k, flag, step;
+
+//     step = 0;
+//     valid_pts = 1;
+
+//     double rA[3];
+//     double rB[3];
+
+//     while ((valid_pts < npoints) & (step < step_limit))
+//     {
+
+//         xn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+//         yn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+//         zn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+
+//         flag = 1;
+//         for (k = 0; k < valid_pts; k++)
+//         {
+
+//             rA[0] = x[k];
+//             rA[1] = y[k];
+//             rA[2] = z[k];
+//             rB[0] = xn;
+//             rB[1] = yn;
+//             rB[2] = zn;
+
+//             F = sphere_overlap(&rA[0], radius, &rB[0], radius);
+
+//             if (F < 1.0)
+//             {
+
+//                 flag = 0;
+//                 break;
+
+//             }
+//         }
+//         if (flag == 1)
+//         {
+
+//            x[valid_pts] = xn;
+//            y[valid_pts] = yn;
+//            z[valid_pts] = zn;
+//            valid_pts += 1;
+
+//         }
+
+//         step += 1;
+        
+//     }
+    
+
+//     gsl_rng_free (r);
+
+//     return valid_pts;
+
+// }

@@ -173,11 +173,34 @@ class Ellipsoid(object):
 
 
         if not isinstance(c, Ellipsoid):
-            raise ValueError('input is not an ellipse')
+            raise ValueError('input is not an Ellipsoid')
 
-        print 'contain_potential method is not yet implemented.'
+        print 'contain_potential method is not yet implemented for Ellipsoid \
+                class.'
 
         return float('nan')
+
+
+
+
+    def cube_container_potential(self):
+        """Determine if object is contained in the container.
+
+        Containment criterion based on the overlap potential value:
+        F(A,B) > 1, object completely inside container
+        F(A,B) = 1, object completely inside and tangent to container
+        F(A,B) < 1, object at least partially outside container
+
+
+        Return values:
+        F -- overlap potential value
+
+        """
+
+        F = cube_container_potential_py(self.center, self.radii, self.phi,
+            self.rt_ax)
+
+        return F
 
 
 
@@ -327,35 +350,35 @@ def overlap_potential_py(rA, radiiA, phiA, rotaxA, rB, radiiB, phiB, rotaxB):
 
     """Input argument checking."""
 
-    rA = np.asarray(rA.flatten())
+    rA = np.asarray(rA).flatten()
     if len(rA) != 3:
         raise ValueError('input error for rA')
     rA = np.matrix(rA).T
 
-    rB = np.asarray(rB.flatten())
+    rB = np.asarray(rB).flatten()
     if len(rB) != 3:
         raise ValueError('input error for rB')
     rB = np.matrix(rB).T
 
 
-    radiiA = np.asarray(radiiA.flatten())
+    radiiA = np.asarray(radiiA).flatten()
     if len(radiiA) != 3:
         raise ValueError('input error for radiiA')
 
-    radiiB = np.asarray(radiiB.flatten())
+    radiiB = np.asarray(radiiB).flatten()
     if len(radiiB) != 3:
         raise ValueError('input error for radiiB')
 
     phiA = float(phiA)
     phiB = float(phiB)
 
-    rotaxA = np.asarray(rotaxA.flatten())
+    rotaxA = np.asarray(rotaxA).flatten()
     if len(rotaxA) != 3:
         raise ValueError('input error for rotaxA')
     if np.allclose(rotaxA, 1):
         raise ValueError('input error for rotaxA')
 
-    rotaxB = np.asarray(rotaxB.flatten())
+    rotaxB = np.asarray(rotaxB).flatten()
     if len(rotaxB) != 3:
         raise ValueError('input error for rotaxB')
     if np.allclose(rotaxB, 1):
@@ -666,3 +689,82 @@ def _generate_ellipsoid_volume_old(x, y, z, center, radii, alpha, beta, gamma):
     vol = vol.astype(float)
 
     return vol
+
+
+
+
+
+
+
+
+def cube_container_potential_py(rA, radiiA, phiA, rotaxA):
+    """
+
+    Container potential function (Python version) determines if an ellipse
+    is inside a cube container or not.
+
+    Overlap criterion based on the overlap potential value:
+    F(A,B) > 1, ellipsoid A is completely contained in the container
+    F(A,B) = 1, ellipsoid A is contained and tangent to the container
+    F(A,B) < 1, ellipsoid A exists outside the container
+
+    Keyword arguments:
+    rA -- center of ellipse A
+    radiiA -- radii of ellipse A
+    phiA -- rotation angle of ellipse A
+    rotaxA -- rotation axis of ellipse A
+
+    Return values:
+    F -- overlap potential value
+
+
+    """
+
+
+    # Top
+    rB = np.array([2., 0.5, 0.5]).T
+    radiiB = np.array([1., float("inf"), float("inf")])
+    phiB = 0.
+    rotaxB = np.array([1., 0., 0.])
+    top = overlap_potential_py(rA, radiiA, phiA, rotaxA, rB, radiiB, phiB, rotaxB)
+
+    # Bottom
+    rB = np.array([-1., 0.5, 0.5]).T
+    radiiB = np.array([1., float("inf"), float("inf")])
+    phiB = 0.
+    rotaxB = np.array([1., 0., 0.])
+    bottom = overlap_potential_py(rA, radiiA, phiA, rotaxA, rB, radiiB, phiB, rotaxB)
+
+    # Left
+    rB = np.array([0.5, 2., 0.5]).T
+    radiiB = np.array([float("inf"), 1., float("inf")])
+    phiB = 0.
+    rotaxB = np.array([1., 0., 0.])
+    left = overlap_potential_py(rA, radiiA, phiA, rotaxA, rB, radiiB, phiB, rotaxB)
+
+    # Right
+    rB = np.array([0.5, -1., 0.5]).T
+    radiiB = np.array([float("inf"), 1., float("inf")])
+    phiB = 0.
+    rotaxB = np.array([1., 0., 0.])
+    right = overlap_potential_py(rA, radiiA, phiA, rotaxA, rB, radiiB, phiB, rotaxB)
+
+    # Front
+    rB = np.array([0.5, 0.5, 2.]).T
+    radiiB = np.array([float("inf"), float("inf"), 1.])
+    phiB = 0.
+    rotaxB = np.array([1., 0., 0.])
+    front = overlap_potential_py(rA, radiiA, phiA, rotaxA, rB, radiiB, phiB, rotaxB)
+
+    # Back
+    rB = np.array([0.5, 0.5, -1.]).T
+    radiiB = np.array([float("inf"), float("inf"), 1.])
+    phiB = 0.
+    rotaxB = np.array([1., 0., 0.])
+    back = overlap_potential_py(rA, radiiA, phiA, rotaxA, rB, radiiB, phiB, rotaxB)
+
+
+    return min(left, right, top, bottom, front, back)
+
+
+

@@ -708,7 +708,7 @@ class TestCode(unittest.TestCase):
     def test1_container_potential(self):
         """
 
-        completely contained
+        completely inside
 
         """
 
@@ -921,6 +921,26 @@ class TestCode(unittest.TestCase):
 
         F = square_container_potential(rA, radiiA, phiA)
         self.assertTrue(np.allclose(F_py, F))
+
+
+
+    def test10_container_potential(self):
+        """
+
+        Test square_container_potential method for Ellipse class
+
+        """
+
+        # Ellipse A
+        rA = np.matrix( np.array( [0.5, 0.5] ))
+        radiiA = 0.4 * np.ones(2)
+        phiA = 0.
+
+        c1 = Ellipse(rA, radiiA, phiA)
+
+        F = c1.square_container_potential()
+
+        self.assertTrue(F > 1.)
 
 
 

@@ -1,7 +1,8 @@
 import unittest
 import numpy as np
 from particle_packing.ellipsoid import Ellipsoid, \
-    overlap_potential, overlap_potential_py
+    overlap_potential, overlap_potential_py, \
+    cube_container_potential_py, cube_container_potential
 
 from particle_packing.ellipsoid.Ellipsoid \
     import _quaternion_to_rotation_matrix, rotation_matrix
@@ -732,6 +733,323 @@ class TestCode(unittest.TestCase):
 
         self.assertTrue(F == 0.)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test1_container_potential(self):
+        """
+
+        completely contained
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.5, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(F_py > 1.)
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+
+
+    def test2_container_potential(self):
+        """
+
+        tangent top
+
+        """
+
+        # Ellipsoid A
+        rA = [0.4, 0.5, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+    def test3_container_potential(self):
+        """
+
+        tangent bottom
+
+        """
+
+        # Ellipsoid A
+        rA = [0.6, 0.5, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+
+    def test4_container_potential(self):
+        """
+
+        tangent right
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.4, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+    def test5_container_potential(self):
+        """
+
+        tangent left
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.6, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+    def test6_container_potential(self):
+        """
+
+        tangent front
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.5, 0.4]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+    def test7_container_potential(self):
+        """
+
+        tangent back
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.5, 0.6]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, 1.))
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+    def test8_container_potential(self):
+        """
+
+        outside, top
+
+        """
+
+        # Ellipsoid A
+        rA = [0.3, 0.5, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(F_py < 1.)
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+    def test9_container_potential(self):
+        """
+
+        outside, bottom
+
+        """
+
+        # Ellipsoid A
+        rA = [0.7, 0.5, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(F_py < 1.)
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+    def test10_container_potential(self):
+        """
+
+        outside, left
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.3, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(F_py < 1.)
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+    def test11_container_potential(self):
+        """
+
+        outside, right
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.7, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(F_py < 1.)
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+    def test12_container_potential(self):
+        """
+
+        outside, front
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.5, 0.3]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(F_py < 1.)
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+    def test13_container_potential(self):
+        """
+
+        outside, back
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.5, 0.7]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        F_py = cube_container_potential_py(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(F_py < 1.)
+
+        F = cube_container_potential(rA, radiiA, phiA, rotaxA)
+        self.assertTrue(np.allclose(F_py, F))
+
+
+
+
+    def test14_container_potential(self):
+        """
+
+        Test cube_container_potential method for Ellipsoid class
+
+        """
+
+        # Ellipsoid A
+        rA = [0.5, 0.5, 0.5]
+        radiiA = 0.4 * np.ones(3)
+        phiA = 0.
+        rotaxA = np.array([1., 0., 0.])
+
+        c1 = Ellipsoid(rA, radiiA, rotaxA, phiA)
+
+        F = c1.cube_container_potential()
+
+        self.assertTrue(F > 1.)
 
 
 
