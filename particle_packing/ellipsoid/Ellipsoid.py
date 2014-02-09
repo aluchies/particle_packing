@@ -1,4 +1,8 @@
 import numpy as np
+from ..ext.ellipsoid import overlap_potential as overlap_potential_c
+from ..ext.ellipsoid import cube_container_potential as \
+    cube_container_potential_c
+
 
 
 class Ellipsoid(object):
@@ -149,7 +153,7 @@ class Ellipsoid(object):
             raise ValueError('input is not an ellipsoid')
 
 
-        F = overlap_potential_py(self.center, self.radii, self.phi, self.rt_ax,
+        F = overlap_potential_c(self.center, self.radii, self.phi, self.rt_ax,
             c.center, c.radii, c.phi, c.rt_ax)
 
         return F
@@ -197,7 +201,7 @@ class Ellipsoid(object):
 
         """
 
-        F = cube_container_potential_py(self.center, self.radii, self.phi,
+        F = cube_container_potential_c(self.center, self.radii, self.phi,
             self.rt_ax)
 
         return F

@@ -49,7 +49,7 @@ class TestCode(unittest.TestCase):
 
         """
 
-        npoints = 25
+        npoints = 50
         radius = 0.05 * np.ones(3)
         rotax = np.array([1., 0., 0.])
         phi = 0.
@@ -88,7 +88,7 @@ class TestCode(unittest.TestCase):
         radius = 0.05 * np.ones(3)
         rotax = np.array([1., 0., 0.])
         phi = 0.
-        step_limit = 10 ** 3
+        step_limit = 10 ** 2
         randSeed = 100
 
         x0, y0, z0 = ellipsoid.pack.rsa_mda(npoints, radius, rotax, phi, step_limit, randSeed)
@@ -152,15 +152,15 @@ class TestCode(unittest.TestCase):
     def test5_pack_rsa_mda(self):
         """
 
-        ellipsoid, npoints small
+        ellipsoid, npoints large
 
         """
 
-        npoints = 25
+        npoints = 50
         radius = 0.05 * np.array([2., 1., 1.])
         rotax = np.array([1., 0., 0.])
         phi = 0.
-        step_limit = 10 ** 2
+        step_limit = 10 ** 3
 
         x, y, z = ellipsoid.pack.rsa_mda(npoints, radius, rotax, phi, step_limit)
 

@@ -371,14 +371,9 @@ size_t rsa_align_cube(double *x, double *y, double *z,
     valid_pts = 1;
 
 
-    FILE *file; 
-    file = fopen("file.txt","w");
-
-
 
     // Get new ellipsoid position and orientation
     G = 0;
-    fprintf(file,"G: %f\n", G);
     while (G < 1)
     {
 
@@ -395,11 +390,7 @@ size_t rsa_align_cube(double *x, double *y, double *z,
 
         G = container_cube_overlap_potential(&rB[0], &radiiB[0], phiB, &rotaxB[0]);
 
-        fprintf(file,"G: %f\n", G);
-
     }
-
-    fclose(file);
 
     // store ellipsoid position
     x[0] = rB[0];
@@ -407,8 +398,6 @@ size_t rsa_align_cube(double *x, double *y, double *z,
     z[0] = rB[2];
 
 
-
-    fclose(file);
 
 
 
