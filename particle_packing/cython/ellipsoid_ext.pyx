@@ -5,9 +5,16 @@ import sys
 
 cdef extern from "c/ellipsoid.c":
     double ellipsoid_overlap(double *rA, double *radiiA, double phiA, double *rotaxA, double *rB, double *radiiB, double phiB, double *rotaxB)
+
     double container_cube_overlap_potential(double *rA, double *radiiA, double phiA, double *rotaxA)
+
     size_t rsa_align_cube(double *x, double *y, double *z,
     size_t npoints, double *radius, double *rotax, double phi,
+    int step_limit, unsigned long randSeed)
+
+    size_t rsa_cube(double *x, double *y, double *z,
+    size_t npoints, double *radius,
+    double *rtx, double *rty, double *rtz, double *phi,
     int step_limit, unsigned long randSeed)
 
 
@@ -212,5 +219,69 @@ def rsa_mda(npoints, radii, rotax, phi, step_limit, rand_seed=None):
     valid_pts = rsa_align_cube(&x[0], &y[0], &z[0], npoints, &radii_arr[0], &rotax_arr[0], alpha, step_limit, rseed)
 
     return x[:valid_pts], y[:valid_pts], z[:valid_pts]
+
+
+
+
+
+
+
+
+
+
+def rsa_md(npoints, radii, step_limit, rand_seed=None):
+    """RSA algorithm for mono-disperse hard ellipsoids in a cube.
+
+    Keyword arguments:
+    npoints -- number of positions to generate
+    radii -- ellipsoid radii
+    step_limit -- number of steps in rsa algorithm
+    rand_seed -- seed for the random number generator
+
+    Return values:
+    x -- array of x-coordinates
+    y -- array of y-coordinates
+    z -- array of z-coordinates
+    rtx -- array of rotation axis for ellipsoid
+    rty -- array of rotation axis for ellipsoid
+    rtz -- array of rotation axis for ellipsoid
+    phi -- array of rotation angle for the ellipsoid
+
+    """
+
+    # Input checking
+    radii = np.asarray(radii).flatten()
+    if len(radii) != 3:
+        raise ValueError('input error for radii')
+    cdef np.ndarray[double, ndim=1, mode="c"] radii_arr = np.ascontiguousarray(radii)
+
+
+
+
+    cdef np.ndarray[double, ndim=1, mode="c"] x = np.zeros((npoints, ))
+    cdef np.ndarray[double, ndim=1, mode="c"] y = np.zeros((npoints, ))
+    cdef np.ndarray[double, ndim=1, mode="c"] z = np.zeros((npoints, ))
+
+
+    cdef np.ndarray[double, ndim=1, mode="c"] rtx = np.zeros((npoints, ))
+    cdef np.ndarray[double, ndim=1, mode="c"] rty = np.zeros((npoints, ))
+    cdef np.ndarray[double, ndim=1, mode="c"] rtz = np.zeros((npoints, ))
+
+    cdef np.ndarray[double, ndim=1, mode="c"] phi = np.zeros((npoints, ))
+
+
+
+    # take care of random seed
+    cdef unsigned long rseed
+    if rand_seed is None:
+        rseed = random.randint(0, sys.maxint)
+    else:
+        rseed = long(rand_seed)
+
+    cdef int valid_pts
+    valid_pts = rsa_cube(&x[0], &y[0], &z[0], npoints, &radii_arr[0], &rtx[0], &rty[0], &rtz[0], &phi[0], step_limit, rseed)
+
+    return x[:valid_pts], y[:valid_pts], z[:valid_pts], rtx[:valid_pts], rty[:valid_pts], rtz[:valid_pts], phi[:valid_pts]
+
 
 

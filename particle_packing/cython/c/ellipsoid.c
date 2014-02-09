@@ -474,3 +474,171 @@ size_t rsa_align_cube(double *x, double *y, double *z,
     return valid_pts;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+size_t rsa_cube(double *x, double *y, double *z,
+    size_t npoints, double *radius,
+    double *rtx, double *rty, double *rtz, double *phi,
+    int step_limit, unsigned long randSeed)
+{
+
+    // Setup GSL random number generator
+    const gsl_rng_type * T;
+    gsl_rng * r;
+    T = gsl_rng_default;
+    r = gsl_rng_alloc (T);
+
+    // Set the seed
+    // srand ( time(NULL) );
+    // unsigned long randSeed = rand();
+    gsl_rng_set(r, randSeed);
+
+    double rA[3];
+    double radiiA[3];
+    double phiA;
+    double rotaxA[3];
+
+    double rB[3];
+    double radiiB[3];
+    double phiB;
+    double rotaxB[3];
+
+    double theta, sz;
+
+    size_t valid_pts;
+    double F, G;
+    int k, flag, step;
+
+    step = 0;
+    valid_pts = 1;
+
+
+
+    // Get new ellipsoid position and orientation
+    G = 0;
+    while (G < 1)
+    {
+
+        rB[0] = gsl_rng_uniform (r);
+        rB[1] = gsl_rng_uniform (r);
+        rB[2] = gsl_rng_uniform (r);
+        radiiB[0] = radius[0];
+        radiiB[1] = radius[1];
+        radiiB[2] = radius[2];
+        phiB = 2 * M_PI * gsl_rng_uniform (r);
+
+        // random rotation axis
+        theta = 2 * M_PI * gsl_rng_uniform (r);
+        sz = 2 * gsl_rng_uniform (r) - 1;
+        random_point_on_sphere(&rotaxB[0], theta, sz);
+
+
+        G = container_cube_overlap_potential(&rB[0], &radiiB[0], phiB, &rotaxB[0]);
+
+    }
+
+    // store ellipsoid position
+    x[0] = rB[0];
+    y[0] = rB[1];
+    z[0] = rB[2];
+    rtx[0] = rotaxB[0];
+    rty[0] = rotaxB[1];
+    rtz[0] = rotaxB[2];
+    phi[0] = phiB;
+
+
+
+
+    // Generate ellipsoid positions
+    while ((valid_pts < npoints) & (step < step_limit))
+    {
+
+        // Get new ellipsoid position and orientation
+        G = 0;
+        while (G < 1)
+        {
+
+            rB[0] = gsl_rng_uniform (r);
+            rB[1] = gsl_rng_uniform (r);
+            rB[2] = gsl_rng_uniform (r);
+            radiiB[0] = radius[0];
+            radiiB[1] = radius[1];
+            radiiB[2] = radius[2];
+            phiB = 2 * M_PI * gsl_rng_uniform (r);
+
+            // random rotation axis
+            theta = 2 * M_PI * gsl_rng_uniform (r);
+            sz = 2 * gsl_rng_uniform (r) - 1;
+            random_point_on_sphere(&rotaxB[0], theta, sz);
+
+            G = container_cube_overlap_potential(&rB[0], &radiiB[0], phiB, &rotaxB[0]);
+
+        }
+
+
+
+        flag = 1;
+        for (k = 0; k < valid_pts; k++)
+        {
+
+            rA[0] = x[k];
+            rA[1] = y[k];
+            rA[2] = z[k];
+            radiiA[0] = radius[0];
+            radiiA[1] = radius[1];
+            radiiA[2] = radius[2];
+            phiA = phi[k];
+            rotaxA[0] = rtx[k];
+            rotaxA[1] = rty[k];
+            rotaxA[2] = rtz[k];
+
+
+            F = ellipsoid_overlap(&rA[0], &radiiA[0], phiA, &rotaxA[0],
+                &rB[0], &radiiB[0], phiB, &rotaxB[0]);
+
+            if (F < 1.0)
+            {
+
+                flag = 0;
+                break;
+
+            }
+        }
+        if (flag == 1)
+        {
+
+            x[valid_pts] = rB[0];
+            y[valid_pts] = rB[1];
+            z[valid_pts] = rB[2];
+            rtx[valid_pts] = rotaxB[0];
+            rty[valid_pts] = rotaxB[1];
+            rtz[valid_pts] = rotaxB[2];
+            phi[valid_pts] = phiB;
+
+            valid_pts += 1;
+
+        }
+
+        step += 1;
+
+    }
+
+
+    gsl_rng_free (r);
+
+    return valid_pts;
+
+}
