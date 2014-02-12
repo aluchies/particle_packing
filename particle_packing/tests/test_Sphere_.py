@@ -844,7 +844,81 @@ class TestCode(unittest.TestCase):
         self.assertTrue(G_py < 1.)
 
 
+
+
+
     def test7_contain_potential(self):
+        """
+
+        Completely inside
+
+        """
+
+        # Sphere A
+        rA = np.array([[0.3, 0.5, 0.5]])
+        radiiA = np.array([0.25])
+
+        # Sphere B
+        rB = np.array([[0.5, 0.5, 0.5]])
+        radiiB = np.array([0.5])
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py > 1.)
+
+
+
+
+    def test8_contain_potential(self):
+        """
+
+        Completely inside, tangent
+
+        """
+
+        # Sphere A
+        rA = np.array([[0.25, 0.5, 0.5]])
+        radiiA = np.array([0.25])
+
+        # Sphere B
+        rB = np.array([[0.5, 0.5, 0.5]])
+        radiiB = np.array([0.5])
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py == 1.)
+
+
+
+
+    def test9_contain_potential(self):
+        """
+
+        Completely inside, tangent
+
+        """
+
+        # Sphere A
+        rA = np.array([[0.2, 0.5, 0.5]])
+        radiiA = np.array([0.25])
+
+        # Sphere B
+        rB = np.array([[0.5, 0.5, 0.5]])
+        radiiB = np.array([0.5])
+
+        G_py = contain_potential_py(rA, radiiA, rB, radiiB)
+        self.assertTrue(G_py < 1.)
+
+
+
+
+
+
+
+
+
+
+
+
+    def test10_contain_potential(self):
         """
 
         Test contain_potential_py called as class method

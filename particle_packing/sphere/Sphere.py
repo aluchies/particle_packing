@@ -389,8 +389,14 @@ def contain_potential_py(rA, radiiA, rB, radiiB):
 
     rAB = rB - rA
 
-    return (radiiB ** 2 - (rAB[0] ** 2 + rAB[1] ** 2 +
-        rAB[2] ** 2)) / radiiA ** 2
+    if np.linalg.norm(rAB) < (radiiB - radiiA):
+        return 2.
+    elif np.linalg.norm(rAB) == (radiiB - radiiA):
+        return 1.
+    else:
+        return 0.
+
+
 
 
 
