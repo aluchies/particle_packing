@@ -210,6 +210,10 @@ def _generate_sphere_volume(x, y, z, radius, center):
     Return values:
     subvol -- generated sub-volume containing sphere
 
+    Notes
+    This function is meant to be used in conjuction with 
+    _find_sphere_subvolume().
+
     """
 
     # Form cubic position array for x, y, z
@@ -226,7 +230,7 @@ def _generate_sphere_volume(x, y, z, radius, center):
     return vol.astype(float)
 
 
-def _find_sphere_subvolume(X, Y, Z, xi, a):
+def _find_sphere_subvolume(X, Y, Z, center, a):
     """Extract sub-volume from the volume with x-, y-, z-axes given by X, Y, Z.
     The sub-volume is just large enough to contain a sphere centered at xi and
     having radius a.
@@ -235,7 +239,7 @@ def _find_sphere_subvolume(X, Y, Z, xi, a):
     X -- extent of the volume along x-axis
     Y -- extent of the volume along y-axis
     Z -- extent of the volume along z-axis
-    xi -- sphere center point
+    center -- sphere center point
     a -- sphere radius
 
 
@@ -250,9 +254,9 @@ def _find_sphere_subvolume(X, Y, Z, xi, a):
     """
 
     # Find smallest cube that contains the sphere
-    X_subvol_ix = np.nonzero(np.abs(X - xi[0]) <= a)[0]
-    Y_subvol_ix = np.nonzero(np.abs(Y - xi[1]) <= a)[0]
-    Z_subvol_ix = np.nonzero(np.abs(Z - xi[2]) <= a)[0]
+    X_subvol_ix = np.nonzero(np.abs(X - center[0]) <= a)[0]
+    Y_subvol_ix = np.nonzero(np.abs(Y - center[1]) <= a)[0]
+    Z_subvol_ix = np.nonzero(np.abs(Z - center[2]) <= a)[0]
 
     # Get axis arrays for the sub-volume
     X_subvol = X[X_subvol_ix]
