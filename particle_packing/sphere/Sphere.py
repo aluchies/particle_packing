@@ -42,6 +42,32 @@ class Sphere(object):
         return vol
 
 
+
+        def generate_volume_spherical_gaussian(self, x_ax, y_ax, z_ax):
+        """Generate volume for a spherical Gaussian.
+
+        Keyword arguments:
+        x_ax -- numpy array for x-axis
+        y_ax -- numpy array for y-axis
+        z_ax -- numpy array for z-axis
+
+        Return values:
+        vol -- 3D array for the volume
+
+        """
+
+
+        x_ax = np.asarray(x_ax, dtype=np.float).flatten()
+        y_ax = np.asarray(y_ax, dtype=np.float).flatten()
+        z_ax = np.asarray(z_ax, dtype=np.float).flatten()
+
+        vol = _generate_spherical_gaussian_volume(x_ax, y_ax, z_ax, self.radius, self.center)
+
+        return vol
+
+
+
+
     def find_subvolume(self, x_ax, y_ax, z_ax):
         """Extract sub-volume from the volume with x-, y-, z-axes given by
         x_ax, y_ax, z_ax. The sub-volume is just large enough to contain a
@@ -228,6 +254,49 @@ def _generate_sphere_volume(x, y, z, radius, center):
     vol = vol <= 1
 
     return vol.astype(float)
+
+
+
+
+
+
+def _generate_spherical_gaussian_volume(x, y, z, radius_eff, center):
+    """Generate the volume having x-, y-, and z-axes given by x, y, z. In the
+    volume, place a spherical Gaussian centered at xi and having effective
+    radius radius_eff.
+
+    Keyword arguments:
+    x -- extent of the volume along x-axis
+    y -- extent of the volume along y-axis
+    z -- extent of the volume along z-axis
+    radius_eff -- effective radius
+    center -- center point of the sphere
+
+    Return values:
+    subvol -- generated sub-volume containing sphere
+
+    Notes
+    This function is meant to be used in conjuction with 
+    _find_sphere_subvolume().
+
+    """
+
+    # Form cubic position array for x, y, z
+    X_cube = np.tile(x, (len(z), len(y), 1))
+    Y_cube = np.tile(y, (len(z), len(x), 1)).transpose(0, 2, 1)
+    Z_cube = np.tile(z, (len(y), len(x), 1)).transpose(2, 0, 1)
+
+    # Find all points inside sphere inside the cube
+    sigma = (3.0 * np.sqrt(np.pi / 2.0)) ** (1.0 / 3.0) * radius_eff
+
+    vol = np.exp(- ((X_cube - center[0]) ** 2 + (Y_cube - center[1]) ** 2 +
+                    (Z_cube - center[2]) ** 2) / sigma ** 2)
+
+    return vol
+
+
+
+
 
 
 def _find_sphere_subvolume(X, Y, Z, center, a):
