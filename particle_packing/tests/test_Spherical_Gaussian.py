@@ -30,11 +30,11 @@ class TestCode(unittest.TestCase):
 
         center = 0
         radius = 'a'
-        self.assertRaises(ValueError, Spherical_Gaussian, center, radius_eff)
+        self.assertRaises(ValueError, Spherical_Gaussian, center, radius)
 
         center = np.asarray([0,0,0])
         radius = 'a'
-        self.assertRaises(ValueError, Spherical_Gaussian, center, radius_eff)
+        self.assertRaises(ValueError, Spherical_Gaussian, center, radius)
 
 
 
@@ -57,7 +57,7 @@ class TestCode(unittest.TestCase):
         z_ax = np.linspace(0, 1, 3)
 
         c = Spherical_Gaussian(center, radius)
-        subvol = c.generate_volume_(x_ax, y_ax, z_ax)
+        subvol = c.generate_volume(x_ax, y_ax, z_ax)
 
         arr = np.zeros((3,3,3))
         arr[0,1,1] = 1
