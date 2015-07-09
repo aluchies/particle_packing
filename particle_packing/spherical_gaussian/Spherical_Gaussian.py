@@ -40,7 +40,7 @@ class Spherical_Gaussian(object):
         y_ax = np.asarray(y_ax, dtype=np.float).flatten()
         z_ax = np.asarray(z_ax, dtype=np.float).flatten()
 
-        vol = _generate_spherical_guassian_volume(x_ax, y_ax, z_ax, \
+        vol = _generate_spherical_gaussian_volume(x_ax, y_ax, z_ax, \
             self.radius_eff, self.center)
 
         return vol
