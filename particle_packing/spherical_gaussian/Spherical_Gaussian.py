@@ -15,8 +15,8 @@ class Spherical_Gaussian(object):
         else:
             self.center = center
 
-        radius = float(radius)
-        self.radius = radius
+        radius_eff = float(radius_eff)
+        self.radius_eff = radius_eff
 
 
 
