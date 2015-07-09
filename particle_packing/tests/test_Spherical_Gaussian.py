@@ -57,7 +57,7 @@ class TestCode(unittest.TestCase):
         z_ax = np.linspace(0, 1, 3)
 
         c = Spherical_Gaussian(center, radius)
-        subvol = c.generate_volume_spherical_gaussian(x_ax, y_ax, z_ax)
+        subvol = c.generate_volume_(x_ax, y_ax, z_ax)
 
         arr = np.zeros((3,3,3))
         arr[0,1,1] = 1
