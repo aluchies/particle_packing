@@ -34,7 +34,7 @@ class TestCode(unittest.TestCase):
 
         center = np.asarray([0,0,0])
         radius = 'a'
-        self.assertRaises(ValueError, Spherical_Gaussian, center, radius_eff)
+        self.assertRaises(ValueError, Spherical_Gaussian, center, radius)
 
 
 
