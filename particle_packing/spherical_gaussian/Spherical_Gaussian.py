@@ -23,7 +23,7 @@ class Spherical_Gaussian(object):
 
 
 
-        def generate_volume(self, x_ax, y_ax, z_ax):
+    def generate_volume(self, x_ax, y_ax, z_ax):
         """Generate volume for the spherical gaussian.
 
         Keyword arguments:
