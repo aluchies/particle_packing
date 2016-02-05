@@ -9,6 +9,9 @@ import sys
 cdef extern from "c/sphere.c":
     double sphere_overlap(double *rA, double radiiA, double *rB, double radiiB)
 
+    double sphere_collection_overlap(double *x, double *y, double *z,
+    double *radii, size_t npoints)
+
     size_t gen_pts_rsa_3d(double *x, double *y, double *z,
     size_t npoints, double radius, int step_limit,
     unsigned long randSeed)
@@ -92,6 +95,72 @@ def overlap_potential(r1, radii1, r2, radii2):
 
     return F
 
+
+
+
+
+def collection_minimum_overlap_potential(x1, y1, z1, radii1):
+    """
+
+    Minimum overlap potential for a collection of spheres.
+
+    Overlap criterion based on the overlap potential value:
+    F(A,B) > 1, A and B are disjoint
+    F(A,B) = 0, A and B are externally tangent
+    F(A,B) < 1, A and B are overlapping
+
+    Keyword arguments:
+    x --
+    y --
+    z --
+    radii --
+
+    Return values:
+    F -- minimum overlap potential value
+
+    Sources:
+    Donev, A, et. al., Neighbor list collision-driven molecular dynamics
+    simulation for nonspherical hard particles. II. Applications to ellipses
+    and ellipsoids, J. of Comp. Physics, vol 202, 2004.
+
+    """
+
+    # Input argument checking.
+
+    cdef np.ndarray[double, ndim=1, mode="c"] xA
+    cdef np.ndarray[double, ndim=1, mode="c"] yA
+    cdef np.ndarray[double, ndim=1, mode="c"] zA
+    cdef np.ndarray[double, ndim=1, mode="c"] radiiA
+
+    cdef size_t npoints
+    cdef double F
+
+
+    x1 = np.asarray(x1).flatten()
+    xA = np.ascontiguousarray(x1, dtype=np.float64)
+    npoints = len(xA)
+
+
+    y1 = np.asarray(y1).flatten()
+    if len(y1) != npoints:
+        raise ValueError('input error for y')
+    yA = np.ascontiguousarray(y1, dtype=np.float64)
+
+    z1 = np.asarray(z1).flatten()
+    if len(z1) != npoints:
+        raise ValueError('input error for z')
+    zA = np.ascontiguousarray(z1, dtype=np.float64)
+
+    radii1 = np.asarray(radii1).flatten()
+    if len(radii1) != npoints:
+        raise ValueError('input error for radii')
+    radiiA = np.ascontiguousarray(radii1, dtype=np.float64)
+
+
+    F = sphere_collection_overlap(&xA[0], &yA[0], &zA[0], &radiiA[0], npoints)
+
+
+    return F
 
 
 

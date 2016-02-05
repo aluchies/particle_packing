@@ -21,6 +21,47 @@ double sphere_overlap(double *rA, double radiiA, double *rB, double radiiB)
 }
 
 
+double sphere_collection_overlap(double *x, double *y, double *z, double *radii, size_t npoints)
+{
+
+    double rA[3];
+    double rB[3];
+    double radiiA;
+    double radiiB;
+    double op;
+    double op_min;
+
+    op_min = 1.7976931348623158e+308;
+
+    for (i = 0; i < npoints; i++)
+    {
+
+        rA[0] = x[i];
+        rA[1] = y[i];
+        rA[2] = z[i];
+        radiiA = radii[i];
+
+        for (k = 0; k < i; k++)
+        {
+
+            rB[0] = x[k];
+            rB[1] = y[k];
+            rB[2] = z[k];
+            radiiB = radii[k];
+
+            op = sphere_overlap(rA, radiiA, rB, radiiB);
+
+            if (op > op_min)
+            {
+                op_min = op;
+            }
+        }
+    }
+
+    return op_min;
+}
+
+
 
 size_t gen_pts_rsa_3d(double *x, double *y, double *z,
     size_t npoints, double radius, int step_limit,
