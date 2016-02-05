@@ -30,6 +30,7 @@ double sphere_collection_overlap(double *x, double *y, double *z, double *radii,
     double radiiB;
     double op;
     double op_min;
+    int i, k;
 
     op_min = 1.7976931348623158e+308;
 
