@@ -9,8 +9,8 @@ import sys
 cdef extern from "c/sphere.c":
     double sphere_overlap(double *rA, double radiiA, double *rB, double radiiB)
 
-    double sphere_collection_overlap(double *x, double *y, double *z,
-    double *radii, size_t npoints)
+    void sphere_collection_overlap(double *x, double *y, double *z, double *radii,
+    size_t npoints, double *stats)
 
     size_t gen_pts_rsa_3d(double *x, double *y, double *z,
     size_t npoints, double radius, int step_limit,
@@ -99,7 +99,7 @@ def overlap_potential(r1, radii1, r2, radii2):
 
 
 
-def collection_minimum_overlap_potential(x1, y1, z1, radii1):
+def collection_overlap_potential(x1, y1, z1, radii1):
     """
 
     Minimum overlap potential for a collection of spheres.
@@ -131,6 +131,7 @@ def collection_minimum_overlap_potential(x1, y1, z1, radii1):
     cdef np.ndarray[double, ndim=1, mode="c"] yA
     cdef np.ndarray[double, ndim=1, mode="c"] zA
     cdef np.ndarray[double, ndim=1, mode="c"] radiiA
+    cdef np.ndarray[double, ndim=1, mode="c"] statsA
 
     cdef size_t npoints
     cdef double F
@@ -156,11 +157,13 @@ def collection_minimum_overlap_potential(x1, y1, z1, radii1):
         raise ValueError('input error for radii')
     radiiA = np.ascontiguousarray(radii1, dtype=np.float64)
 
+    statsA = np.ascontiguousarray(np.asarray([0, 0, 0]), dtype=np.float64)
 
-    F = sphere_collection_overlap(&xA[0], &yA[0], &zA[0], &radiiA[0], npoints)
+
+    sphere_collection_overlap(&xA[0], &yA[0], &zA[0], &radiiA[0], npoints, &statsA[0])
 
 
-    return F
+    return statsA
 
 
 

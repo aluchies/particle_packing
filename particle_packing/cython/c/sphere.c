@@ -21,7 +21,7 @@ double sphere_overlap(double *rA, double radiiA, double *rB, double radiiB)
 }
 
 
-double sphere_collection_overlap(double *x, double *y, double *z, double *radii, size_t npoints)
+void sphere_collection_overlap(double *x, double *y, double *z, double *radii, size_t npoints, double *stats)
 {
 
     double rA[3];
@@ -29,10 +29,12 @@ double sphere_collection_overlap(double *x, double *y, double *z, double *radii,
     double radiiA;
     double radiiB;
     double op;
-    double op_min;
+    double op_min, op_max, op_sum;
     int i, k;
 
     op_min = 1.7976931348623158e+308;
+    op_sum = 0.0;
+    op_sum = 0.0;
 
     for (i = 0; i < npoints; i++)
     {
@@ -56,10 +58,19 @@ double sphere_collection_overlap(double *x, double *y, double *z, double *radii,
             {
                 op_min = op;
             }
+
+            if (op > op_max)
+            {
+                op_max = op;
+            }
+
+            op_sum = op_sum + op;
         }
     }
 
-    return op_min;
+    stats[0] = op_min;
+    stats[1] = op_max;
+    stats[2] = op_sum;
 }
 
 
