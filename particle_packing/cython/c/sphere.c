@@ -52,7 +52,7 @@ double sphere_collection_overlap(double *x, double *y, double *z, double *radii,
 
             op = sphere_overlap(rA, radiiA, rB, radiiB);
 
-            if (op > op_min)
+            if (op < op_min)
             {
                 op_min = op;
             }
