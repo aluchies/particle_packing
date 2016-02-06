@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 from particle_packing.sphere import Sphere, \
     overlap_potential, overlap_potential_py, \
+    collection_minimum_overlap_potential, \
     contain_potential_py, container_potential_cube_py
 
 class TestCode(unittest.TestCase):
@@ -1021,6 +1022,39 @@ class TestCode(unittest.TestCase):
 
         self.assertTrue(H > 1.)
 
+
+
+    def test1_collection_minimum_overlap_potential(self):
+        """
+
+        Testing collection minimum overlap potential
+
+        """
+
+        x = np.asarray([0.5, 0.5, 0.5])
+        y = np.asarray([0.5, 0.5, 0.5])
+        z = np.asarray([0.5, 0.5, 0.5])
+        radii = np.asarray([0.5, 0.5, 0.5])
+
+        F = collection_minimum_overlap_potential(x, y, z, radii)
+
+        self.assertTrue(F == 0.0)
+
+    def test1_collection_minimum_overlap_potential(self):
+        """
+
+        Testing collection minimum overlap potential
+
+        """
+
+        x = np.asarray([0.1, 0.9, 0.1])
+        y = np.asarray([0.1, 0.9, 0.9])
+        z = np.asarray([0.1, 0.9, 0.9])
+        radii = np.asarray([0.1, 0.1, 0.1])
+
+        F = collection_minimum_overlap_potential(x, y, z, radii)
+
+        self.assertTrue(F > 1.0)
 
 
 
