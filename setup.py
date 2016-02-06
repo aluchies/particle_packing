@@ -53,7 +53,8 @@ else:
 
 sphere_ext = Extension("particle_packing.ext.sphere",
                    [base_dir + "/cython/sphere_ext" + ext],
-                   include_dirs=[np.get_include()],
+                   include_dirs=[np.get_include(), '/usr/local/Cellar/gsl/1.16/include'],
+                   library_dirs=['/usr/local/Cellar/gsl/1.16/lib'],
                    libraries=['gsl', 'gslcblas', 'm'],
                    #extra_compile_args=["-g"],
                    #extra_link_args=["-g"]
@@ -61,7 +62,8 @@ sphere_ext = Extension("particle_packing.ext.sphere",
 
 ellipsoid_ext = Extension("particle_packing.ext.ellipsoid",
                    [base_dir + "/cython/ellipsoid_ext" + ext],
-                   include_dirs=[np.get_include()],
+                   include_dirs=[np.get_include(), '/usr/local/Cellar/gsl/1.16/include'],
+                   library_dirs=['/usr/local/Cellar/gsl/1.16/lib'],
                    libraries=['gsl', 'gslcblas', 'm'],
                    #extra_compile_args=["-g"],
                    #extra_link_args=["-g"]
@@ -70,7 +72,8 @@ ellipsoid_ext = Extension("particle_packing.ext.ellipsoid",
 
 circle_ext = Extension("particle_packing.ext.circle",
                    [base_dir + "/cython/circle_ext" + ext],
-                   include_dirs=[np.get_include()],
+                   include_dirs=[np.get_include(), '/usr/local/Cellar/gsl/1.16/include'],
+                   library_dirs=['/usr/local/Cellar/gsl/1.16/lib'],
                    libraries=['gsl', 'gslcblas', 'm'],
                    #extra_compile_args=["-g"],
                    #extra_link_args=["-g"]
@@ -79,7 +82,8 @@ circle_ext = Extension("particle_packing.ext.circle",
 
 ellipse_ext = Extension("particle_packing.ext.ellipse",
                    [base_dir + "/cython/ellipse_ext" + ext],
-                   include_dirs=[np.get_include()],
+                   include_dirs=[np.get_include(), '/usr/local/Cellar/gsl/1.16/include'],
+                   library_dirs=['/usr/local/Cellar/gsl/1.16/lib'],
                    libraries=['gsl', 'gslcblas', 'm'],
                    #extra_compile_args=["-g"],
                    #extra_link_args=["-g"]
@@ -87,7 +91,8 @@ ellipse_ext = Extension("particle_packing.ext.ellipse",
 
 boxcar_ext = Extension("particle_packing.ext.boxcar",
                    [base_dir + "/cython/boxcar_ext" + ext],
-                   include_dirs=[np.get_include()],
+                   include_dirs=[np.get_include(), '/usr/local/Cellar/gsl/1.16/include'],
+                   library_dirs=['/usr/local/Cellar/gsl/1.16/lib'],
                    libraries=['gsl', 'gslcblas', 'm'],
                    #extra_compile_args=["-g"],
                    #extra_link_args=["-g"]
