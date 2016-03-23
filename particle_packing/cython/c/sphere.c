@@ -92,9 +92,12 @@ size_t gen_pts_rsa_3d(double *x, double *y, double *z,
     gsl_rng_set(r, randSeed);
 
     // Set the initial position
-    double xn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
-    double yn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
-    double zn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+    // double xn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+    // double yn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+    // double zn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+    double xn = gsl_rng_uniform (r);
+    double yn = gsl_rng_uniform (r);
+    double zn = gsl_rng_uniform (r);
     x[0] = xn;
     y[0] = yn;
     z[0] = zn;
@@ -114,9 +117,12 @@ size_t gen_pts_rsa_3d(double *x, double *y, double *z,
     while ((valid_pts < npoints) & (step < step_limit))
     {
 
-        xn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
-        yn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
-        zn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+        // xn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+        // yn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+        // zn = gsl_rng_uniform (r) * (1 - 2 * radius) + radius;
+        xn = gsl_rng_uniform (r);
+        yn = gsl_rng_uniform (r);
+        zn = gsl_rng_uniform (r);
 
         flag = 1;
         for (k = 0; k < valid_pts; k++)
@@ -213,7 +219,8 @@ unsigned int metro_md_3d(double *x, double *y, double *z,
             dz = diameter * (gsl_rng_uniform (r) - 0.5);
             zn = z[i] + dz;
 
-            if (((xn > radius) & (xn < 1 - radius)) & ((yn > radius) & (yn < 1 - radius)) & ((zn > radius) & (zn < 1 - radius)))
+            //if (((xn > radius) & (xn < 1 - radius)) & ((yn > radius) & (yn < 1 - radius)) & ((zn > radius) & (zn < 1 - radius)))
+            if (((xn > 0) & (xn < 1)) & ((yn > 0) & (yn < 1)) & ((zn > 0) & (zn < 1)))
             {
                break;
             }
@@ -312,7 +319,8 @@ unsigned int metro_pd_3d(double *x, double *y, double *z,
             dz = diameter * (gsl_rng_uniform (r) - 0.5);
             zn = z[i] + dz;
 
-            if (((xn > radius[i]) & (xn < 1 - radius[i])) & ((yn > radius[i]) & (yn < 1 - radius[i])) & ((zn > radius[i]) & (zn < 1 - radius[i])))
+            //if (((xn > radius[i]) & (xn < 1 - radius[i])) & ((yn > radius[i]) & (yn < 1 - radius[i])) & ((zn > radius[i]) & (zn < 1 - radius[i])))
+            if (((xn > 0) & (xn < 1)) & ((yn > 0) & (yn < 1)) & ((zn > 0) & (zn < 1)))
             {
                break;
             }
